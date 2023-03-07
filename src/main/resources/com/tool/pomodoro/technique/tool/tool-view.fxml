@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0"
+         prefWidth="408.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <tabs>
+        <Tab onSelectionChanged="#onLoadTodo" text="待办列表">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="349.0" prefWidth="458.0">
+                    <children>
+                        <TableView fx:id="todoTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0"
+                                   prefWidth="380.0">
+                            <columns>
+                                <TableColumn fx:id="todoContentTableColumn" prefWidth="378.0" text="内容"/>
+                            </columns>
+                            <contextMenu>
+                                <ContextMenu fx:id="todoContextMenu">
+                                    <items>
+                                        <MenuItem fx:id="todoDeleteMenuItem" mnemonicParsing="false"
+                                                  onAction="#onTodoDeleteMenuItem" text="删除"/>
+                                        <MenuItem fx:id="todoCopyToTodayMenuItem" mnemonicParsing="false"
+                                                  onAction="#onTodoCopyToTodayMenuItem"
+                                                  text="复制至今日待办"/>
+                                        <MenuItem fx:id="todoCutToTodayMenuItem" mnemonicParsing="false"
+                                                  onAction="#onTodoCutToTodayMenuItem"
+                                                  text="剪切至今日待办"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </TableView>
+                        <TextField fx:id="addTodoField" layoutX="14.0" layoutY="325.0" prefHeight="23.0"
+                                   prefWidth="329.0"/>
+                        <Button layoutX="355.0" layoutY="325.0" mnemonicParsing="false" onAction="#onAddTodoButtonClick"
+                                text="Add"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab onSelectionChanged="#onLoadToday" text="今日待办">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0"
+                                   prefWidth="380.0">
+                            <columns>
+                                <TableColumn fx:id="todayContentTableColumn" prefWidth="292.0" text="内容"/>
+                                <TableColumn fx:id="todayClocksTableColumn" prefWidth="87.0" text="时钟数"/>
+                            </columns>
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem onAction="#onTodayDeleteMenuItem" text="删除"/>
+                                        <MenuItem onAction="#onTodayCopyToTodoMenuItem" text="复制至待办列表"/>
+                                        <MenuItem onAction="#onTodayCutToTodoMenuItem" text="剪切至待办列表"/>
+                                        <MenuItem onAction="#onStartClock" text="启动时钟"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </TableView>
+                        <TextField fx:id="addTodayField" layoutX="14.0" layoutY="325.0" prefHeight="23.0"
+                                   prefWidth="329.0"/>
+                        <Button layoutX="355.0" layoutY="325.0" mnemonicParsing="false"
+                                onAction="#onAddTodayButtonClick" text="Add"/>
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
