@@ -33,7 +33,7 @@ public class RemindCommand implements Command {
 
         stage.show();
         var closeWindowCommand = new CloseWindowCommand(stage);
-        DelayCommand delayCommand = new DelayCommand(5, ChronoUnit.SECONDS, List.of(closeWindowCommand));
+        DelayCommand delayCommand = new DelayCommand(30, ChronoUnit.SECONDS, List.of(closeWindowCommand));
         PerSecondCommandQueue.join(delayCommand);
     }
 }
