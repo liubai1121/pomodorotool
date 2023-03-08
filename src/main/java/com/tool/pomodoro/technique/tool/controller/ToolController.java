@@ -1,13 +1,16 @@
 package com.tool.pomodoro.technique.tool.controller;
 
 import com.tool.pomodoro.technique.tool.ToolApplication;
+import com.tool.pomodoro.technique.tool.controller.countdown.CountdownController;
+import com.tool.pomodoro.technique.tool.controller.countdown.command.CloseWindowCommand;
 import com.tool.pomodoro.technique.tool.controller.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.vo.TodoVo;
-import com.tool.pomodoro.technique.tool.init.queue.CommandQueue;
+import com.tool.pomodoro.technique.tool.controller.countdown.command.IncrementClockCommand;
+import com.tool.pomodoro.technique.tool.controller.countdown.command.RemindCommand;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
@@ -24,6 +27,7 @@ import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -34,13 +38,11 @@ public class ToolController {
     private final TodoStrategy todoStrategy;
     private final TodayStrategy todayStrategy;
     private final TodoTodayMoveStrategy moveStrategy;
-    private final CommandQueue commandQueue;
 
-    public ToolController(TodoStrategy todoStrategy, TodayStrategy todayStrategy, TodoTodayMoveStrategy moveStrategy, CommandQueue commandQueue) {
+    public ToolController(TodoStrategy todoStrategy, TodayStrategy todayStrategy, TodoTodayMoveStrategy moveStrategy) {
         this.todoStrategy = todoStrategy;
         this.todayStrategy = todayStrategy;
         this.moveStrategy = moveStrategy;
-        this.commandQueue = commandQueue;
     }
 
     @FXML
@@ -289,10 +291,10 @@ public class ToolController {
     private void createCountdownWindow(TodayVo todayVo) {
         Stage stage = new Stage();
 
-//        var countdownController = new CountdownController(todayVo.getId(), todayStrategy, commandQueue);
+        var countdownController = new CountdownController();
 
         FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource("countdown.fxml"));
-//        fxmlLoader.setController(countdownController);
+        fxmlLoader.setController(countdownController);
 
         Scene scene = null;
         try {
@@ -300,10 +302,18 @@ public class ToolController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("Countdown");
+        stage.setTitle(todayVo.getContent());
         stage.setScene(scene);
         stage.show();
 
-//        countdownController.init();
+        stage.setOnCloseRequest(event -> {
+            onLoadToday();
+        });
+
+        var closeWindowCommand = new CloseWindowCommand(stage);
+        var remindCommand = new RemindCommand();
+        var incrementClockCommand = new IncrementClockCommand(todayVo.getId());
+
+        countdownController.startCountdown(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
     }
 }

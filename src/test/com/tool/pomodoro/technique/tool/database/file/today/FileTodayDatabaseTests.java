@@ -17,11 +17,6 @@ public class FileTodayDatabaseTests {
 
     FileTodayDatabase database = new FileTodayDatabase();
 
-    @BeforeEach
-    void initAll() {
-        database.init();
-    }
-
     @Test
     void init() {
         Optional<File> todoFile = FileUtil.getTodayFile()

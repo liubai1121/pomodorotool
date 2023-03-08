@@ -9,14 +9,12 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class FileTodayDatabase implements TodayDatabase, ToolInit {
+public class FileTodayDatabase implements TodayDatabase {
 
-    private final List<Today> data = new LinkedList<>();
-
-    @Override
-    public void init() {
+    public FileTodayDatabase() {
         load();
     }
+    private final List<Today> data = new LinkedList<>();
 
     @Override
     public void save(Today today) {

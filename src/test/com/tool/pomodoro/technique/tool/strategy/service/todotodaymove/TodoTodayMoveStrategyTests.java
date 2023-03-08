@@ -4,8 +4,10 @@ import com.tool.pomodoro.technique.tool.database.file.today.FileTodayDatabase;
 import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
+import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.iml.TodayStrategyImpl;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.impl.TodoStrategyImpl;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
@@ -17,18 +19,10 @@ import java.util.Optional;
 
 public class TodoTodayMoveStrategyTests {
 
-    private final FileTodayDatabase fileTodayDatabase = new FileTodayDatabase();
-    private final TodayStrategy todayStrategy = new TodayStrategyImpl(fileTodayDatabase);
-    private final FileTodoDatabase fileTodoDatabase = new FileTodoDatabase();
-    private final TodoStrategy todoStrategy = new TodoStrategyImpl(fileTodoDatabase);
+    private final TodayStrategy todayStrategy = TodayStrategyFactory.create();
+    private final TodoStrategy todoStrategy = TodoStrategyFactory.create();
 
     private final TodoTodayMoveStrategy todoTodayMoveStrategy = new TodoTodayMoveStrategyImpl(todoStrategy, todayStrategy);
-
-    @BeforeEach
-    void init() {
-        fileTodayDatabase.init();
-        fileTodoDatabase.init();
-    }
 
     @Test
     void copyTodoToToday() {

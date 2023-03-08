@@ -1,12 +1,10 @@
 package com.tool.pomodoro.technique.tool.strategy.service.today;
 
-import com.tool.pomodoro.technique.tool.database.file.today.FileTodayDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
-import com.tool.pomodoro.technique.tool.strategy.service.today.iml.TodayStrategyImpl;
+import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,13 +12,7 @@ import java.util.Optional;
 
 public class TodayStrategyTests {
 
-    FileTodayDatabase database = new FileTodayDatabase();
-    TodayStrategy todayStrategy = new TodayStrategyImpl(database);
-
-    @BeforeEach
-    void init() {
-        database.init();
-    }
+    TodayStrategy todayStrategy = TodayStrategyFactory.create();
 
     @Test
     void add() {

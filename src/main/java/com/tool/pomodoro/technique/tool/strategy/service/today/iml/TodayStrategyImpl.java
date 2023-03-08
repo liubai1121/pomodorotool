@@ -68,9 +68,11 @@ public class TodayStrategyImpl implements TodayStrategy {
         todayDatabase.selectById(uuid)
                 .ifPresent(today -> {
                     var newClocks = today.getClocks() + 1;
+
                     Today updateToday = new Today();
                     updateToday.setId(today.getId());
                     updateToday.setClocks(newClocks);
+                    updateToday.setContent(today.getContent());
                     todayDatabase.update(updateToday);
                 });
     }

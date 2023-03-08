@@ -1,7 +1,6 @@
 package com.tool.pomodoro.technique.tool.database.file.todo;
 
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
-import com.tool.pomodoro.technique.tool.init.ToolInit;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.TodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
 
@@ -11,13 +10,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class FileTodoDatabase implements TodoDatabase, ToolInit {
+public class FileTodoDatabase implements TodoDatabase {
 
     List<Todo> data = new LinkedList<>();
 
-    @Override
-    public void init() {
-        data.clear();
+    public FileTodoDatabase() {
         load();
     }
 

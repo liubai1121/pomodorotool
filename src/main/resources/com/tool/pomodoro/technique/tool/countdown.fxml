@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="181.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="countdownLabel" layoutX="120.0" layoutY="60.0" prefHeight="61.0" prefWidth="200.0" text="00:25:00">
+      <Label fx:id="countdownLabel" layoutX="120.0" layoutY="60.0" prefHeight="61.0" prefWidth="200.0" text="00:00:10">
          <font>
             <Font size="48.0" />
          </font>

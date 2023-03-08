@@ -17,19 +17,6 @@ public class FileTodoDatabaseTests {
 
     private final FileTodoDatabase todoDatabase = new FileTodoDatabase();
 
-    @BeforeEach
-    void initAll() {
-        todoDatabase.init();
-    }
-
-    @Test
-    void init() {
-        Optional<File> todoFile = FileUtil.getTodoFile()
-                .filter(file -> file.length() > 0);
-        Optional<List<Todo>> todos = todoDatabase.selectAll();
-        Assertions.assertEquals(todoFile.isPresent(), todos.isPresent());
-    }
-
     @Test
     void save() {
         var todo = new Todo();
@@ -38,7 +25,6 @@ public class FileTodoDatabaseTests {
         todo.setCreateTime(LocalDateTime.now());
         todoDatabase.save(todo);
 
-        todoDatabase.init();
         Optional<List<Todo>> todos = todoDatabase.selectAll();
 
         Assertions.assertTrue(todos.isPresent());

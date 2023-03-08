@@ -4,6 +4,7 @@ import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.impl.TodoStrategyImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +15,7 @@ import java.util.Optional;
 
 public class TodoStrategyTests {
 
-    private final FileTodoDatabase database = new FileTodoDatabase();
-
-    private final TodoStrategy strategy = new TodoStrategyImpl(database);
-
-    @BeforeEach
-    void init() {
-        database.init();
-    }
+    private final TodoStrategy strategy = TodoStrategyFactory.create();
 
     @Test
     void enterTodo() {
