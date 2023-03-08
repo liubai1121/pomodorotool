@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.common.queue.command;
+package com.tool.pomodoro.technique.tool.common.command;
 
 import java.util.Collection;
 import java.util.List;

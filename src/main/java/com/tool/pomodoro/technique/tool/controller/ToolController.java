@@ -1,7 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller;
 
-import com.tool.pomodoro.technique.tool.common.queue.command.CompositeCommand;
-import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.common.command.CompositeCommand;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
 import com.tool.pomodoro.technique.tool.controller.command.CloseWindowCommand;
 import com.tool.pomodoro.technique.tool.controller.command.IncrementClockCommand;
 import com.tool.pomodoro.technique.tool.controller.command.LabelCountdownCommand;

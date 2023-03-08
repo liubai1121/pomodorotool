@@ -1,6 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.command;
 
-import com.tool.pomodoro.technique.tool.common.queue.command.Command;
+import com.tool.pomodoro.technique.tool.common.command.Command;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 

@@ -1,6 +1,6 @@
-package com.tool.pomodoro.technique.tool.common.queue.command;
+package com.tool.pomodoro.technique.tool.common.command;
 
-import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

@@ -1,6 +1,6 @@
-package com.tool.pomodoro.technique.tool.common.queue;
+package com.tool.pomodoro.technique.tool.common.command.queue;
 
-import com.tool.pomodoro.technique.tool.common.queue.command.Command;
+import com.tool.pomodoro.technique.tool.common.command.Command;
 import com.tool.pomodoro.technique.tool.common.init.ToolInit;
 
 import java.util.LinkedList;

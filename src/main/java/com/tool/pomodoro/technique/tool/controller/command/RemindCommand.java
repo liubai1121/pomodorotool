@@ -1,9 +1,9 @@
 package com.tool.pomodoro.technique.tool.controller.command;
 
 import com.tool.pomodoro.technique.tool.ToolApplication;
-import com.tool.pomodoro.technique.tool.common.queue.command.Command;
-import com.tool.pomodoro.technique.tool.common.queue.command.DelayCommand;
-import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.common.command.Command;
+import com.tool.pomodoro.technique.tool.common.command.DelayCommand;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class RemindCommand implements Command {
     @Override

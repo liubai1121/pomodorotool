@@ -1,7 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller.command;
 
-import com.tool.pomodoro.technique.tool.common.queue.command.Command;
-import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.common.command.Command;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
