@@ -1,8 +1,8 @@
-package com.tool.pomodoro.technique.tool.controller.countdown.command;
+package com.tool.pomodoro.technique.tool.controller.command;
 
 import com.tool.pomodoro.technique.tool.ToolApplication;
-import com.tool.pomodoro.technique.tool.common.command.Command;
-import com.tool.pomodoro.technique.tool.common.command.DelayCommand;
+import com.tool.pomodoro.technique.tool.common.queue.command.Command;
+import com.tool.pomodoro.technique.tool.common.queue.command.DelayCommand;
 import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -32,8 +32,9 @@ public class RemindCommand implements Command {
         stage.setAlwaysOnTop(true);
 
         stage.show();
+
         var closeWindowCommand = new CloseWindowCommand(stage);
-        DelayCommand delayCommand = new DelayCommand(30, ChronoUnit.SECONDS, List.of(closeWindowCommand));
-        PerSecondCommandQueue.join(delayCommand);
+        DelayCommand delayCommand = new DelayCommand(30, ChronoUnit.SECONDS, closeWindowCommand);
+        PerSecondCommandQueue.getInstance().put(delayCommand);
     }
 }

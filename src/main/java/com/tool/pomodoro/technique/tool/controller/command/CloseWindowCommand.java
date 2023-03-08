@@ -1,6 +1,6 @@
-package com.tool.pomodoro.technique.tool.controller.countdown.command;
+package com.tool.pomodoro.technique.tool.controller.command;
 
-import com.tool.pomodoro.technique.tool.common.command.Command;
+import com.tool.pomodoro.technique.tool.common.queue.command.Command;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -18,13 +18,14 @@ public class CloseWindowCommand implements Command {
     @Override
     public void execute() {
         Platform.runLater(() -> {
-            Optional.ofNullable(stage.getOnCloseRequest())
+            Optional.ofNullable(stage)
+                    .map(Stage::getOnCloseRequest)
                     .ifPresent(onCloseRequest -> {
                         WindowEvent event = new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST);
                         onCloseRequest.handle(event);
                     });
 
-            stage.close();
+            Optional.ofNullable(stage).ifPresent(Stage::close);
         });
     }
 }

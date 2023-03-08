@@ -1,7 +1,7 @@
 package com.tool.pomodoro.technique.tool;
 
-import com.tool.pomodoro.technique.tool.controller.ToolController;
 import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.controller.ToolController;
 import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
@@ -15,9 +15,7 @@ import java.io.IOException;
 public class ToolApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-
-        PerSecondCommandQueue.init();
-
+        initTool();
 
         var toolController = createController();
 
@@ -28,10 +26,11 @@ public class ToolApplication extends Application {
         stage.setTitle("Pomodoro Technique Tool");
         stage.setScene(scene);
         stage.show();
-
-
     }
 
+    private void initTool() {
+        PerSecondCommandQueue.getInstance().init();
+    }
 
     private ToolController createController() {
         var todayStrategy = TodayStrategyFactory.create();

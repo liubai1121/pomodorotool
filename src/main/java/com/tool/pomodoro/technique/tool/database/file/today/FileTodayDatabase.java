@@ -1,7 +1,6 @@
 package com.tool.pomodoro.technique.tool.database.file.today;
 
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
-import com.tool.pomodoro.technique.tool.init.ToolInit;
 import com.tool.pomodoro.technique.tool.strategy.database.today.TodayDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
 
