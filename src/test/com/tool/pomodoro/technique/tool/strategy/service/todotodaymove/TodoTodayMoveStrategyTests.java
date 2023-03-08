@@ -1,18 +1,13 @@
 package com.tool.pomodoro.technique.tool.strategy.service.todotodaymove;
 
-import com.tool.pomodoro.technique.tool.database.file.today.FileTodayDatabase;
-import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
-import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
-import com.tool.pomodoro.technique.tool.strategy.service.today.iml.TodayStrategyImpl;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.impl.TodoStrategyImpl;
+import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

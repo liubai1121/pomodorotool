@@ -3,7 +3,7 @@ package com.tool.pomodoro.technique.tool.strategy.service.today;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
-import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

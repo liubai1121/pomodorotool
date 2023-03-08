@@ -1,13 +1,10 @@
 package com.tool.pomodoro.technique.tool.strategy.service.todo;
 
-import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.impl.TodoStrategyImpl;
+import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

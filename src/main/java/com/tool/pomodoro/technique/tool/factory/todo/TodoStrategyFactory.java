@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.strategy.service.todo.factory;
+package com.tool.pomodoro.technique.tool.factory.todo;
 
 import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;

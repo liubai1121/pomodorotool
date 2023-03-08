@@ -2,8 +2,8 @@ package com.tool.pomodoro.technique.tool;
 
 import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
 import com.tool.pomodoro.technique.tool.controller.ToolController;
-import com.tool.pomodoro.technique.tool.strategy.service.today.factory.TodayStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.factory.TodoStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
