@@ -1,12 +1,13 @@
 package com.tool.pomodoro.technique.tool.controller;
 
-import com.tool.pomodoro.technique.tool.ToolApplication;
-import com.tool.pomodoro.technique.tool.controller.countdown.CountdownController;
-import com.tool.pomodoro.technique.tool.controller.countdown.command.CloseWindowCommand;
+import com.tool.pomodoro.technique.tool.common.queue.command.CompositeCommand;
+import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.controller.command.CloseWindowCommand;
+import com.tool.pomodoro.technique.tool.controller.command.IncrementClockCommand;
+import com.tool.pomodoro.technique.tool.controller.command.LabelCountdownCommand;
+import com.tool.pomodoro.technique.tool.controller.command.RemindCommand;
 import com.tool.pomodoro.technique.tool.controller.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.vo.TodoVo;
-import com.tool.pomodoro.technique.tool.controller.countdown.command.IncrementClockCommand;
-import com.tool.pomodoro.technique.tool.controller.countdown.command.RemindCommand;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
@@ -17,15 +18,15 @@ import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoToday
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -289,21 +290,23 @@ public class ToolController {
     }
 
     private void createCountdownWindow(TodayVo todayVo) {
+        final var countdownDefaultTime = "00:25:00";
+
+        Label countdownLabel = new Label(countdownDefaultTime);
+        countdownLabel.setPrefHeight(61.0);
+        countdownLabel.setPrefWidth(200.0);
+        countdownLabel.setLayoutX(120.0);
+        countdownLabel.setLayoutY(60.0);
+        countdownLabel.setFont(new Font(48.0));
+
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setPrefHeight(181.0);
+        anchorPane.setPrefWidth(440.0);
+        anchorPane.getChildren().add(countdownLabel);
+
         Stage stage = new Stage();
-
-        var countdownController = new CountdownController();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource("countdown.fxml"));
-        fxmlLoader.setController(countdownController);
-
-        Scene scene = null;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         stage.setTitle(todayVo.getContent());
-        stage.setScene(scene);
+        stage.setScene(new Scene(anchorPane));
         stage.show();
 
         stage.setOnCloseRequest(event -> {
@@ -313,7 +316,9 @@ public class ToolController {
         var closeWindowCommand = new CloseWindowCommand(stage);
         var remindCommand = new RemindCommand();
         var incrementClockCommand = new IncrementClockCommand(todayVo.getId());
+        var compositeCommand = new CompositeCommand(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
 
-        countdownController.startCountdown(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
+        var labelCountdownCommand = new LabelCountdownCommand(countdownLabel, compositeCommand);
+        PerSecondCommandQueue.getInstance().put(labelCountdownCommand);
     }
 }

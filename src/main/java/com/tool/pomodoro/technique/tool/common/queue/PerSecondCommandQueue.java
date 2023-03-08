@@ -1,16 +1,23 @@
 package com.tool.pomodoro.technique.tool.common.queue;
 
-import com.tool.pomodoro.technique.tool.common.command.Command;
+import com.tool.pomodoro.technique.tool.common.queue.command.Command;
+import com.tool.pomodoro.technique.tool.common.init.ToolInit;
 
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 
-public class PerSecondCommandQueue {
-    private final static Queue<Command> queue = new LinkedList<>();
+public class PerSecondCommandQueue implements CommandQueue, ToolInit {
+    private final static PerSecondCommandQueue PER_SECOND_COMMAND_QUEUE = new PerSecondCommandQueue();
 
-    public static void init() {
-        PerSecondCommandQueue.join(new SleepCommand(1000));
+    private final Queue<Command> queue = new LinkedList<>();
+
+    private PerSecondCommandQueue() {
+    }
+
+    @Override
+    public void init() {
+        PerSecondCommandQueue.getInstance().put(new SleepCommand(1000));
 
         new Thread(() -> {
             while (true) {
@@ -20,8 +27,19 @@ public class PerSecondCommandQueue {
         }).start();
     }
 
+    @Override
+    public void put(Command command) {
+        Optional.ofNullable(command)
+                .ifPresent(queue::add);
+    }
+
+    public static PerSecondCommandQueue getInstance() {
+        return PER_SECOND_COMMAND_QUEUE;
+    }
+
     private static class SleepCommand implements Command {
         private final long sleepTime;
+
         public SleepCommand(long sleepTime) {
             this.sleepTime = sleepTime;
         }
@@ -30,14 +48,10 @@ public class PerSecondCommandQueue {
         public void execute() {
             try {
                 Thread.sleep(sleepTime);
-                PerSecondCommandQueue.join(this);
+                PerSecondCommandQueue.getInstance().put(this);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void join(Command command) {
-        queue.add(command);
     }
 }

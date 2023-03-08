@@ -13,5 +13,4 @@ module com.tool.pomodoro.technique.tool {
 
     opens com.tool.pomodoro.technique.tool.strategy.database.todo.po;
     opens com.tool.pomodoro.technique.tool.strategy.database.today.po;
-    opens com.tool.pomodoro.technique.tool.controller.countdown to javafx.fxml;
 }
