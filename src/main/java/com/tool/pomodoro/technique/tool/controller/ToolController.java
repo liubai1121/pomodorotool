@@ -5,7 +5,7 @@ import com.tool.pomodoro.technique.tool.common.queue.PerSecondCommandQueue;
 import com.tool.pomodoro.technique.tool.controller.command.CloseWindowCommand;
 import com.tool.pomodoro.technique.tool.controller.command.IncrementClockCommand;
 import com.tool.pomodoro.technique.tool.controller.command.LabelCountdownCommand;
-import com.tool.pomodoro.technique.tool.controller.command.RemindCommand;
+import com.tool.pomodoro.technique.tool.controller.command.CreateRemindWindowCommand;
 import com.tool.pomodoro.technique.tool.controller.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
@@ -290,7 +290,7 @@ public class ToolController {
     }
 
     private void createCountdownWindow(TodayVo todayVo) {
-        final var countdownDefaultTime = "00:25:00";
+        final var countdownDefaultTime = "00:30:00";
 
         Label countdownLabel = new Label(countdownDefaultTime);
         countdownLabel.setPrefHeight(61.0);
@@ -303,8 +303,8 @@ public class ToolController {
         anchorPane.setPrefHeight(181.0);
         anchorPane.setPrefWidth(440.0);
         anchorPane.getChildren().add(countdownLabel);
-
         Stage stage = new Stage();
+
         stage.setTitle(todayVo.getContent());
         stage.setScene(new Scene(anchorPane));
         stage.show();
@@ -314,7 +314,7 @@ public class ToolController {
         });
 
         var closeWindowCommand = new CloseWindowCommand(stage);
-        var remindCommand = new RemindCommand();
+        var remindCommand = new CreateRemindWindowCommand();
         var incrementClockCommand = new IncrementClockCommand(todayVo.getId());
         var compositeCommand = new CompositeCommand(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
 
