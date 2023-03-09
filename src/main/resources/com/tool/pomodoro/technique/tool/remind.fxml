@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: YELLOWGREEN;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label layoutX="132.0" layoutY="125.0" prefHeight="150.0" prefWidth="336.0" text="注意休息！！！">
-         <font>
-            <Font size="48.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane prefHeight="557.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.RemindController">
+   <Label layoutX="225.0" layoutY="17.0" prefHeight="91.0" prefWidth="336.0" text="注意休息！！！" textFill="#31c63b">
+      <font>
+         <Font name="Arial" size="47.0" />
+      </font>
+   </Label>
+   <ImageView fitHeight="320.0" fitWidth="480.0" layoutX="153.0" layoutY="119.0">
+      <image>
+         <Image url="@picture/remind_window_background.gif" />
+      </image>
+   </ImageView>
+   <Button fx:id="closeRemindButton" layoutX="324.0" layoutY="473.0" mnemonicParsing="false" onAction="#onCloseRemindButton" prefHeight="56.0" prefWidth="174.0" text="知道了">
+      <font>
+         <Font size="24.0" />
+      </font>
+   </Button>
 </AnchorPane>

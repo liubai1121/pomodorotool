@@ -26,14 +26,14 @@
                             <contextMenu>
                                 <ContextMenu fx:id="todoContextMenu">
                                     <items>
-                                        <MenuItem fx:id="todoDeleteMenuItem" mnemonicParsing="false"
-                                                  onAction="#onTodoDeleteMenuItem" text="删除"/>
                                         <MenuItem fx:id="todoCopyToTodayMenuItem" mnemonicParsing="false"
                                                   onAction="#onTodoCopyToTodayMenuItem"
                                                   text="复制至今日待办"/>
                                         <MenuItem fx:id="todoCutToTodayMenuItem" mnemonicParsing="false"
                                                   onAction="#onTodoCutToTodayMenuItem"
                                                   text="剪切至今日待办"/>
+                                        <MenuItem fx:id="todoDeleteMenuItem" mnemonicParsing="false"
+                                                  onAction="#onTodoDeleteMenuItem" text="删除"/>
                                     </items>
                                 </ContextMenu>
                             </contextMenu>
@@ -59,10 +59,10 @@
                             <contextMenu>
                                 <ContextMenu>
                                     <items>
-                                        <MenuItem onAction="#onTodayDeleteMenuItem" text="删除"/>
+                                        <MenuItem onAction="#onStartClock" text="启动时钟"/>
                                         <MenuItem onAction="#onTodayCopyToTodoMenuItem" text="复制至待办列表"/>
                                         <MenuItem onAction="#onTodayCutToTodoMenuItem" text="剪切至待办列表"/>
-                                        <MenuItem onAction="#onStartClock" text="启动时钟"/>
+                                        <MenuItem onAction="#onTodayDeleteMenuItem" text="删除"/>
                                     </items>
                                 </ContextMenu>
                             </contextMenu>

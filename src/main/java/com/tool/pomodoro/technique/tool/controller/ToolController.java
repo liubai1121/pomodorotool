@@ -290,7 +290,7 @@ public class ToolController {
     }
 
     private void createCountdownWindow(TodayVo todayVo) {
-        final var countdownDefaultTime = "00:30:00";
+        final var countdownDefaultTime = "00:25:00";
 
         Label countdownLabel = new Label(countdownDefaultTime);
         countdownLabel.setPrefHeight(61.0);

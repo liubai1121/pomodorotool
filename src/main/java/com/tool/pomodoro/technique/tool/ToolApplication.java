@@ -26,6 +26,10 @@ public class ToolApplication extends Application {
         stage.setTitle("Pomodoro Technique Tool");
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
     }
 
     private void initTool() {
