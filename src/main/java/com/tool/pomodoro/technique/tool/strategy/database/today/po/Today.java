@@ -3,7 +3,7 @@ package com.tool.pomodoro.technique.tool.strategy.database.today.po;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Today {
+public class Today implements Cloneable {
     private String id;
     private String content;
     private int clocks;
@@ -62,5 +62,14 @@ public class Today {
     @Override
     public int hashCode() {
         return Objects.hash(id, content, createTime);
+    }
+
+    @Override
+    public Today clone() {
+        try {
+            return (Today) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

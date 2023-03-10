@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.tool.pomodoro.technique.tool.controller.ToolMenuController"
+            prefHeight="25.0" prefWidth="408.0">
+
+    <MenuBar layoutX="1.0" layoutY="2.0" prefHeight="25.0" prefWidth="408.0">
+        <menus>
+            <Menu mnemonicParsing="false" text="文件">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="导入" />
+                    <MenuItem mnemonicParsing="false" text="导出" />
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="编辑">
+                <items>
+                    <MenuItem onAction="#onLabelManagement" mnemonicParsing="false" text="标签管理" />
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="帮助">
+                <items>
+                    <MenuItem mnemonicParsing="false" text="关于" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+</AnchorPane>

@@ -1,18 +1,17 @@
 package com.tool.pomodoro.technique.tool.database.file.todo;
 
+import com.tool.pomodoro.technique.tool.database.file.FileBaseDatabase;
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
+import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.TodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
-public class FileTodoDatabase implements TodoDatabase {
+public class FileTodoDatabase implements TodoDatabase, FileBaseDatabase {
 
-    List<Todo> data = new LinkedList<>();
+    List<Todo> dataList = new LinkedList<>();
 
     public FileTodoDatabase() {
         load();
@@ -22,7 +21,7 @@ public class FileTodoDatabase implements TodoDatabase {
     public void save(Todo todo) {
         Optional.ofNullable(todo)
                 .ifPresent(item -> {
-                    data.add(item);
+                    dataList.add(item);
                     store();
                 });
     }
@@ -32,7 +31,7 @@ public class FileTodoDatabase implements TodoDatabase {
         Optional.ofNullable(todo)
                 .filter(Predicate.not(Collection::isEmpty))
                 .ifPresent(list -> {
-                    data.addAll(list);
+                    dataList.addAll(list);
                     store();
                 });
     }
@@ -42,7 +41,7 @@ public class FileTodoDatabase implements TodoDatabase {
         Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(id -> {
-                    data.removeIf(item -> item.getId().equals(id));
+                    dataList.removeIf(item -> item.getId().equals(id));
                     store();
                 });
     }
@@ -50,39 +49,41 @@ public class FileTodoDatabase implements TodoDatabase {
     @Override
     public void update(Todo todo) {
         Optional.ofNullable(todo)
-                .flatMap(item -> selectById(item.getId()))
                 .ifPresent(item -> {
-                    item.setContent(todo.getContent());
-                    store();
+                    for (Todo data : dataList) {
+                        if (data.getId().equals(item.getId())) {
+                            data.setContent(item.getContent());
+                            store();
+                        }
+                    }
                 });
     }
 
     @Override
     public Optional<Todo> selectById(String todoId) {
         return Optional.ofNullable(todoId)
-                .flatMap(id -> data.stream()
+                .flatMap(id -> dataList.stream()
                         .filter(todo -> todo.getId().equals(id))
-                        .findFirst());
+                        .findFirst())
+                .map(Todo::clone);
     }
 
     @Override
     public Optional<List<Todo>> selectAll() {
-        return Optional.ofNullable(data)
-                .filter(Predicate.not(Collection::isEmpty));
+        return Optional.ofNullable(dataList)
+                .map(Collections::unmodifiableList);
     }
 
-    private void store() {
-        FileUtil.getTodoFile()
-                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
-    }
-
-
-    private void load() {
+    @Override
+    public void load() {
         FileUtil.getTodoFile()
                 .filter(file -> file.length() > 0)
-                .ifPresent(file -> {
-                    var todos = FileUtil.doDeserialized(file, Todo.class);
-                    data.addAll(todos);
-                });
+                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Todo.class)));
+    }
+
+    @Override
+    public void store() {
+        FileUtil.getTodoFile()
+                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
     }
 }

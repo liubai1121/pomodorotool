@@ -1,13 +1,9 @@
 package com.tool.pomodoro.technique.tool.database.file.todo;
 
-import com.tool.pomodoro.technique.tool.database.file.FileUtil;
-import com.tool.pomodoro.technique.tool.database.file.todo.FileTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

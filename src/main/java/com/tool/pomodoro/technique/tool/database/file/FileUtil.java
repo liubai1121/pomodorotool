@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class FileUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -27,24 +28,27 @@ public class FileUtil {
 
     public static Optional<File> getTodoFile() {
         var filePath = FileConfig.getTodoFile();
-        try {
-            var file = new File(filePath);
-            if (!file.exists()) {
-                return file.createNewFile() ? Optional.of(file) : Optional.empty();
-            }
-            return Optional.of(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
+
+        return getFileOrCreate(filePath);
     }
 
     public static Optional<File> getTodayFile() {
         var localDate = LocalDate.now();
         String format = DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
+        String filePath = FileConfig.getFolderDirectory() + format + FileConfig.getFileSuffix();
 
+        return getFileOrCreate(filePath);
+    }
+
+    public static Optional<File> getLabelFile() {
+        var filePath = FileConfig.getLabelFile();
+
+        return getFileOrCreate(filePath);
+    }
+
+    private static Optional<File> getFileOrCreate(String filePath) {
         try {
-            var file = new File(FileConfig.getFolderDirectory() + format + FileConfig.getFileSuffix());
+            var file = new File(filePath);
             if (!file.exists()) {
                 return file.createNewFile() ? Optional.of(file) : Optional.empty();
             }
