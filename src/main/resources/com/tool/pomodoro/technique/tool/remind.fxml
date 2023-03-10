@@ -18,7 +18,7 @@
          <Image url="@picture/remind_window_background.gif" />
       </image>
    </ImageView>
-   <Button fx:id="closeRemindButton" layoutX="324.0" layoutY="473.0" mnemonicParsing="false" onAction="#onCloseRemindButton" prefHeight="56.0" prefWidth="174.0" text="知道了">
+   <Button fx:id="closeRemindButton" layoutX="324.0" layoutY="473.0" mnemonicParsing="false" onMouseClicked="#onCloseRemindButton" prefHeight="56.0" prefWidth="174.0" text="知道了">
       <font>
          <Font size="24.0" />
       </font>
