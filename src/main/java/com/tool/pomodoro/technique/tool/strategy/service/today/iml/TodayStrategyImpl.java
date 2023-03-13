@@ -34,6 +34,7 @@ public class TodayStrategyImpl implements TodayStrategy {
         return uuid;
     }
 
+
     @Override
     public void delete(String id) {
         todayDatabase.deleteById(id);

@@ -8,6 +8,8 @@ public class FileConfig {
 
     private static final String TODO_FILE_NAME = "todo";
 
+    private static final String LABEL_FILE_NAME = "label";
+
     public static String getTodoFile() {
         return FOLDER_DIRECTORY + TODO_FILE_NAME + FILE_SUFFIX;
     }
@@ -18,6 +20,10 @@ public class FileConfig {
 
     public static String getFileSuffix() {
         return FILE_SUFFIX;
+    }
+
+    public static String getLabelFile() {
+        return FOLDER_DIRECTORY + LABEL_FILE_NAME + FILE_SUFFIX;
     }
 
 

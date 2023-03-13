@@ -50,6 +50,8 @@ public class ToolController {
     private TableView<TodoVo> todoTableView;
     @FXML
     private TableColumn<TodoVo, String> todoContentTableColumn;
+    
+
 
     @FXML
     protected void onLoadTodo() {

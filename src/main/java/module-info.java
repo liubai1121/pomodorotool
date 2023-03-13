@@ -13,4 +13,6 @@ module com.tool.pomodoro.technique.tool {
 
     opens com.tool.pomodoro.technique.tool.strategy.database.todo.po;
     opens com.tool.pomodoro.technique.tool.strategy.database.today.po;
+    opens com.tool.pomodoro.technique.tool.strategy.database.label.po;
+    opens com.tool.pomodoro.technique.tool.controller.label to javafx.fxml;
 }

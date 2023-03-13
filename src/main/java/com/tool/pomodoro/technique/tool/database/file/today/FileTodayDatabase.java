@@ -1,5 +1,6 @@
 package com.tool.pomodoro.technique.tool.database.file.today;
 
+import com.tool.pomodoro.technique.tool.database.file.FileBaseDatabase;
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
 import com.tool.pomodoro.technique.tool.strategy.database.today.TodayDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
@@ -8,18 +9,19 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class FileTodayDatabase implements TodayDatabase {
+public class FileTodayDatabase implements TodayDatabase, FileBaseDatabase {
 
     public FileTodayDatabase() {
         load();
     }
-    private final List<Today> data = new LinkedList<>();
+
+    private final List<Today> dataList = new LinkedList<>();
 
     @Override
     public void save(Today today) {
         Optional.ofNullable(today)
                 .ifPresent(item -> {
-                    data.add(item);
+                    dataList.add(item);
                     store();
                 });
     }
@@ -30,7 +32,7 @@ public class FileTodayDatabase implements TodayDatabase {
                 .map(list -> list.stream().filter(Objects::nonNull).collect(Collectors.toList()))
                 .filter(Predicate.not(Collection::isEmpty))
                 .ifPresent(list -> {
-                    data.addAll(list);
+                    dataList.addAll(list);
                     store();
                 });
     }
@@ -40,7 +42,7 @@ public class FileTodayDatabase implements TodayDatabase {
         Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(id -> {
-                    data.removeIf(item -> item.getId().equals(id));
+                    dataList.removeIf(item -> item.getId().equals(id));
                     store();
                 });
     }
@@ -48,11 +50,14 @@ public class FileTodayDatabase implements TodayDatabase {
     @Override
     public void update(Today today) {
         Optional.ofNullable(today)
-                .flatMap(item -> selectById(item.getId()))
                 .ifPresent(item -> {
-                    item.setContent(today.getContent());
-                    item.setClocks(today.getClocks());
-                    store();
+                    for (Today data : dataList) {
+                        if (data.getId().equals(item.getId())) {
+                            data.setContent(item.getContent());
+                            data.setClocks(item.getClocks());
+                            store();
+                        }
+                    }
                 });
     }
 
@@ -61,14 +66,15 @@ public class FileTodayDatabase implements TodayDatabase {
         return selectAll()
                 .flatMap(list -> list.stream()
                         .filter(item -> item.getId().equals(uuid))
-                        .findFirst());
+                        .findFirst())
+                .map(Today::clone);
     }
 
     @Override
     public Optional<List<Today>> selectAll() {
-        return Optional.of(data)
+        return Optional.of(dataList)
                 .map(this::filterNullObject)
-                .filter(Predicate.not(Collection::isEmpty));
+                .map(Collections::unmodifiableList);
     }
 
     private <T> List<T> filterNullObject(List<T> list) {
@@ -77,18 +83,16 @@ public class FileTodayDatabase implements TodayDatabase {
                 .collect(Collectors.toList());
     }
 
-    private void store() {
-        FileUtil.getTodayFile()
-                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
-    }
-
-
-    private void load() {
+    @Override
+    public void load() {
         FileUtil.getTodayFile()
                 .filter(file -> file.length() > 0)
-                .ifPresent(file -> {
-                    var todos = FileUtil.doDeserialized(file, Today.class);
-                    data.addAll(todos);
-                });
+                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Today.class)));
+    }
+
+    @Override
+    public void store() {
+        FileUtil.getTodayFile()
+                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
     }
 }

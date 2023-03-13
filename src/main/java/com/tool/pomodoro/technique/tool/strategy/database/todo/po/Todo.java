@@ -1,8 +1,9 @@
 package com.tool.pomodoro.technique.tool.strategy.database.todo.po;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-public class Todo {
+public class Todo implements Cloneable {
     private String id;
     private String content;
     private LocalDateTime createTime;
@@ -47,5 +48,27 @@ public class Todo {
                 ", content='" + content + '\'' +
                 ", createTime=" + createTime +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Todo todo = (Todo) o;
+        return Objects.equals(id, todo.id) && Objects.equals(content, todo.content) && Objects.equals(createTime, todo.createTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, content, createTime);
+    }
+
+    @Override
+    public Todo clone() {
+        try {
+            return (Todo) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

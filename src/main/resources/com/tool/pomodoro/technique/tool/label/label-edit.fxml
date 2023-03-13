@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane prefHeight="197.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="27.0" layoutY="80.0" prefHeight="15.0" prefWidth="29.0" text="标签:"/>
+        <TextField fx:id="labelEditLabelNameTextField" layoutX="63.0" layoutY="76.0" prefHeight="23.0"
+                   prefWidth="231.0"/>
+        <Label layoutX="14.0" layoutY="36.0" prefHeight="15.0" prefWidth="42.0" text="标签ID:"/>
+        <TextField fx:id="labelEditLabelIdTextField" layoutX="62.0" layoutY="32.0" prefHeight="23.0" prefWidth="231.0"/>
+        <Button layoutX="123.0" layoutY="134.0" mnemonicParsing="false" onAction="#onLabelEdit" prefHeight="23.0"
+                prefWidth="63.0" text="修改"/>
+    </children>
+</AnchorPane>
