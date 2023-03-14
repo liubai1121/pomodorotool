@@ -5,6 +5,7 @@ import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
 import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelDto;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,7 +37,7 @@ public class LabelManagementController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        labelTableNameColumn.setCellValueFactory(new PropertyValueFactory<>("labelName"));
+        labelTableNameColumn.setCellValueFactory(column -> new SimpleStringProperty(column.getValue().labelName()));
 
         labelStrategy.all()
                 .map(this::wrapVoList)
@@ -82,7 +83,7 @@ public class LabelManagementController implements Initializable {
     protected void onLabelDelete() {
         getSelectedLabel()
                 .ifPresent(labelVo -> {
-                    labelStrategy.delete(labelVo.getLabelId());
+                    labelStrategy.delete(labelVo.labelId());
                     refreshTableView();
                 });
     }
@@ -101,7 +102,7 @@ public class LabelManagementController implements Initializable {
 
     private List<LabelVo> wrapVoList(List<LabelDto> labels) {
         return labels.stream()
-                .map(label -> new LabelVo(label.getLabelId(), label.getLabelName()))
+                .map(label -> new LabelVo(label.labelId(), label.labelName()))
                 .collect(Collectors.toList());
     }
 }

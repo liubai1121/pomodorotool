@@ -39,7 +39,7 @@ public class MemoryTodoDatabase implements TodoDatabase {
     public Optional<Todo> selectById(String todoId) {
         return Optional.ofNullable(todoId)
                 .flatMap(id -> list.stream()
-                        .filter(todo -> todo.getId().equals(id))
+                        .filter(todo -> todo.id().equals(id))
                         .findFirst());
     }
 

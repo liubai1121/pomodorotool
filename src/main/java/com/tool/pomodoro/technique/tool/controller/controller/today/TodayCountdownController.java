@@ -35,7 +35,7 @@ public class TodayCountdownController {
                     countdownLabel.setText(COUNTDOWN_TIME);
                     var closeWindowCommand = new CloseWindowCommand(stage);
                     var remindCommand = new CreateTodayCountdownRemindWindowCommand();
-                    var incrementClockCommand = new TodayIncrementClockCommand(todayVo.getId());
+                    var incrementClockCommand = new TodayIncrementClockCommand(todayVo.id());
                     var compositeCommand = new CompositeCommand(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
 
                     var labelCountdownCommand = new TodayCountdownCommand(countdownLabel, compositeCommand);

@@ -27,16 +27,14 @@ public class LabelStrategyImpl implements LabelStrategy {
         return Optional.ofNullable(labelName)
                 .filter(Predicate.not(String::isBlank))
                 .flatMap(labelDatabase::selectByName)
-                .map(Label::getLabelId)
+                .map(Label::labelId)
                 .orElseGet(() -> doAdd(labelName));
     }
 
     private String doAdd(String labelName) {
         String id = IdUtil.generate();
 
-        var labelData = new Label();
-        labelData.setLabelId(id);
-        labelData.setLabelName(labelName);
+        var labelData = new Label(id, labelName);
         labelDatabase.save(labelData);
 
         return id;
@@ -82,7 +80,7 @@ public class LabelStrategyImpl implements LabelStrategy {
         return labelDatabase.selectAll()
                 .filter(Predicate.not(Collection::isEmpty))
                 .map(labels -> labels.stream()
-                        .filter(label -> label.getLabelName().contains(labelName))
+                        .filter(label -> label.labelName().contains(labelName))
                         .map(LabelStrategyWrapper::wrapLabelDto)
                         .collect(Collectors.toList()));
     }

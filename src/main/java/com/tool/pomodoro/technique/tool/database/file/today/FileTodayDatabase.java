@@ -42,7 +42,7 @@ public class FileTodayDatabase implements TodayDatabase, FileBaseDatabase {
         Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(id -> {
-                    dataList.removeIf(item -> item.getId().equals(id));
+                    dataList.removeIf(item -> item.id().equals(id));
                     store();
                 });
     }
@@ -51,23 +51,26 @@ public class FileTodayDatabase implements TodayDatabase, FileBaseDatabase {
     public void update(Today today) {
         Optional.ofNullable(today)
                 .ifPresent(item -> {
-                    for (Today data : dataList) {
-                        if (data.getId().equals(item.getId())) {
-                            data.setContent(item.getContent());
-                            data.setClocks(item.getClocks());
-                            store();
-                        }
-                    }
+                    doUpdate(item);
+                    store();
                 });
+    }
+
+    private void doUpdate(Today today) {
+        int index = dataList.indexOf(today);
+        if (index == -1) {
+            return;
+        }
+        dataList.remove(index);
+        dataList.add(index, today);
     }
 
     @Override
     public Optional<Today> selectById(String uuid) {
         return selectAll()
                 .flatMap(list -> list.stream()
-                        .filter(item -> item.getId().equals(uuid))
-                        .findFirst())
-                .map(Today::clone);
+                        .filter(item -> item.id().equals(uuid))
+                        .findFirst());
     }
 
     @Override

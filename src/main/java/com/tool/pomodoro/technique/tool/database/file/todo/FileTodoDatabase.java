@@ -2,6 +2,7 @@ package com.tool.pomodoro.technique.tool.database.file.todo;
 
 import com.tool.pomodoro.technique.tool.database.file.FileBaseDatabase;
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
+import com.tool.pomodoro.technique.tool.strategy.database.label.po.Label;
 import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.TodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
@@ -41,7 +42,7 @@ public class FileTodoDatabase implements TodoDatabase, FileBaseDatabase {
         Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(id -> {
-                    dataList.removeIf(item -> item.getId().equals(id));
+                    dataList.removeIf(item -> item.id().equals(id));
                     store();
                 });
     }
@@ -50,22 +51,26 @@ public class FileTodoDatabase implements TodoDatabase, FileBaseDatabase {
     public void update(Todo todo) {
         Optional.ofNullable(todo)
                 .ifPresent(item -> {
-                    for (Todo data : dataList) {
-                        if (data.getId().equals(item.getId())) {
-                            data.setContent(item.getContent());
-                            store();
-                        }
-                    }
+                    doUpdate(item);
+                    store();
                 });
+    }
+
+    private void doUpdate(Todo todo) {
+        int index = dataList.indexOf(todo);
+        if (index == -1) {
+            return;
+        }
+        dataList.remove(index);
+        dataList.add(index, todo);
     }
 
     @Override
     public Optional<Todo> selectById(String todoId) {
         return Optional.ofNullable(todoId)
                 .flatMap(id -> dataList.stream()
-                        .filter(todo -> todo.getId().equals(id))
-                        .findFirst())
-                .map(Todo::clone);
+                        .filter(todo -> todo.id().equals(id))
+                        .findFirst());
     }
 
     @Override

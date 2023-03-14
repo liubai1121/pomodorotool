@@ -13,10 +13,7 @@ public class LabelStrategyWrapper {
 
 
     public static LabelDto wrapLabelDto(Label label) {
-        var labelDto = new LabelDto();
-        labelDto.setLabelId(label.getLabelId());
-        labelDto.setLabelName(label.getLabelName());
-        return labelDto;
+        return new LabelDto(label.labelId(), label.labelName());
     }
 
     public static List<LabelDto> wrapLabelDtoList(List<Label> labels) {
@@ -26,9 +23,6 @@ public class LabelStrategyWrapper {
     }
 
     public static Label wrapLabel(LabelUpdateDto updateDto) {
-        var label = new Label();
-        label.setLabelId(updateDto.getLabelId());
-        label.setLabelName(updateDto.getLabelName());
-        return label;
+        return new Label(updateDto.labelId(), updateDto.labelName());
     }
 }

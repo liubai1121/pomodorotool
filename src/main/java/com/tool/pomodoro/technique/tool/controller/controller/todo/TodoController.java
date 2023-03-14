@@ -7,6 +7,7 @@ import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -31,8 +32,7 @@ public class TodoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // 设置列的取值
-        todoContentTableColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
+        todoContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
 
         refreshTodoTableView();
     }
@@ -58,8 +58,7 @@ public class TodoController implements Initializable {
     }
 
     private void addTodo(String todo) {
-        var dto = new TodoAddDto();
-        dto.setTodo(todo);
+        var dto = new TodoAddDto(todo);
         todoStrategy.add(dto);
     }
 
@@ -67,7 +66,7 @@ public class TodoController implements Initializable {
     protected void onTodoCopyToTodayMenuItem() {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
-                .ifPresent(todoVo -> moveStrategy.copyTodoToToday(todoVo.getId()));
+                .ifPresent(todoVo -> moveStrategy.copyTodoToToday(todoVo.id()));
     }
 
     @FXML
@@ -75,7 +74,7 @@ public class TodoController implements Initializable {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> {
-                    moveStrategy.cutTodoToToday(todoVo.getId());
+                    moveStrategy.cutTodoToToday(todoVo.id());
                     refreshTodoTableView();
                 });
     }
@@ -85,7 +84,7 @@ public class TodoController implements Initializable {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> {
-                    todoStrategy.delete(todoVo.getId());
+                    todoStrategy.delete(todoVo.id());
                     refreshTodoTableView();
                 });
     }
@@ -100,7 +99,7 @@ public class TodoController implements Initializable {
     private List<TodoVo> wrapTodoVoList(List<TodoDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(item -> new TodoVo(item.getId(), item.getContent()))
+                .map(item -> new TodoVo(item.id(), item.content()))
                 .collect(Collectors.toList());
     }
 }

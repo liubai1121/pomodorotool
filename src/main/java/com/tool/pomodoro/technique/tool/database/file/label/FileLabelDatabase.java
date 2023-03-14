@@ -31,7 +31,7 @@ public class FileLabelDatabase implements LabelDatabase, FileBaseDatabase {
         Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(id -> {
-                    dataList.removeIf(label -> label.getLabelId().equals(id));
+                    dataList.removeIf(label -> label.labelId().equals(id));
                     store();
                 });
     }
@@ -40,36 +40,40 @@ public class FileLabelDatabase implements LabelDatabase, FileBaseDatabase {
     public void update(Label label) {
         Optional.ofNullable(label)
                 .ifPresent(data -> {
-                    for (Label item : dataList) {
-                        if (item.getLabelId().equals(data.getLabelId())) {
-                            item.setLabelName(data.getLabelName());
-                            store();
-                            return;
-                        }
-                    }
+
+                    doUpdate(data);
+                    store();
                 });
+    }
+
+    private void doUpdate(Label label) {
+        int index = dataList.indexOf(label);
+        if (index == -1) {
+            return;
+        }
+        dataList.remove(index);
+        dataList.add(index, label);
     }
 
     @Override
     public Optional<Label> selectById(String uuid) {
         return Optional.ofNullable(uuid)
                 .filter(Predicate.not(String::isBlank))
-                .flatMap(id -> select(label -> label.getLabelId().equals(id)));
+                .flatMap(id -> select(label -> label.labelId().equals(id)));
     }
 
     @Override
     public Optional<Label> selectByName(String labelName) {
         return Optional.ofNullable(labelName)
                 .filter(Predicate.not(String::isBlank))
-                .flatMap(name -> select(label -> label.getLabelName().equals(name)));
+                .flatMap(name -> select(label -> label.labelName().equals(name)));
     }
 
     private Optional<Label> select(Predicate<Label> predicate) {
         return Optional.ofNullable(predicate)
                 .flatMap(filter -> dataList.stream()
                         .filter(filter)
-                        .findFirst())
-                .map(Label::clone);
+                        .findFirst());
     }
 
     @Override
@@ -77,7 +81,7 @@ public class FileLabelDatabase implements LabelDatabase, FileBaseDatabase {
         return Optional.ofNullable(uuids)
                 .filter(Predicate.not(Collection::isEmpty))
                 .map(id -> dataList.stream()
-                        .filter(label -> uuids.contains(label.getLabelId()))
+                        .filter(label -> uuids.contains(label.labelId()))
                         .collect(Collectors.toList()));
     }
 

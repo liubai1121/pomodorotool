@@ -16,7 +16,7 @@ public class ToolApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource("tool/tool-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("番茄工作法小工具");
+        stage.setTitle("番茄工作法工具");
         stage.setScene(scene);
 
         stage.setOnCloseRequest(event -> {

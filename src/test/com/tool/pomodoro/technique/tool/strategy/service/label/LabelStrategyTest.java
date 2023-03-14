@@ -23,7 +23,7 @@ public class LabelStrategyTest {
         Optional<LabelDto> labelOpt = labelStrategy.get(labelId);
 
         Assertions.assertTrue(labelOpt.isPresent());
-        Assertions.assertEquals(label, labelOpt.get().getLabelName());
+        Assertions.assertEquals(label, labelOpt.get().labelName());
 
         Optional<List<LabelDto>> labelsOpt = labelStrategy.fuzzyQueryByName(label);
         Assertions.assertTrue(labelsOpt.isPresent());
@@ -90,13 +90,11 @@ public class LabelStrategyTest {
         String id = labelStrategy.add(label);
 
         var updateName = "测试更新成功";
-        var updateDto = new LabelUpdateDto();
-        updateDto.setLabelId(id);
-        updateDto.setLabelName(updateName);
+        var updateDto = new LabelUpdateDto(id, updateName);
         labelStrategy.update(updateDto);
 
         Optional<LabelDto> labelOpt = labelStrategy.get(id);
         Assertions.assertTrue(labelOpt.isPresent());
-        Assertions.assertEquals(updateName, labelOpt.get().getLabelName());
+        Assertions.assertEquals(updateName, labelOpt.get().labelName());
     }
 }

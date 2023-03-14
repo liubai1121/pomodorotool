@@ -16,16 +16,14 @@ public class TodoStrategyTests {
 
     @Test
     void enterTodo() {
-        TodoAddDto todoAddDto = new TodoAddDto();
-        todoAddDto.setTodo("周报");
+        TodoAddDto todoAddDto = new TodoAddDto("周报");
         String id = strategy.add(todoAddDto);
         Assertions.assertNotNull(id);
     }
 
     @Test
     void delete() {
-        var dto = new TodoAddDto();
-        dto.setTodo("测试删除方法");
+        var dto = new TodoAddDto("测试删除方法");
         String id = strategy.add(dto);
         strategy.delete(id);
         Assertions.assertFalse(strategy.get(id).isPresent());
@@ -33,26 +31,22 @@ public class TodoStrategyTests {
 
     @Test
     void updateTodo() {
-        var dto = new TodoAddDto();
-        dto.setTodo("测试更新方法");
+        var dto = new TodoAddDto("测试更新方法");
         String id = strategy.add(dto);
 
         var updateContent = "测试更新成功";
-        var updateDto = new TodoUpdateDto();
-        updateDto.setId(id);
-        updateDto.setContent(updateContent);
+        var updateDto = new TodoUpdateDto(id, updateContent);
         strategy.update(updateDto);
 
         Optional<TodoDto> today = strategy.get(id);
 
         Assertions.assertTrue(today.isPresent());
-        Assertions.assertEquals(today.get().getContent(), updateContent);
+        Assertions.assertEquals(today.get().content(), updateContent);
     }
 
     @Test
     void selectTodo() {
-        TodoAddDto todoAddDto = new TodoAddDto();
-        todoAddDto.setTodo("安全考试");
+        TodoAddDto todoAddDto = new TodoAddDto("安全考试");
         String id = strategy.add(todoAddDto);
         Assertions.assertNotNull(id);
         Optional<TodoDto> todo = strategy.get(id);
@@ -61,8 +55,7 @@ public class TodoStrategyTests {
 
     @Test
     void listTodo() {
-        TodoAddDto todoAddDto = new TodoAddDto();
-        todoAddDto.setTodo("开发工作");
+        TodoAddDto todoAddDto = new TodoAddDto("开发工作");
         String id = strategy.add(todoAddDto);
         Assertions.assertNotNull(id);
         Optional<List<TodoDto>> todos = strategy.all();

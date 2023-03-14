@@ -1,17 +1,14 @@
 package com.tool.pomodoro.technique.tool.database.file.today;
 
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
-import com.tool.pomodoro.technique.tool.database.file.today.FileTodayDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
+import com.tool.pomodoro.technique.tool.strategy.util.IdUtil;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class FileTodayDatabaseTests {
 
@@ -27,10 +24,7 @@ public class FileTodayDatabaseTests {
 
     @Test
     void save() {
-        var today = new Today();
-        today.setId(UUID.randomUUID().toString());
-        today.setContent("test save");
-        today.setCreateTime(LocalDateTime.now());
+        var today = new Today(IdUtil.generate(), "test save");
         database.save(today);
 
         Optional<List<Today>> todayList = database.selectAll();
@@ -41,15 +35,9 @@ public class FileTodayDatabaseTests {
 
     @Test
     void saveBatch() {
-        var today = new Today();
-        today.setId(UUID.randomUUID().toString());
-        today.setContent("test saveBatch1");
-        today.setCreateTime(LocalDateTime.now());
+        var today = new Today(IdUtil.generate(), "test saveBatch1");
 
-        var today1 = new Today();
-        today1.setId(UUID.randomUUID().toString());
-        today1.setContent("test saveBatch2");
-        today1.setCreateTime(LocalDateTime.now());
+        var today1 = new Today(IdUtil.generate(), "test saveBatch2");
 
         database.saveBatch(List.of(today, today1));
 
@@ -61,11 +49,8 @@ public class FileTodayDatabaseTests {
 
     @Test
     void delete() {
-        String id = UUID.randomUUID().toString();
-        var today = new Today();
-        today.setId(id);
-        today.setContent("test delete");
-        today.setCreateTime(LocalDateTime.now());
+        String id = IdUtil.generate();
+        var today = new Today(id, "test delete");
         database.save(today);
 
         Assertions.assertTrue(database.selectById(id).isPresent());
@@ -77,31 +62,23 @@ public class FileTodayDatabaseTests {
 
     @Test
     void update() {
-        String id = UUID.randomUUID().toString();
-        var today = new Today();
-        today.setId(id);
-        today.setContent("test update");
-        today.setCreateTime(LocalDateTime.now());
+        String id = IdUtil.generate();
+        var today = new Today(id, "test update");
         database.save(today);
 
         String updateContent = "update success!";
-        var updateToday = new Today();
-        updateToday.setId(id);
-        updateToday.setContent(updateContent);
+        var updateToday = new Today(id, updateContent);
         database.update(updateToday);
 
         Optional<Today> updatedToday = database.selectById(id);
         Assertions.assertTrue(updatedToday.isPresent());
-        Assertions.assertEquals(updatedToday.get().getContent(), updateContent);
+        Assertions.assertEquals(updatedToday.get().content(), updateContent);
     }
 
     @Test
     void selectById() {
-        String uuid = UUID.randomUUID().toString();
-        var today = new Today();
-        today.setId(uuid);
-        today.setContent("test selectById");
-        today.setCreateTime(LocalDateTime.now());
+        String uuid = IdUtil.generate();
+        var today = new Today(uuid, "test selectById");
         database.save(today);
 
         Optional<Today> todayOpt = database.selectById(uuid);
@@ -111,10 +88,7 @@ public class FileTodayDatabaseTests {
 
     @Test
     void selectAll() {
-        var today = new Today();
-        today.setId(UUID.randomUUID().toString());
-        today.setContent("test selectAll");
-        today.setCreateTime(LocalDateTime.now());
+        var today = new Today(IdUtil.generate(), "test selectAll");
         database.save(today);
 
         Optional<List<Today>> todayOpt = database.selectAll();
@@ -122,7 +96,4 @@ public class FileTodayDatabaseTests {
         Assertions.assertTrue(todayOpt.isPresent());
         Assertions.assertFalse(todayOpt.get().isEmpty());
     }
-
-
-
 }

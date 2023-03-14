@@ -8,6 +8,8 @@ import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -33,8 +35,8 @@ public class TodayController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        todayContentTableColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
-        todayClocksTableColumn.setCellValueFactory(new PropertyValueFactory<>("clocks"));
+        todayContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
+        todayClocksTableColumn.setCellValueFactory(clocksColumn -> new SimpleIntegerProperty(clocksColumn.getValue().clocks()).asObject());
 
         refreshTodayTableView();
     }
@@ -45,7 +47,6 @@ public class TodayController implements Initializable {
     private TableColumn<TodayVo, String> todayContentTableColumn;
     @FXML
     private TableColumn<TodayVo, Integer> todayClocksTableColumn;
-
 
     @FXML
     private TextField addTodayField;
@@ -62,18 +63,16 @@ public class TodayController implements Initializable {
     }
 
     private void addToday(String content) {
-        var dto = new TodayAddDto();
-        dto.setContent(content);
+        var dto = new TodayAddDto(content);
         todayStrategy.add(dto);
     }
-
 
 
     @FXML
     protected void onTodayCopyToTodoMenuItem() {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
-                .ifPresent(todayVo -> moveStrategy.copyTodayToTodo(todayVo.getId()));
+                .ifPresent(todayVo -> moveStrategy.copyTodayToTodo(todayVo.id()));
     }
 
     @FXML
@@ -81,7 +80,7 @@ public class TodayController implements Initializable {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todayVo -> {
-                    moveStrategy.cutTodayToTodo(todayVo.getId());
+                    moveStrategy.cutTodayToTodo(todayVo.id());
                     refreshTodayTableView();
                 });
     }
@@ -91,7 +90,7 @@ public class TodayController implements Initializable {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todayVo -> {
-                    todayStrategy.delete(todayVo.getId());
+                    todayStrategy.delete(todayVo.id());
                     refreshTodayTableView();
                 });
     }
@@ -105,7 +104,7 @@ public class TodayController implements Initializable {
 
     private void createCountdownWindow(TodayVo todayVo) {
         TodayCountdownController todayCountdownController = new TodayCountdownController(todayVo);
-        Stage stage = WindowUtil.create(todayVo.getContent(), "today/today-countdown.fxml", todayCountdownController);
+        Stage stage = WindowUtil.create(todayVo.content(), "today/today-countdown.fxml", todayCountdownController);
 
         stage.setOnShowing(event -> todayCountdownController.init());
 
@@ -126,7 +125,7 @@ public class TodayController implements Initializable {
     private List<TodayVo> wrapTodayVoList(List<TodayDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(item -> new TodayVo(item.getId(), item.getContent(), item.getClocks()))
+                .map(item -> new TodayVo(item.id(), item.content(), item.clocks()))
                 .collect(Collectors.toList());
     }
 }

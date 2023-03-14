@@ -22,7 +22,7 @@ public class TodoTodayMoveStrategyImpl implements TodoTodayMoveStrategy {
     @Override
     public Optional<String> copyTodoToToday(String uuid) {
         return todoStrategy.get(uuid)
-                .map(todoDto -> new TodayAddDto(todoDto.getContent()))
+                .map(todoDto -> new TodayAddDto(todoDto.content()))
                 .map(todayStrategy::add);
     }
 
@@ -38,7 +38,7 @@ public class TodoTodayMoveStrategyImpl implements TodoTodayMoveStrategy {
     @Override
     public Optional<String> copyTodayToTodo(String uuid) {
         return todayStrategy.get(uuid)
-                .map(todayDto -> new TodoAddDto(todayDto.getContent()))
+                .map(todayDto -> new TodoAddDto(todayDto.content()))
                 .map(todoStrategy::add);
     }
 

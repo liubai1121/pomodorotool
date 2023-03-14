@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 
 public class LabelEditController implements Initializable {
 
-    private LabelVo updateLabel;
+    private final LabelVo updateLabel;
 
     private final LabelStrategy labelStrategy = LabelStrategyFactory.create();
 
@@ -27,10 +27,10 @@ public class LabelEditController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        labelEditLabelIdTextField.setText(updateLabel.getLabelId());
+        labelEditLabelIdTextField.setText(updateLabel.labelId());
         labelEditLabelIdTextField.setEditable(false);
 
-        labelEditLabelNameTextField.setText(updateLabel.getLabelName());
+        labelEditLabelNameTextField.setText(updateLabel.labelName());
     }
 
     @FXML
@@ -46,10 +46,7 @@ public class LabelEditController implements Initializable {
                         .filter(Predicate.not(String::isBlank))
                         .ifPresent(newLabelName -> {
 
-                            LabelUpdateDto updateDto = new LabelUpdateDto();
-                            updateDto.setLabelId(labelId);
-                            updateDto.setLabelName(newLabelName);
-                            labelStrategy.update(updateDto);
+                            labelStrategy.update(new LabelUpdateDto(labelId, newLabelName));
 
                             Stage stage = (Stage) labelEditLabelNameTextField.getScene().getWindow();
                             WindowUtil.close(stage);

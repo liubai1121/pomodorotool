@@ -1,14 +1,12 @@
 package com.tool.pomodoro.technique.tool.database.memory.todo;
 
-import com.tool.pomodoro.technique.tool.database.memory.todo.MemoryTodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
+import com.tool.pomodoro.technique.tool.strategy.util.IdUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public class MemoryTodoDatabaseTests {
 
@@ -16,10 +14,7 @@ public class MemoryTodoDatabaseTests {
 
     @Test
     void save() {
-        var todo = new Todo();
-        todo.setId(UUID.randomUUID().toString());
-        todo.setContent("test save");
-        todo.setCreateTime(LocalDateTime.now());
+        var todo = new Todo(IdUtil.generate(), "test save");
         todoDatabase.save(todo);
 
         Optional<List<Todo>> todos = todoDatabase.selectAll();
@@ -30,15 +25,9 @@ public class MemoryTodoDatabaseTests {
 
     @Test
     void saveBatch() {
-        var todo = new Todo();
-        todo.setId(UUID.randomUUID().toString());
-        todo.setContent("test saveBatch1");
-        todo.setCreateTime(LocalDateTime.now());
+        var todo = new Todo(IdUtil.generate(), "test saveBatch1");
 
-        var todo1 = new Todo();
-        todo1.setId(UUID.randomUUID().toString());
-        todo1.setContent("test saveBatch2");
-        todo1.setCreateTime(LocalDateTime.now());
+        var todo1 = new Todo(IdUtil.generate(), "test saveBatch2");
 
         todoDatabase.saveBatch(List.of(todo, todo1));
 
@@ -50,10 +39,7 @@ public class MemoryTodoDatabaseTests {
 
     @Test
     void selectAll() {
-        var todo = new Todo();
-        todo.setId(UUID.randomUUID().toString());
-        todo.setContent("test selectAll");
-        todo.setCreateTime(LocalDateTime.now());
+        var todo = new Todo(IdUtil.generate(), "test selectAll");
         todoDatabase.save(todo);
 
         Optional<List<Todo>> todos = todoDatabase.selectAll();
@@ -64,11 +50,8 @@ public class MemoryTodoDatabaseTests {
 
     @Test
     void selectById() {
-        String uuid = UUID.randomUUID().toString();
-        var todo = new Todo();
-        todo.setId(uuid);
-        todo.setContent("test selectById");
-        todo.setCreateTime(LocalDateTime.now());
+        String uuid = IdUtil.generate();
+        var todo = new Todo(uuid, "test selectById");
         todoDatabase.save(todo);
 
         Optional<Todo> todos = todoDatabase.selectById(uuid);

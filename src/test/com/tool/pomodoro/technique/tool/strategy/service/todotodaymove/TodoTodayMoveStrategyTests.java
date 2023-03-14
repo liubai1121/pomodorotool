@@ -21,8 +21,7 @@ public class TodoTodayMoveStrategyTests {
 
     @Test
     void copyTodoToToday() {
-        var todoAddDto = new TodoAddDto();
-        todoAddDto.setTodo("测试复制Todo到Today");
+        var todoAddDto = new TodoAddDto("测试复制Todo到Today");
         String uuid = todoStrategy.add(todoAddDto);
 
         Optional<String> todayIdOpt = todoTodayMoveStrategy.copyTodoToToday(uuid);
@@ -35,8 +34,7 @@ public class TodoTodayMoveStrategyTests {
 
     @Test
     void cutTodoToToday() {
-        var todoAddDto = new TodoAddDto();
-        todoAddDto.setTodo("测试剪切Todo到Today");
+        var todoAddDto = new TodoAddDto("测试剪切Todo到Today");
         String uuid = todoStrategy.add(todoAddDto);
 
         Optional<String> todayIdOpt = todoTodayMoveStrategy.cutTodoToToday(uuid);
@@ -48,8 +46,7 @@ public class TodoTodayMoveStrategyTests {
 
     @Test
     void copyTodayToTodo() {
-        var todayAddDto = new TodayAddDto();
-        todayAddDto.setContent("测试复制Today到Todo");
+        var todayAddDto = new TodayAddDto("测试复制Today到Todo");
         String uuid = todayStrategy.add(todayAddDto);
 
         Optional<String> todoIdOpt = todoTodayMoveStrategy.copyTodayToTodo(uuid);
@@ -61,8 +58,7 @@ public class TodoTodayMoveStrategyTests {
 
     @Test
     void cutTodayToTodo() {
-        var todayAddDto = new TodayAddDto();
-        todayAddDto.setContent("测试剪切Today到Todo");
+        var todayAddDto = new TodayAddDto("测试剪切Today到Todo");
         String uuid = todayStrategy.add(todayAddDto);
 
         Optional<String> todoIdOpt = todoTodayMoveStrategy.cutTodayToTodo(uuid);
