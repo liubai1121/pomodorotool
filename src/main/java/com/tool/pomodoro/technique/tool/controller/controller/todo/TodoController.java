@@ -1,5 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
+import com.tool.pomodoro.technique.tool.controller.controller.today.TodayController;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
@@ -35,6 +36,7 @@ public class TodoController implements Initializable {
         todoContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
 
         refreshTodoTableView();
+        ToolController.registerController(this);
     }
 
     @FXML
@@ -66,7 +68,11 @@ public class TodoController implements Initializable {
     protected void onTodoCopyToTodayMenuItem() {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
-                .ifPresent(todoVo -> moveStrategy.copyTodoToToday(todoVo.id()));
+                .ifPresent(todoVo -> {
+                    moveStrategy.copyTodoToToday(todoVo.id());
+                    ToolController.getController(TodayController.class)
+                            .ifPresent(TodayController::refreshTodayTableView);
+                });
     }
 
     @FXML
@@ -76,6 +82,8 @@ public class TodoController implements Initializable {
                 .ifPresent(todoVo -> {
                     moveStrategy.cutTodoToToday(todoVo.id());
                     refreshTodoTableView();
+                    ToolController.getController(TodayController.class)
+                            .ifPresent(TodayController::refreshTodayTableView);
                 });
     }
 
@@ -89,7 +97,7 @@ public class TodoController implements Initializable {
                 });
     }
 
-    private void refreshTodoTableView() {
+    public void refreshTodoTableView() {
         todoStrategy.all()
                 .map(this::wrapTodoVoList)
                 .map(FXCollections::observableList)

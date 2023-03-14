@@ -1,6 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
+import com.tool.pomodoro.technique.tool.controller.controller.todo.TodoController;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
@@ -39,6 +40,7 @@ public class TodayController implements Initializable {
         todayClocksTableColumn.setCellValueFactory(clocksColumn -> new SimpleIntegerProperty(clocksColumn.getValue().clocks()).asObject());
 
         refreshTodayTableView();
+        ToolController.registerController(this);
     }
 
     @FXML
@@ -71,7 +73,11 @@ public class TodayController implements Initializable {
     protected void onTodayCopyToTodoMenuItem() {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
-                .ifPresent(todayVo -> moveStrategy.copyTodayToTodo(todayVo.id()));
+                .ifPresent(todayVo -> {
+                    moveStrategy.copyTodayToTodo(todayVo.id());
+                    ToolController.getController(TodoController.class)
+                            .ifPresent(TodoController::refreshTodoTableView);
+                });
     }
 
     @FXML
@@ -81,6 +87,8 @@ public class TodayController implements Initializable {
                 .ifPresent(todayVo -> {
                     moveStrategy.cutTodayToTodo(todayVo.id());
                     refreshTodayTableView();
+                    ToolController.getController(TodoController.class)
+                            .ifPresent(TodoController::refreshTodoTableView);
                 });
     }
 
@@ -114,7 +122,7 @@ public class TodayController implements Initializable {
         stage.show();
     }
 
-    private void refreshTodayTableView() {
+    public void refreshTodayTableView() {
         todayStrategy.all()
                 .map(this::wrapTodayVoList)
                 .map(FXCollections::observableList)
