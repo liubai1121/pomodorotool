@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0" minWidth="0.0" prefHeight="349.0" prefWidth="458.0">
+    <children>
+        <TableView fx:id="todoTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="380.0">
+            <columns>
+                <TableColumn fx:id="todoContentTableColumn" prefWidth="378.0" text="内容"/>
+            </columns>
+            <contextMenu>
+                <ContextMenu fx:id="todoContextMenu">
+                    <items>
+                        <MenuItem fx:id="todoCopyToTodayMenuItem" mnemonicParsing="false" text="复制至今日待办"/>
+                        <MenuItem fx:id="todoCutToTodayMenuItem" mnemonicParsing="false" text="剪切至今日待办"/>
+                        <MenuItem fx:id="todoDeleteMenuItem" mnemonicParsing="false" text="删除"/>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+        <TextField fx:id="addTodoField" layoutX="14.0" layoutY="325.0" prefHeight="23.0" prefWidth="329.0"/>
+        <Button layoutX="355.0" layoutY="325.0" mnemonicParsing="false" text="Add"/>
+    </children>
+</AnchorPane>
+
+
+

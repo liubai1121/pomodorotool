@@ -46,116 +46,114 @@ public class ToolController {
         this.moveStrategy = moveStrategy;
     }
 
-    @FXML
-    private TableView<TodoVo> todoTableView;
-    @FXML
-    private TableColumn<TodoVo, String> todoContentTableColumn;
-    
-
-
-    @FXML
-    protected void onLoadTodo() {
-        todoStrategy.all()
-                .map(list -> list.stream()
-                        .filter(Objects::nonNull)
-                        .map(item -> new TodoVo(item.getId(), item.getContent()))
-                        .collect(Collectors.toList()))
-                .map(FXCollections::observableList)
-                .ifPresent(this::setTodoTableView);
-    }
-
-    private void setTodoTableView(ObservableList<TodoVo> list) {
-        // 设置tableView的列可更改
-        todoTableView.setEditable(true);
-        // 设置列的编辑方式
-        todoContentTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        // 设置列的取值
-        todoContentTableColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
-        // 设置列的编辑提交函数
-        todoContentTableColumn.setOnEditCommit(event -> {
-            TablePosition<TodoVo, String> tablePosition = event.getTablePosition();
-            TableView<TodoVo> tableView = tablePosition.getTableView();
-            ObservableList<TodoVo> items = tableView.getItems();
-            TodoVo todoVo = items.get(tablePosition.getRow());
-            todoVo.setContent(event.getNewValue());
-            updateTodo(todoVo);
-        });
-
-        todoTableView.setItems(list);
-    }
-
-    private void updateTodo(TodoVo vo) {
-        var updateTodo = new TodoUpdateDto();
-        updateTodo.setId(vo.getId());
-        updateTodo.setContent(vo.getContent());
-        todoStrategy.update(updateTodo);
-    }
-
-    @FXML
-    private TextField addTodoField;
-
-    @FXML
-    protected void onAddTodoButtonClick() {
-        Optional.ofNullable(addTodoField.getCharacters())
-                .map(CharSequence::toString)
-                .filter(Predicate.not(String::isBlank))
-                .ifPresent(this::addTodo);
-
-        addTodoField.clear();
-        onLoadTodo();
-    }
-
-    private void addTodo(String todo) {
-        var dto = new TodoAddDto();
-        dto.setTodo(todo);
-        todoStrategy.add(dto);
-    }
-
-    @FXML
-    private ContextMenu todoContextMenu;
-    @FXML
-    private MenuItem todoDeleteMenuItem;
-
-    @FXML
-    protected void onTodoDeleteMenuItem() {
-        Optional.ofNullable(todoTableView.getSelectionModel())
-                .flatMap(selectionModel -> Optional.of(selectionModel.getSelectedIndex())
-                        .filter(selectedIndex -> selectedIndex >= 0))
-                .ifPresent(selectedIndex -> Optional.ofNullable(todoTableView.getItems())
-                        .filter(Predicate.not(Collection::isEmpty))
-                        .filter(items -> items.size() > selectedIndex)
-                        .ifPresent(items -> {
-                            TodoVo removedVO = items.remove(selectedIndex.intValue());
-                            todoStrategy.delete(removedVO.getId());
-                        }));
-    }
-
-    @FXML
-    private MenuItem todoCopyToTodayMenuItem;
-
-    @FXML
-    protected void onTodoCopyToTodayMenuItem() {
-        Optional.ofNullable(todoTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
-                .ifPresent(todoVo -> moveStrategy.copyTodoToToday(todoVo.getId()));
-    }
-
-    @FXML
-    private MenuItem todoCutToTodayMenuItem;
-
-    @FXML
-    protected void onTodoCutToTodayMenuItem() {
-        Optional.ofNullable(todoTableView.getSelectionModel())
-                .flatMap(selectionModel -> Optional.of(selectionModel.getSelectedIndex())
-                        .filter(selectedIndex -> selectedIndex >= 0))
-                .ifPresent(selectedIndex -> Optional.ofNullable(todoTableView.getItems())
-                        .filter(Predicate.not(Collection::isEmpty))
-                        .filter(items -> items.size() > selectedIndex)
-                        .ifPresent(items -> {
-                            TodoVo removedVO = items.remove(selectedIndex.intValue());
-                            moveStrategy.cutTodoToToday(removedVO.getId());
-                        }));
-    }
+//    @FXML
+//    private TableView<TodoVo> todoTableView;
+//    @FXML
+//    private TableColumn<TodoVo, String> todoContentTableColumn;
+//
+//    @FXML
+//    protected void onLoadTodo() {
+//        todoStrategy.all()
+//                .map(list -> list.stream()
+//                        .filter(Objects::nonNull)
+//                        .map(item -> new TodoVo(item.getId(), item.getContent()))
+//                        .collect(Collectors.toList()))
+//                .map(FXCollections::observableList)
+//                .ifPresent(this::setTodoTableView);
+//    }
+//
+//    private void setTodoTableView(ObservableList<TodoVo> list) {
+//        // 设置tableView的列可更改
+//        todoTableView.setEditable(true);
+//        // 设置列的编辑方式
+//        todoContentTableColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+//        // 设置列的取值
+//        todoContentTableColumn.setCellValueFactory(new PropertyValueFactory<>("content"));
+//        // 设置列的编辑提交函数
+//        todoContentTableColumn.setOnEditCommit(event -> {
+//            TablePosition<TodoVo, String> tablePosition = event.getTablePosition();
+//            TableView<TodoVo> tableView = tablePosition.getTableView();
+//            ObservableList<TodoVo> items = tableView.getItems();
+//            TodoVo todoVo = items.get(tablePosition.getRow());
+//            todoVo.setContent(event.getNewValue());
+//            updateTodo(todoVo);
+//        });
+//
+//        todoTableView.setItems(list);
+//    }
+//
+//    private void updateTodo(TodoVo vo) {
+//        var updateTodo = new TodoUpdateDto();
+//        updateTodo.setId(vo.getId());
+//        updateTodo.setContent(vo.getContent());
+//        todoStrategy.update(updateTodo);
+//    }
+//
+//    @FXML
+//    private TextField addTodoField;
+//
+//    @FXML
+//    protected void onAddTodoButtonClick() {
+//        Optional.ofNullable(addTodoField.getCharacters())
+//                .map(CharSequence::toString)
+//                .filter(Predicate.not(String::isBlank))
+//                .ifPresent(this::addTodo);
+//
+//        addTodoField.clear();
+//        onLoadTodo();
+//    }
+//
+//    private void addTodo(String todo) {
+//        var dto = new TodoAddDto();
+//        dto.setTodo(todo);
+//        todoStrategy.add(dto);
+//    }
+//
+//    @FXML
+//    private ContextMenu todoContextMenu;
+//    @FXML
+//    private MenuItem todoDeleteMenuItem;
+//
+//    @FXML
+//    protected void onTodoDeleteMenuItem() {
+//        Optional.ofNullable(todoTableView.getSelectionModel())
+//                .flatMap(selectionModel -> Optional.of(selectionModel.getSelectedIndex())
+//                        .filter(selectedIndex -> selectedIndex >= 0))
+//                .ifPresent(selectedIndex -> Optional.ofNullable(todoTableView.getItems())
+//                        .filter(Predicate.not(Collection::isEmpty))
+//                        .filter(items -> items.size() > selectedIndex)
+//                        .ifPresent(items -> {
+//                            TodoVo removedVO = items.remove(selectedIndex.intValue());
+//                            todoStrategy.delete(removedVO.getId());
+//                        }));
+//    }
+//
+//    @FXML
+//    private MenuItem todoCopyToTodayMenuItem;
+//
+//    @FXML
+//    protected void onTodoCopyToTodayMenuItem() {
+//        Optional.ofNullable(todoTableView.getSelectionModel())
+//                .map(SelectionModel::getSelectedItem)
+//                .ifPresent(todoVo -> moveStrategy.copyTodoToToday(todoVo.getId()));
+//    }
+//
+//    @FXML
+//    private MenuItem todoCutToTodayMenuItem;
+//
+//    @FXML
+//    protected void onTodoCutToTodayMenuItem() {
+//        Optional.ofNullable(todoTableView.getSelectionModel())
+//                .flatMap(selectionModel -> Optional.of(selectionModel.getSelectedIndex())
+//                        .filter(selectedIndex -> selectedIndex >= 0))
+//                .ifPresent(selectedIndex -> Optional.ofNullable(todoTableView.getItems())
+//                        .filter(Predicate.not(Collection::isEmpty))
+//                        .filter(items -> items.size() > selectedIndex)
+//                        .ifPresent(items -> {
+//                            TodoVo removedVO = items.remove(selectedIndex.intValue());
+//                            moveStrategy.cutTodoToToday(removedVO.getId());
+//                        }));
+//    }
 
 
     @FXML

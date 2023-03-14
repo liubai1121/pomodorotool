@@ -16,28 +16,9 @@
     <fx:include source="tool-menu.fxml"/>
     <TabPane layoutX="1.0" layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="408.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
         <tabs>
-            <Tab onSelectionChanged="#onLoadTodo" text="待办列表">
+            <Tab text="待办列表">
                 <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="349.0" prefWidth="458.0">
-                        <children>
-                            <TableView fx:id="todoTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="380.0">
-                                <columns>
-                                    <TableColumn fx:id="todoContentTableColumn" prefWidth="378.0" text="内容" />
-                                </columns>
-                                <contextMenu>
-                                    <ContextMenu fx:id="todoContextMenu">
-                                        <items>
-                                            <MenuItem fx:id="todoCopyToTodayMenuItem" mnemonicParsing="false" onAction="#onTodoCopyToTodayMenuItem" text="复制至今日待办" />
-                                            <MenuItem fx:id="todoCutToTodayMenuItem" mnemonicParsing="false" onAction="#onTodoCutToTodayMenuItem" text="剪切至今日待办" />
-                                            <MenuItem fx:id="todoDeleteMenuItem" mnemonicParsing="false" onAction="#onTodoDeleteMenuItem" text="删除" />
-                                        </items>
-                                    </ContextMenu>
-                                </contextMenu>
-                            </TableView>
-                            <TextField fx:id="addTodoField" layoutX="14.0" layoutY="325.0" prefHeight="23.0" prefWidth="329.0" />
-                            <Button layoutX="355.0" layoutY="325.0" mnemonicParsing="false" onAction="#onAddTodoButtonClick" text="Add" />
-                        </children>
-                    </AnchorPane>
+                    <fx:include source="todo-tab.fxml"/>
                 </content>
             </Tab>
             <Tab onSelectionChanged="#onLoadToday" text="今日待办">
