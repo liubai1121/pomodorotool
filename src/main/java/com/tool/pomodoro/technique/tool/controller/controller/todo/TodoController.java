@@ -1,6 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
+import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.factory.todotodaymove.TodoTodayMoveStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
@@ -15,7 +16,6 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.List;
@@ -101,5 +101,13 @@ public class TodoController implements Initializable {
                 .filter(Objects::nonNull)
                 .map(item -> new TodoVo(item.id(), item.content()))
                 .collect(Collectors.toList());
+    }
+
+    @FXML
+    protected void onRowSelected() {
+        Optional.ofNullable(todoTableView.getSelectionModel())
+                .map(SelectionModel::getSelectedItem)
+                .ifPresent(todoVo -> ToolController.getController(TodoDetailController.class)
+                        .ifPresent(controller -> controller.display(todoVo)));
     }
 }

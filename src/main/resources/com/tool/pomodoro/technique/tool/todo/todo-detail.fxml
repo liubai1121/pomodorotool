@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane layoutX="14.0" layoutY="381.0" prefHeight="74.0" prefWidth="282.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.todo.TodoDetailController">
+    <TextArea fx:id="todoDetailTextAreal" editable="false" layoutY="-56.0" prefHeight="106.0" prefWidth="381.0"/>
+</AnchorPane>

@@ -7,6 +7,7 @@ import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -27,20 +28,19 @@ public class LabelEditController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        labelEditLabelIdTextField.setText(updateLabel.labelId());
-        labelEditLabelIdTextField.setEditable(false);
+        labelEditLabelIdLabel.setText(updateLabel.labelId());
 
         labelEditLabelNameTextField.setText(updateLabel.labelName());
     }
 
     @FXML
-    private TextField labelEditLabelIdTextField;
+    private Label labelEditLabelIdLabel;
     @FXML
     private TextField labelEditLabelNameTextField;
 
     @FXML
     protected void onLabelEdit() {
-        Optional.ofNullable(labelEditLabelIdTextField.getText())
+        Optional.ofNullable(labelEditLabelIdLabel.getText())
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(labelId -> Optional.ofNullable(labelEditLabelNameTextField.getText())
                         .filter(Predicate.not(String::isBlank))

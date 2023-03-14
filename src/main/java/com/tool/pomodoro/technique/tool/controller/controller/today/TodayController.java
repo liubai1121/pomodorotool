@@ -1,7 +1,8 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
-import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
+import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
+import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.factory.todotodaymove.TodoTodayMoveStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
@@ -17,7 +18,6 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -66,7 +66,6 @@ public class TodayController implements Initializable {
         var dto = new TodayAddDto(content);
         todayStrategy.add(dto);
     }
-
 
     @FXML
     protected void onTodayCopyToTodoMenuItem() {
@@ -127,5 +126,14 @@ public class TodayController implements Initializable {
                 .filter(Objects::nonNull)
                 .map(item -> new TodayVo(item.id(), item.content(), item.clocks()))
                 .collect(Collectors.toList());
+    }
+
+
+    @FXML
+    protected void onRowSelected() {
+        Optional.ofNullable(todayTableView.getSelectionModel())
+                .map(SelectionModel::getSelectedItem)
+                .ifPresent(todayVo -> ToolController.getController(TodayDetailController.class)
+                        .ifPresent(controller -> controller.display(todayVo)));
     }
 }

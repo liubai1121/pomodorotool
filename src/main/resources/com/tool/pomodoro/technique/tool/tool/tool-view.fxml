@@ -3,18 +3,15 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="432.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController">
-    <fx:include source="tool-menu.fxml"/>
-    <TabPane layoutX="1.0" layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-             minWidth="-Infinity" prefHeight="390.0" prefWidth="408.0" tabClosingPolicy="UNAVAILABLE"
-             xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane prefHeight="497.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController">
+    <fx:include source="tool-menu.fxml" />
+    <TabPane layoutX="1.0" layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="409.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
         <Tab text="待办列表">
-            <fx:include source="../todo/todo-tab.fxml"/>
+            <fx:include source="../todo/todo-tab.fxml" />
         </Tab>
         <Tab text="今日待办">
-            <fx:include source="../today/today-tab.fxml"/>
+            <fx:include source="../today/today-tab.fxml" />
         </Tab>
     </TabPane>
 </AnchorPane>
