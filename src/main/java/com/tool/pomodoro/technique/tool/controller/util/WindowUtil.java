@@ -1,7 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.util;
 
 import com.tool.pomodoro.technique.tool.ToolApplication;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -31,16 +30,14 @@ public class WindowUtil {
     }
 
     private static Stage create(String title, FXMLLoader fxmlLoader) {
-        Scene scene = null;
+        Stage stage = new Stage();
+        stage.setTitle(title);
+
         try {
-            scene = new Scene(fxmlLoader.load());
+            stage.setScene(new Scene(fxmlLoader.load()));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(scene);
 
         return stage;
     }

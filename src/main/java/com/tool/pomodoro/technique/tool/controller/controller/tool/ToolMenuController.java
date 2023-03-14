@@ -1,11 +1,10 @@
-package com.tool.pomodoro.technique.tool.controller;
+package com.tool.pomodoro.technique.tool.controller.controller.tool;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
 public class ToolMenuController {
-
 
     @FXML
     protected void onLabelManagement() {

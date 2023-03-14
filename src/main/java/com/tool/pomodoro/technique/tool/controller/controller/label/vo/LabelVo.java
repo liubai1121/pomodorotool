@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.controller.vo;
+package com.tool.pomodoro.technique.tool.controller.controller.label.vo;
 
 public class LabelVo {
     private String labelId;

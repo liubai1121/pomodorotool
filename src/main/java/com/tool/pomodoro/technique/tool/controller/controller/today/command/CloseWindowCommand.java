@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.controller.command;
+package com.tool.pomodoro.technique.tool.controller.controller.today.command;
 
 import com.tool.pomodoro.technique.tool.common.command.Command;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;

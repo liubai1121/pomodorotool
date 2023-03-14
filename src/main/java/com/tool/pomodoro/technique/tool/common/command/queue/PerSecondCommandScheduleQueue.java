@@ -7,17 +7,17 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 
-public class PerSecondCommandQueue implements CommandQueue, ToolInit {
-    private final static PerSecondCommandQueue PER_SECOND_COMMAND_QUEUE = new PerSecondCommandQueue();
+public class PerSecondCommandScheduleQueue implements CommandScheduleQueue, ToolInit {
+    private final static PerSecondCommandScheduleQueue PER_SECOND_COMMAND_QUEUE = new PerSecondCommandScheduleQueue();
 
     private final Queue<Command> queue = new LinkedList<>();
 
-    private PerSecondCommandQueue() {
+    private PerSecondCommandScheduleQueue() {
     }
 
     @Override
     public void init() {
-        PerSecondCommandQueue.getInstance().put(new SleepCommand(1000));
+        PerSecondCommandScheduleQueue.getInstance().put(new SleepCommand(1000));
 
         new Thread(() -> {
             while (true) {
@@ -33,7 +33,7 @@ public class PerSecondCommandQueue implements CommandQueue, ToolInit {
                 .ifPresent(queue::add);
     }
 
-    public static PerSecondCommandQueue getInstance() {
+    public static PerSecondCommandScheduleQueue getInstance() {
         return PER_SECOND_COMMAND_QUEUE;
     }
 
@@ -48,7 +48,7 @@ public class PerSecondCommandQueue implements CommandQueue, ToolInit {
         public void execute() {
             try {
                 Thread.sleep(sleepTime);
-                PerSecondCommandQueue.getInstance().put(this);
+                PerSecondCommandScheduleQueue.getInstance().put(this);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

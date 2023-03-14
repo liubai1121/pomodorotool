@@ -1,10 +1,6 @@
 package com.tool.pomodoro.technique.tool;
 
-import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
-import com.tool.pomodoro.technique.tool.controller.ToolController;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
-import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandScheduleQueue;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,31 +13,21 @@ public class ToolApplication extends Application {
     public void start(Stage stage) throws IOException {
         initTool();
 
-        var toolController = createController();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource("tool-view.fxml"));
-        fxmlLoader.setController(toolController);
+        FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource("tool/tool-view.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Pomodoro Technique Tool");
+        stage.setTitle("番茄工作法小工具");
         stage.setScene(scene);
-        stage.show();
 
         stage.setOnCloseRequest(event -> {
             System.exit(0);
         });
+
+        stage.show();
     }
 
     private void initTool() {
-        PerSecondCommandQueue.getInstance().init();
-    }
-
-    private ToolController createController() {
-        var todayStrategy = TodayStrategyFactory.create();
-        var todoStrategy = TodoStrategyFactory.create();
-        var moveStrategy = new TodoTodayMoveStrategyImpl(todoStrategy, todayStrategy);
-
-        return new ToolController(todoStrategy, todayStrategy, moveStrategy);
+        PerSecondCommandScheduleQueue.getInstance().init();
     }
 
     public static void main(String[] args) {

@@ -1,14 +1,14 @@
-package com.tool.pomodoro.technique.tool.controller.command;
+package com.tool.pomodoro.technique.tool.controller.controller.today.command;
 
 import com.tool.pomodoro.technique.tool.common.command.Command;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 
-public class IncrementClockCommand implements Command {
+public class TodayIncrementClockCommand implements Command {
 
     private final String id;
 
-    public IncrementClockCommand(String id) {
+    public TodayIncrementClockCommand(String id) {
         this.id = id;
     }
 

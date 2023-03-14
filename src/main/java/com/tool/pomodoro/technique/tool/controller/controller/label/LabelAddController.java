@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.controller.label;
+package com.tool.pomodoro.technique.tool.controller.controller.label;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;

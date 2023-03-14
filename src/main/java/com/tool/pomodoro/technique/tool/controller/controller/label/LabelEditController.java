@@ -1,7 +1,7 @@
-package com.tool.pomodoro.technique.tool.controller.label;
+package com.tool.pomodoro.technique.tool.controller.controller.label;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.controller.vo.LabelVo;
+import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
 import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;

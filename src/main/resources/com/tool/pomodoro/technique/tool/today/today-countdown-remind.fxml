@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="557.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.RemindController">
+<AnchorPane prefHeight="557.0" prefWidth="785.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.today.TodayCountdownRemindController">
    <Label layoutX="225.0" layoutY="17.0" prefHeight="91.0" prefWidth="336.0" text="注意休息！！！" textFill="#31c63b">
       <font>
          <Font name="Arial" size="47.0" />

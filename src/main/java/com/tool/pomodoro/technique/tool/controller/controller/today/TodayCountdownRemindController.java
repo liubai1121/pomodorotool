@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.controller;
+package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class RemindController {
+public class TodayCountdownRemindController {
 
     @FXML
     public Button closeRemindButton;

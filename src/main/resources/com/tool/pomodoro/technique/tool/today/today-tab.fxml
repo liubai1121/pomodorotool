@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"
+            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.today.TodayController">
+
+    <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="380.0">
+        <columns>
+            <TableColumn fx:id="todayContentTableColumn" prefWidth="292.0" text="内容"/>
+            <TableColumn fx:id="todayClocksTableColumn" prefWidth="87.0" text="时钟数"/>
+        </columns>
+        <contextMenu>
+            <ContextMenu>
+                <items>
+                    <MenuItem onAction="#onStartClock" text="启动时钟"/>
+                    <MenuItem onAction="#onTodayCopyToTodoMenuItem" text="复制至待办列表"/>
+                    <MenuItem onAction="#onTodayCutToTodoMenuItem" text="剪切至待办列表"/>
+                    <MenuItem onAction="#onTodayDeleteMenuItem" text="删除"/>
+                </items>
+            </ContextMenu>
+        </contextMenu>
+    </TableView>
+    <TextField fx:id="addTodayField" layoutX="14.0" layoutY="325.0" prefHeight="23.0" prefWidth="329.0"/>
+    <Button layoutX="355.0" layoutY="325.0" mnemonicParsing="false" onAction="#onAddTodayButtonClick" text="Add"/>
+
+</AnchorPane>

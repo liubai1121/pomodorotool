@@ -1,4 +1,4 @@
-package com.tool.pomodoro.technique.tool.controller.vo;
+package com.tool.pomodoro.technique.tool.controller.controller.today.vo;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;

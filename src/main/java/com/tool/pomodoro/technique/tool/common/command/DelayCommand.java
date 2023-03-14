@@ -1,6 +1,6 @@
 package com.tool.pomodoro.technique.tool.common.command;
 
-import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandQueue;
+import com.tool.pomodoro.technique.tool.common.command.queue.PerSecondCommandScheduleQueue;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -20,7 +20,7 @@ public class DelayCommand implements Command {
     @Override
     public void execute() {
         if (LocalDateTime.now().isBefore(endTime)) {
-            PerSecondCommandQueue.getInstance().put(this);
+            PerSecondCommandScheduleQueue.getInstance().put(this);
             return;
         }
 
