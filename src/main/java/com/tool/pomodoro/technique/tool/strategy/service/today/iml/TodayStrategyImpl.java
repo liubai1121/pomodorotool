@@ -44,7 +44,7 @@ public class TodayStrategyImpl implements TodayStrategy {
     @Override
     public Optional<TodayDto> get(String uuid) {
         return todayDatabase.selectById(uuid)
-                .map(today -> new TodayDto(today.id(), today.content(), today.clocks()));
+                .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.createTime()));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class TodayStrategyImpl implements TodayStrategy {
         return todayDatabase.selectAll()
                 .map(list -> list.stream()
                         .filter(Objects::nonNull)
-                        .map(today -> new TodayDto(today.id(), today.content(), today.clocks()))
+                        .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.createTime()))
                         .collect(Collectors.toList()));
     }
 

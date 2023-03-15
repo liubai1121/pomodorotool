@@ -50,19 +50,20 @@ public class FileTodayDatabase implements TodayDatabase, FileBaseDatabase {
     @Override
     public void update(Today today) {
         Optional.ofNullable(today)
+                .flatMap(item -> selectById(item.id()))
                 .ifPresent(item -> {
-                    doUpdate(item);
+                    doUpdate(item, today);
                     store();
                 });
     }
 
-    private void doUpdate(Today today) {
-        int index = dataList.indexOf(today);
+    private void doUpdate(Today oldToday, Today newToday) {
+        int index = dataList.indexOf(oldToday);
         if (index == -1) {
             return;
         }
         dataList.remove(index);
-        dataList.add(index, today);
+        dataList.add(index, newToday);
     }
 
     @Override

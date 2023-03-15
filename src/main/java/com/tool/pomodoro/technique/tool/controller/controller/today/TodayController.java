@@ -96,27 +96,27 @@ public class TodayController implements Initializable {
 
     @FXML
     protected void onAdd() {
-        Stage stage = WindowUtil.create("新增标签", "label/label-add.fxml");
+        Stage stage = WindowUtil.create("新增", "today/today-add.fxml");
         stage.setAlwaysOnTop(true);
         stage.show();
+
         stage.setOnCloseRequest(event -> {
             refreshTableView();
         });
     }
 
-
     @FXML
-    protected void edit() {
+    protected void onEdit() {
         getSelectedLabel()
                 .ifPresent(today -> {
                     var editController = new TodayEditController(today);
                     Stage stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
+
                     stage.setOnCloseRequest(event -> {
                         refreshTableView();
                     });
-
                 });
     }
 
@@ -165,7 +165,7 @@ public class TodayController implements Initializable {
     private List<TodayVo> wrapTodayVoList(List<TodayDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(item -> new TodayVo(item.id(), item.content(), item.clocks()))
+                .map(item -> new TodayVo(item.id(), item.content(), item.clocks(), item.createTime()))
                 .collect(Collectors.toList());
     }
 

@@ -2,8 +2,6 @@ package com.tool.pomodoro.technique.tool.database.file.todo;
 
 import com.tool.pomodoro.technique.tool.database.file.FileBaseDatabase;
 import com.tool.pomodoro.technique.tool.database.file.FileUtil;
-import com.tool.pomodoro.technique.tool.strategy.database.label.po.Label;
-import com.tool.pomodoro.technique.tool.strategy.database.today.po.Today;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.TodoDatabase;
 import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
 
@@ -50,19 +48,20 @@ public class FileTodoDatabase implements TodoDatabase, FileBaseDatabase {
     @Override
     public void update(Todo todo) {
         Optional.ofNullable(todo)
+                .flatMap(item -> selectById(item.id()))
                 .ifPresent(item -> {
-                    doUpdate(item);
+                    doUpdate(item, todo);
                     store();
                 });
     }
 
-    private void doUpdate(Todo todo) {
-        int index = dataList.indexOf(todo);
+    private void doUpdate(Todo oldTodo, Todo newTodo) {
+        int index = dataList.indexOf(oldTodo);
         if (index == -1) {
             return;
         }
         dataList.remove(index);
-        dataList.add(index, todo);
+        dataList.add(index, newTodo);
     }
 
     @Override

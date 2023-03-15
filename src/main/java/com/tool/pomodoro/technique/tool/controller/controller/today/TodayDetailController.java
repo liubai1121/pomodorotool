@@ -2,6 +2,7 @@ package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import javafx.fxml.FXML;
@@ -17,6 +18,9 @@ import java.util.stream.Stream;
 public class TodayDetailController implements Initializable {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
+    static {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     @FXML
     private TextArea todayDetailTextArea;
@@ -31,14 +35,7 @@ public class TodayDetailController implements Initializable {
         Optional.ofNullable(todayVo)
                 .ifPresent(vo -> {
                     try {
-                        String replace = objectMapper.writeValueAsString(vo)
-                                .replace("{", "")
-                                .replace("}", "")
-                                .replace("\"", "")
-                                .replace(":", "=");
-                        String[] dataList = replace.split(",");
-                        String data = String.join("\r\n", dataList);
-                        todayDetailTextArea.setText(data);
+                        todayDetailTextArea.setText(objectMapper.writeValueAsString(vo));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
