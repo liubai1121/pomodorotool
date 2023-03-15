@@ -12,9 +12,9 @@ module com.tool.pomodoro.technique.tool {
     opens com.tool.pomodoro.technique.tool to javafx.fxml;
     opens com.tool.pomodoro.technique.tool.controller.controller.todo.vo to javafx.base;
 
-    opens com.tool.pomodoro.technique.tool.strategy.database.todo.po;
-    opens com.tool.pomodoro.technique.tool.strategy.database.today.po;
-    opens com.tool.pomodoro.technique.tool.strategy.database.label.po;
+    opens com.tool.pomodoro.technique.tool.strategy.storage.todo.po;
+    opens com.tool.pomodoro.technique.tool.strategy.storage.today.po;
+    opens com.tool.pomodoro.technique.tool.strategy.storage.label.po;
     opens com.tool.pomodoro.technique.tool.controller.controller.label to javafx.fxml;
     opens com.tool.pomodoro.technique.tool.controller.controller.today to javafx.fxml;
     opens com.tool.pomodoro.technique.tool.controller.controller.label.vo to javafx.base;

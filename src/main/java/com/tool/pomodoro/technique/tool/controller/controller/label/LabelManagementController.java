@@ -1,8 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller.controller.label;
 
-import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
-import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
+import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelDto;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,7 +12,6 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -24,7 +22,11 @@ import java.util.stream.Collectors;
 
 public class LabelManagementController implements Initializable {
 
-    private final LabelStrategy labelStrategy = LabelStrategyFactory.create();
+    private final LabelStrategy labelStrategy;
+
+    public LabelManagementController(LabelStrategy labelStrategy) {
+        this.labelStrategy = labelStrategy;
+    }
 
     @FXML
     private TextField labelSearchField;
@@ -56,7 +58,8 @@ public class LabelManagementController implements Initializable {
 
     @FXML
     protected void onLabelAdd() {
-        Stage stage = WindowUtil.create("新增标签", "label/label-add.fxml");
+        var addController = new LabelAddController(labelStrategy);
+        var stage = WindowUtil.create("新增标签", "label/label-add.fxml", addController);
         stage.setAlwaysOnTop(true);
         stage.show();
         stage.setOnCloseRequest(event -> {
@@ -68,8 +71,8 @@ public class LabelManagementController implements Initializable {
     protected void onLabelEdit() {
         getSelectedLabel()
                 .ifPresent(label -> {
-                    LabelEditController labelEditController = new LabelEditController(label);
-                    Stage stage = WindowUtil.create("修改标签", "label/label-edit.fxml", labelEditController);
+                    var editController = new LabelEditController(labelStrategy, label);
+                    var stage = WindowUtil.create("修改标签", "label/label-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
                     stage.setOnCloseRequest(event -> {

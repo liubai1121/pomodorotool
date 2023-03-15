@@ -1,8 +1,8 @@
 package com.tool.pomodoro.technique.tool.controller.controller.label;
 
-import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
-import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
+import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;
 import javafx.fxml.FXML;
@@ -20,10 +20,11 @@ public class LabelEditController implements Initializable {
 
     private final LabelVo updateLabel;
 
-    private final LabelStrategy labelStrategy = LabelStrategyFactory.create();
+    private final LabelStrategy labelStrategy;
 
-    public LabelEditController(LabelVo label) {
+    public LabelEditController(LabelStrategy labelStrategy, LabelVo label) {
         this.updateLabel = label;
+        this.labelStrategy = labelStrategy;
     }
 
     @Override

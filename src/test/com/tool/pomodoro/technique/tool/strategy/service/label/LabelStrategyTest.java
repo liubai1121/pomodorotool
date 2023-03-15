@@ -1,17 +1,25 @@
 package com.tool.pomodoro.technique.tool.strategy.service.label;
 
-import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.FileStorageStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelDto;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 public class LabelStrategyTest {
+    private static LabelStrategy labelStrategy;
 
-    private final LabelStrategy labelStrategy = LabelStrategyFactory.create();
+    @BeforeAll
+    static void init() {
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(new TestFilePathConfig());
+        labelStrategy = strategyFactory.createLabelStrategy();
+    }
 
     @Test
     void add() {

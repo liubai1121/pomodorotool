@@ -2,7 +2,6 @@ package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
 import javafx.fxml.FXML;
@@ -19,7 +18,13 @@ import java.util.function.Predicate;
 
 public class TodayEditController implements Initializable {
 
-    private final TodayStrategy todayStrategy = TodayStrategyFactory.create();
+    private final TodayStrategy todayStrategy;
+    private final TodayVo today;
+
+    public TodayEditController(TodayStrategy todayStrategy, TodayVo today) {
+        this.todayStrategy = todayStrategy;
+        this.today = today;
+    }
 
     @FXML
     private Label todayId;
@@ -29,12 +34,6 @@ public class TodayEditController implements Initializable {
     private TextField todayClocks;
     @FXML
     private Label todayCreateTime;
-
-    private final TodayVo today;
-
-    public TodayEditController(TodayVo today) {
-        this.today = today;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

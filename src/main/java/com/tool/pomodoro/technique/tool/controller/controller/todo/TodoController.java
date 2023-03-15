@@ -1,13 +1,10 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.TodayController;
-import com.tool.pomodoro.technique.tool.controller.controller.today.TodayEditController;
-import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
-import com.tool.pomodoro.technique.tool.factory.todotodaymove.TodoTodayMoveStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
@@ -32,8 +29,13 @@ import java.util.stream.Collectors;
 
 public class TodoController implements Initializable {
 
-    private final TodoStrategy todoStrategy = TodoStrategyFactory.create();
-    private final TodoTodayMoveStrategy moveStrategy = TodoTodayMoveStrategyFactory.create();
+    private final TodoStrategy todoStrategy;
+    private final TodoTodayMoveStrategy moveStrategy;
+
+    public TodoController(StrategyFactory strategyFactory) {
+        this.todoStrategy = strategyFactory.createTodoStrategy();
+        this.moveStrategy = strategyFactory.createTodoTodayMoveStrategy();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -47,7 +49,6 @@ public class TodoController implements Initializable {
     private TableView<TodoVo> todoTableView;
     @FXML
     private TableColumn<TodoVo, String> todoContentTableColumn;
-
 
     @FXML
     private TextField addTodoField;
@@ -93,7 +94,8 @@ public class TodoController implements Initializable {
 
     @FXML
     protected void onAdd() {
-        Stage stage = WindowUtil.create("新增", "todo/todo-add.fxml");
+        var addController = new TodoAddController(todoStrategy);
+        Stage stage = WindowUtil.create("新增", "todo/todo-add.fxml", addController);
         stage.setAlwaysOnTop(true);
         stage.show();
 
@@ -106,7 +108,7 @@ public class TodoController implements Initializable {
     protected void onEdit() {
         getSelectedLabel()
                 .ifPresent(todo -> {
-                    var editController = new TodoEditController(todo);
+                    var editController = new TodoEditController(todoStrategy, todo);
                     Stage stage = WindowUtil.create("修改", "todo/todo-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();

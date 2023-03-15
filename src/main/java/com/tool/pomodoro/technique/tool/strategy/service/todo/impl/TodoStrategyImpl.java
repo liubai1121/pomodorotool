@@ -1,10 +1,10 @@
 package com.tool.pomodoro.technique.tool.strategy.service.todo.impl;
 
-import com.tool.pomodoro.technique.tool.strategy.database.todo.TodoDatabase;
+import com.tool.pomodoro.technique.tool.strategy.storage.todo.TodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
-import com.tool.pomodoro.technique.tool.strategy.database.todo.po.Todo;
+import com.tool.pomodoro.technique.tool.strategy.storage.todo.po.Todo;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.util.IdUtil;
 
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 public class TodoStrategyImpl implements TodoStrategy {
 
-    private final TodoDatabase database;
+    private final TodoStorage database;
 
-    public TodoStrategyImpl(TodoDatabase todoDatabase) {
-        this.database = todoDatabase;
+    public TodoStrategyImpl(TodoStorage todoStorage) {
+        this.database = todoStorage;
     }
 
     @Override

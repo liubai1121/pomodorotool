@@ -1,7 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import javafx.fxml.FXML;
@@ -13,7 +12,11 @@ import java.util.function.Predicate;
 
 public class TodayAddController {
 
-    private final TodayStrategy todayStrategy = TodayStrategyFactory.create();
+    private final TodayStrategy todayStrategy;
+
+    public TodayAddController(TodayStrategy todayStrategy) {
+        this.todayStrategy = todayStrategy;
+    }
 
     @FXML
     private TextField todayContent;

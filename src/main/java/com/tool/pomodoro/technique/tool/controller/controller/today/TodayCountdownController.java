@@ -7,6 +7,7 @@ import com.tool.pomodoro.technique.tool.controller.controller.today.command.Crea
 import com.tool.pomodoro.technique.tool.controller.controller.today.command.TodayIncrementClockCommand;
 import com.tool.pomodoro.technique.tool.controller.controller.today.command.TodayCountdownCommand;
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
+import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -16,16 +17,18 @@ import java.util.Optional;
 
 public class TodayCountdownController {
 
+    private final TodayStrategy todayStrategy;
     private final TodayVo todayVo;
+
+    public TodayCountdownController(TodayStrategy todayStrategy, TodayVo todayVo) {
+        this.todayStrategy = todayStrategy;
+        this.todayVo = todayVo;
+    }
 
     private static final String COUNTDOWN_TIME = "00:25:00";
 
     @FXML
     private Label countdownLabel;
-
-    public TodayCountdownController(TodayVo todayVo) {
-        this.todayVo = todayVo;
-    }
 
     public void init() {
         Optional.ofNullable(countdownLabel.getScene())
@@ -35,7 +38,7 @@ public class TodayCountdownController {
                     countdownLabel.setText(COUNTDOWN_TIME);
                     var closeWindowCommand = new CloseWindowCommand(stage);
                     var remindCommand = new CreateTodayCountdownRemindWindowCommand();
-                    var incrementClockCommand = new TodayIncrementClockCommand(todayVo.id());
+                    var incrementClockCommand = new TodayIncrementClockCommand(todayStrategy, todayVo.id());
                     var compositeCommand = new CompositeCommand(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
 
                     var labelCountdownCommand = new TodayCountdownCommand(countdownLabel, compositeCommand);

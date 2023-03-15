@@ -4,8 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="335.0" prefWidth="336.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.label.LabelManagementController">
+<AnchorPane prefHeight="335.0" prefWidth="336.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <TextField fx:id="labelSearchField" layoutX="27.0" layoutY="33.0" prefHeight="23.0" prefWidth="228.0"/>
     <Button onAction="#onLabelSearch" layoutX="265.0" layoutY="33.0" mnemonicParsing="false" text="查询">
         <font>

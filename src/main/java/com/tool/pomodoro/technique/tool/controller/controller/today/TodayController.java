@@ -4,8 +4,7 @@ import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.TodoController;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
-import com.tool.pomodoro.technique.tool.factory.todotodaymove.TodoTodayMoveStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
@@ -31,8 +30,13 @@ import java.util.stream.Collectors;
 
 public class TodayController implements Initializable {
 
-    private final TodayStrategy todayStrategy = TodayStrategyFactory.create();
-    private final TodoTodayMoveStrategy moveStrategy = TodoTodayMoveStrategyFactory.create();
+    private final TodayStrategy todayStrategy;
+    private final TodoTodayMoveStrategy moveStrategy;
+
+    public TodayController(StrategyFactory strategyFactory) {
+        this.todayStrategy = strategyFactory.createTodayStrategy();
+        this.moveStrategy = strategyFactory.createTodoTodayMoveStrategy();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -94,7 +98,8 @@ public class TodayController implements Initializable {
 
     @FXML
     protected void onAdd() {
-        Stage stage = WindowUtil.create("新增", "today/today-add.fxml");
+        var addController = new TodayAddController(todayStrategy);
+        var stage = WindowUtil.create("新增", "today/today-add.fxml", addController);
         stage.setAlwaysOnTop(true);
         stage.show();
 
@@ -107,8 +112,8 @@ public class TodayController implements Initializable {
     protected void onEdit() {
         getSelectedLabel()
                 .ifPresent(today -> {
-                    var editController = new TodayEditController(today);
-                    Stage stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
+                    var editController = new TodayEditController(todayStrategy, today);
+                    var stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
 
@@ -141,7 +146,7 @@ public class TodayController implements Initializable {
     }
 
     private void createCountdownWindow(TodayVo todayVo) {
-        TodayCountdownController todayCountdownController = new TodayCountdownController(todayVo);
+        TodayCountdownController todayCountdownController = new TodayCountdownController(todayStrategy, todayVo);
         Stage stage = WindowUtil.create(todayVo.content(), "today/today-countdown.fxml", todayCountdownController);
 
         stage.setOnShowing(event -> todayCountdownController.init());

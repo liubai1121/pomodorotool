@@ -5,8 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="136.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.today.TodayAddController">
+<AnchorPane prefHeight="136.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <Label layoutX="40.0" layoutY="23.0" prefHeight="15.0" prefWidth="65.0" text="今日待办："/>
     <TextField fx:id="todayContent" layoutX="112.0" layoutY="20.0" prefHeight="23.0" prefWidth="245.0"/>
     <Label layoutX="51.0" layoutY="57.0" prefHeight="15.0" prefWidth="48.0" text="时钟数："/>

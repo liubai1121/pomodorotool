@@ -3,8 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="197.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.label.LabelAddController">
+<AnchorPane prefHeight="197.0" prefWidth="309.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <TextField fx:id="labelAddTextField" layoutX="20.0" layoutY="53.0" prefHeight="23.0" prefWidth="265.0"/>
     <Button layoutX="123.0" layoutY="134.0" mnemonicParsing="false" onAction="#onLabelAdd" prefHeight="23.0"
             prefWidth="63.0" text="添加"/>

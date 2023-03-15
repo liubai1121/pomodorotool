@@ -1,18 +1,26 @@
 package com.tool.pomodoro.technique.tool.strategy.service.todo;
 
+import com.tool.pomodoro.technique.tool.factory.FileStorageStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
-import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 public class TodoStrategyTests {
+    private static TodoStrategy strategy;
 
-    private final TodoStrategy strategy = TodoStrategyFactory.create();
+    @BeforeAll
+    static void init() {
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(new TestFilePathConfig());
+        strategy = strategyFactory.createTodoStrategy();
+    }
 
     @Test
     void enterTodo() {

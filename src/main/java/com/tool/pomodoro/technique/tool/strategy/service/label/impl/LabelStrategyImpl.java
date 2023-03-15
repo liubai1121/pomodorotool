@@ -1,7 +1,7 @@
 package com.tool.pomodoro.technique.tool.strategy.service.label.impl;
 
-import com.tool.pomodoro.technique.tool.strategy.database.label.LabelDatabase;
-import com.tool.pomodoro.technique.tool.strategy.database.label.po.Label;
+import com.tool.pomodoro.technique.tool.strategy.storage.label.LabelStorage;
+import com.tool.pomodoro.technique.tool.strategy.storage.label.po.Label;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelDto;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;
@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 
 public class LabelStrategyImpl implements LabelStrategy {
 
-    private final LabelDatabase labelDatabase;
+    private final LabelStorage labelStorage;
 
-    public LabelStrategyImpl(LabelDatabase labelDatabase) {
-        this.labelDatabase = labelDatabase;
+    public LabelStrategyImpl(LabelStorage labelStorage) {
+        this.labelStorage = labelStorage;
     }
 
     @Override
     public String add(String labelName) {
         return Optional.ofNullable(labelName)
                 .filter(Predicate.not(String::isBlank))
-                .flatMap(labelDatabase::selectByName)
+                .flatMap(labelStorage::selectByName)
                 .map(Label::labelId)
                 .orElseGet(() -> doAdd(labelName));
     }
@@ -35,27 +35,27 @@ public class LabelStrategyImpl implements LabelStrategy {
         String id = IdUtil.generate();
 
         var labelData = new Label(id, labelName);
-        labelDatabase.save(labelData);
+        labelStorage.save(labelData);
 
         return id;
     }
 
     @Override
     public void delete(String labelId) {
-        labelDatabase.delete(labelId);
+        labelStorage.delete(labelId);
     }
 
     @Override
     public void update(LabelUpdateDto updateDto) {
         var label = LabelStrategyWrapper.wrapLabel(updateDto);
-        labelDatabase.update(label);
+        labelStorage.update(label);
     }
 
     @Override
     public Optional<LabelDto> get(String labelId) {
         return Optional.ofNullable(labelId)
                 .filter(Predicate.not(String::isBlank))
-                .flatMap(labelDatabase::selectById)
+                .flatMap(labelStorage::selectById)
                 .map(LabelStrategyWrapper::wrapLabelDto);
     }
 
@@ -63,21 +63,21 @@ public class LabelStrategyImpl implements LabelStrategy {
     public Optional<List<LabelDto>> list(List<String> labelIds) {
         return Optional.ofNullable(labelIds)
                 .filter(Predicate.not(Collection::isEmpty))
-                .flatMap(labelDatabase::selectByIds)
+                .flatMap(labelStorage::selectByIds)
                 .filter(Predicate.not(Collection::isEmpty))
                 .map(LabelStrategyWrapper::wrapLabelDtoList);
     }
 
     @Override
     public Optional<List<LabelDto>> all() {
-        return labelDatabase.selectAll()
+        return labelStorage.selectAll()
                 .filter(Predicate.not(Collection::isEmpty))
                 .map(LabelStrategyWrapper::wrapLabelDtoList);
     }
 
     @Override
     public Optional<List<LabelDto>> fuzzyQueryByName(String labelName) {
-        return labelDatabase.selectAll()
+        return labelStorage.selectAll()
                 .filter(Predicate.not(Collection::isEmpty))
                 .map(labels -> labels.stream()
                         .filter(label -> label.labelName().contains(labelName))

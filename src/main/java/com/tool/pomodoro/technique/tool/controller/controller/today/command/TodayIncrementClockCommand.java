@@ -2,19 +2,19 @@ package com.tool.pomodoro.technique.tool.controller.controller.today.command;
 
 import com.tool.pomodoro.technique.tool.common.command.Command;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 
 public class TodayIncrementClockCommand implements Command {
 
     private final String id;
+    private final TodayStrategy todayStrategy;
 
-    public TodayIncrementClockCommand(String id) {
+    public TodayIncrementClockCommand(TodayStrategy todayStrategy, String id) {
+        this.todayStrategy = todayStrategy;
         this.id = id;
     }
 
     @Override
     public void execute() {
-        TodayStrategy todayStrategy = TodayStrategyFactory.create();
         todayStrategy.incrementClock(id);
     }
 }

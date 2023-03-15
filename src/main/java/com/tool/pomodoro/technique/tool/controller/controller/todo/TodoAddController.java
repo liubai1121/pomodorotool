@@ -1,8 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import javafx.fxml.FXML;
@@ -14,7 +12,11 @@ import java.util.function.Predicate;
 
 public class TodoAddController {
 
-    private final TodoStrategy todoStrategy = TodoStrategyFactory.create();
+    private final TodoStrategy todoStrategy;
+
+    public TodoAddController(TodoStrategy todoStrategy) {
+        this.todoStrategy = todoStrategy;
+    }
 
     @FXML
     private TextField todoContent;

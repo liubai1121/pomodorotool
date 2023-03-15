@@ -1,18 +1,26 @@
 package com.tool.pomodoro.technique.tool.strategy.service.today;
 
+import com.tool.pomodoro.technique.tool.factory.FileStorageStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 public class TodayStrategyTests {
+    private static TodayStrategy todayStrategy;
 
-    TodayStrategy todayStrategy = TodayStrategyFactory.create();
+    @BeforeAll
+    static void init() {
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(new TestFilePathConfig());
+        todayStrategy = strategyFactory.createTodayStrategy();
+    }
 
     @Test
     void add() {

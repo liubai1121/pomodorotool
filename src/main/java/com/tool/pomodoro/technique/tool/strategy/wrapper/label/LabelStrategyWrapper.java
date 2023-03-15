@@ -1,6 +1,6 @@
 package com.tool.pomodoro.technique.tool.strategy.wrapper.label;
 
-import com.tool.pomodoro.technique.tool.strategy.database.label.po.Label;
+import com.tool.pomodoro.technique.tool.strategy.storage.label.po.Label;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelDto;
 import com.tool.pomodoro.technique.tool.strategy.service.label.dto.LabelUpdateDto;
 

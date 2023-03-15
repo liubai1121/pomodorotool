@@ -1,7 +1,6 @@
 package com.tool.pomodoro.technique.tool.controller.controller.label;
 
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
-import com.tool.pomodoro.technique.tool.factory.label.LabelStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +11,12 @@ import java.util.function.Predicate;
 
 public class LabelAddController {
 
-    private final LabelStrategy labelStrategy = LabelStrategyFactory.create();
+    private final LabelStrategy labelStrategy;
+
+    public LabelAddController(LabelStrategy labelStrategy) {
+        this.labelStrategy = labelStrategy;
+    }
+
 
     @FXML
     private TextField labelAddTextField;
@@ -24,7 +28,7 @@ public class LabelAddController {
                 .ifPresent(labelName -> {
                     labelStrategy.add(labelName);
 
-                    Stage stage = (Stage)labelAddTextField.getScene().getWindow();
+                    Stage stage = (Stage) labelAddTextField.getScene().getWindow();
                     WindowUtil.close(stage);
                 });
     }

@@ -1,23 +1,31 @@
 package com.tool.pomodoro.technique.tool.strategy.service.todotodaymove;
 
+import com.tool.pomodoro.technique.tool.factory.FileStorageStrategyFactory;
+import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
-import com.tool.pomodoro.technique.tool.factory.today.TodayStrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
-import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.impl.TodoTodayMoveStrategyImpl;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 public class TodoTodayMoveStrategyTests {
 
-    private final TodayStrategy todayStrategy = TodayStrategyFactory.create();
-    private final TodoStrategy todoStrategy = TodoStrategyFactory.create();
+    private static TodoTodayMoveStrategy todoTodayMoveStrategy;
+    private static TodoStrategy todoStrategy;
+    private static TodayStrategy todayStrategy;
 
-    private final TodoTodayMoveStrategy todoTodayMoveStrategy = new TodoTodayMoveStrategyImpl(todoStrategy, todayStrategy);
+    @BeforeAll
+    static void init() {
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(new TestFilePathConfig());
+        todoTodayMoveStrategy = strategyFactory.createTodoTodayMoveStrategy();
+        todoStrategy = strategyFactory.createTodoStrategy();
+        todayStrategy = strategyFactory.createTodayStrategy();
+    }
 
     @Test
     void copyTodoToToday() {
