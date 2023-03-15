@@ -1,0 +1,60 @@
+package com.tool.pomodoro.technique.tool.controller.controller.todo;
+
+import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
+import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
+import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
+import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
+import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayUpdateDto;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoUpdateDto;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.net.URL;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
+
+public class TodoEditController implements Initializable {
+
+    private final TodoStrategy todoStrategy = TodoStrategyFactory.create();
+
+    @FXML
+    private Label todoId;
+    @FXML
+    private TextField todoContent;
+    @FXML
+    private Label todoCreateTime;
+
+    private final TodoVo todo;
+
+    public TodoEditController(TodoVo todo) {
+        this.todo = todo;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        todoId.setText(todo.id());
+        todoContent.setText(todo.content());
+        todoCreateTime.setText(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(todo.createTime()));
+    }
+
+    @FXML
+    protected void onTodoEdit() {
+        Optional.ofNullable(todoId.getText())
+                .filter(Predicate.not(String::isBlank))
+                .ifPresent(id -> Optional.ofNullable(todoContent.getText())
+                        .filter(Predicate.not(String::isBlank))
+                        .ifPresent(content -> {
+                            var updateDto = new TodoUpdateDto(id, content);
+                            todoStrategy.update(updateDto);
+
+                            Stage stage = (Stage) todoId.getScene().getWindow();
+                            WindowUtil.close(stage);
+                        }));
+    }
+}

@@ -1,7 +1,5 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
-import com.tool.pomodoro.technique.tool.controller.controller.label.LabelEditController;
-import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.TodoController;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
@@ -78,7 +76,7 @@ public class TodayController implements Initializable {
                 .ifPresent(todayVo -> {
                     moveStrategy.copyTodayToTodo(todayVo.id());
                     ToolController.getController(TodoController.class)
-                            .ifPresent(TodoController::refreshTodoTableView);
+                            .ifPresent(TodoController::refreshTableView);
                 });
     }
 
@@ -90,7 +88,7 @@ public class TodayController implements Initializable {
                     moveStrategy.cutTodayToTodo(todayVo.id());
                     refreshTableView();
                     ToolController.getController(TodoController.class)
-                            .ifPresent(TodoController::refreshTodoTableView);
+                            .ifPresent(TodoController::refreshTableView);
                 });
     }
 

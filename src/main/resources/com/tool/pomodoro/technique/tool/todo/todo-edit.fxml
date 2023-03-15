@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="178.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <Label layoutX="30.0" layoutY="34.0" prefHeight="15.0" prefWidth="73.0" text="待办事项ID："/>
+    <Label fx:id="todoId" layoutX="112.0" layoutY="30.0" prefHeight="23.0" prefWidth="245.0"/>
+    <Label layoutX="40.0" layoutY="64.0" prefHeight="15.0" prefWidth="65.0" text="待办事项："/>
+    <TextField fx:id="todoContent" layoutX="112.0" layoutY="60.0" prefHeight="23.0" prefWidth="245.0"/>
+    <Label layoutX="40.0" layoutY="96.0" prefHeight="15.0" prefWidth="65.0" text="创建时间："/>
+    <Label fx:id="todoCreateTime" layoutX="112.0" layoutY="92.0" prefHeight="23.0" prefWidth="164.0"/>
+    <Button layoutX="172.0" layoutY="132.0" mnemonicParsing="false" onAction="#onTodoEdit" prefHeight="23.0"
+            prefWidth="63.0" text="修改"/>
+</AnchorPane>

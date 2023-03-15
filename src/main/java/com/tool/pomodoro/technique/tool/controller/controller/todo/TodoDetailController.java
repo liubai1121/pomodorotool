@@ -2,6 +2,7 @@ package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import javafx.fxml.FXML;
@@ -15,6 +16,9 @@ import java.util.ResourceBundle;
 public class TodoDetailController implements Initializable {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
+    static {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     @FXML
     private TextArea todoDetailTextAreal;

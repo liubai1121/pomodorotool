@@ -17,9 +17,11 @@
         <contextMenu>
             <ContextMenu fx:id="todoContextMenu">
                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#onTodoCopyToTodayMenuItem" text="复制至今日待办"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onTodoCutToTodayMenuItem" text="剪切至今日待办"/>
-                    <MenuItem mnemonicParsing="false" onAction="#onTodoDeleteMenuItem" text="删除"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onAdd" text="新增"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onEdit" text="修改"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onCopyToToday" text="复制至今日待办"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onCutToToday" text="剪切至今日待办"/>
+                    <MenuItem mnemonicParsing="false" onAction="#onDelete" text="删除"/>
                 </items>
             </ContextMenu>
         </contextMenu>

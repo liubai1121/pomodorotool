@@ -1,8 +1,11 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.TodayController;
+import com.tool.pomodoro.technique.tool.controller.controller.today.TodayEditController;
+import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
+import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.todo.TodoStrategyFactory;
 import com.tool.pomodoro.technique.tool.factory.todotodaymove.TodoTodayMoveStrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
@@ -17,6 +20,7 @@ import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.List;
@@ -35,7 +39,7 @@ public class TodoController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         todoContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
 
-        refreshTodoTableView();
+        refreshTableView();
         ToolController.registerController(this);
     }
 
@@ -56,7 +60,7 @@ public class TodoController implements Initializable {
                 .ifPresent(this::addTodo);
 
         addTodoField.clear();
-        refreshTodoTableView();
+        refreshTableView();
     }
 
     private void addTodo(String todo) {
@@ -65,7 +69,7 @@ public class TodoController implements Initializable {
     }
 
     @FXML
-    protected void onTodoCopyToTodayMenuItem() {
+    protected void onCopyToToday() {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> {
@@ -76,28 +80,59 @@ public class TodoController implements Initializable {
     }
 
     @FXML
-    protected void onTodoCutToTodayMenuItem() {
+    protected void onCutToToday() {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> {
                     moveStrategy.cutTodoToToday(todoVo.id());
-                    refreshTodoTableView();
+                    refreshTableView();
                     ToolController.getController(TodayController.class)
                             .ifPresent(TodayController::refreshTableView);
                 });
     }
 
     @FXML
-    protected void onTodoDeleteMenuItem() {
+    protected void onAdd() {
+        Stage stage = WindowUtil.create("新增", "todo/todo-add.fxml");
+        stage.setAlwaysOnTop(true);
+        stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            refreshTableView();
+        });
+    }
+
+    @FXML
+    protected void onEdit() {
+        getSelectedLabel()
+                .ifPresent(todo -> {
+                    var editController = new TodoEditController(todo);
+                    Stage stage = WindowUtil.create("修改", "todo/todo-edit.fxml", editController);
+                    stage.setAlwaysOnTop(true);
+                    stage.show();
+
+                    stage.setOnCloseRequest(event -> {
+                        refreshTableView();
+                    });
+                });
+    }
+
+    private Optional<TodoVo> getSelectedLabel() {
+        return Optional.ofNullable(todoTableView.getSelectionModel())
+                .map(SelectionModel::getSelectedItem);
+    }
+
+    @FXML
+    protected void onDelete() {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> {
                     todoStrategy.delete(todoVo.id());
-                    refreshTodoTableView();
+                    refreshTableView();
                 });
     }
 
-    public void refreshTodoTableView() {
+    public void refreshTableView() {
         todoStrategy.all()
                 .map(this::wrapTodoVoList)
                 .map(FXCollections::observableList)
@@ -107,7 +142,7 @@ public class TodoController implements Initializable {
     private List<TodoVo> wrapTodoVoList(List<TodoDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(item -> new TodoVo(item.id(), item.content()))
+                .map(item -> new TodoVo(item.id(), item.content(), item.createTime()))
                 .collect(Collectors.toList());
     }
 

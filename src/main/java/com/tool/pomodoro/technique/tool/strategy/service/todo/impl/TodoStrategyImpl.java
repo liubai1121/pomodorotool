@@ -42,7 +42,7 @@ public class TodoStrategyImpl implements TodoStrategy {
     @Override
     public Optional<TodoDto> get(String id) {
         return database.selectById(id)
-                .map(todo -> new TodoDto(todo.id(), todo.content()));
+                .map(todo -> new TodoDto(todo.id(), todo.content(), todo.createTime()));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class TodoStrategyImpl implements TodoStrategy {
         return database.selectAll()
                 .map(list -> list.stream()
                         .filter(Objects::nonNull)
-                        .map(todo -> new TodoDto(todo.id(), todo.content()))
+                        .map(todo -> new TodoDto(todo.id(), todo.content(), todo.createTime()))
                         .collect(Collectors.toList()));
     }
 }
