@@ -12,22 +12,31 @@ import java.util.function.Predicate;
 
 public class TodayCountdownCommand implements Command {
 
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
     private final Label label;
     private final Command command;
-
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public TodayCountdownCommand(Label label, Command command) {
         this.label = label;
         this.command = command;
     }
 
+    private boolean isCancel = false;
+
     @Override
     public void execute() {
+        if (isCancel) {
+            return;
+        }
         Optional.of(label.getText())
                 .filter(Predicate.not(String::isBlank))
                 .map(this::countdown)
                 .ifPresent(newTime -> PerSecondCommandScheduleQueue.getInstance().put(this));
+    }
+
+    public void cancel() {
+        isCancel = true;
     }
 
     private LocalTime countdown(String text) {

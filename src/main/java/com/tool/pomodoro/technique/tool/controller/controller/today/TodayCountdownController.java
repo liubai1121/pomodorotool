@@ -19,6 +19,7 @@ public class TodayCountdownController {
 
     private final TodayStrategy todayStrategy;
     private final TodayVo todayVo;
+    private TodayCountdownCommand labelCountdownCommand;
 
     public TodayCountdownController(TodayStrategy todayStrategy, TodayVo todayVo) {
         this.todayStrategy = todayStrategy;
@@ -34,15 +35,19 @@ public class TodayCountdownController {
         Optional.ofNullable(countdownLabel.getScene())
                 .map(scene -> (Stage) scene.getWindow())
                 .ifPresent(stage -> {
-
                     countdownLabel.setText(COUNTDOWN_TIME);
                     var closeWindowCommand = new CloseWindowCommand(stage);
                     var remindCommand = new CreateTodayCountdownRemindWindowCommand();
                     var incrementClockCommand = new TodayIncrementClockCommand(todayStrategy, todayVo.id());
                     var compositeCommand = new CompositeCommand(List.of(incrementClockCommand, remindCommand, closeWindowCommand));
 
-                    var labelCountdownCommand = new TodayCountdownCommand(countdownLabel, compositeCommand);
+                    labelCountdownCommand = new TodayCountdownCommand(countdownLabel, compositeCommand);
                     PerSecondCommandScheduleQueue.getInstance().put(labelCountdownCommand);
                 });
+    }
+
+    public void cancel() {
+        Optional.ofNullable(labelCountdownCommand)
+                .ifPresent(TodayCountdownCommand::cancel);
     }
 }

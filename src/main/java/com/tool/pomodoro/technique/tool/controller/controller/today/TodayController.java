@@ -152,6 +152,7 @@ public class TodayController implements Initializable {
         stage.setOnShowing(event -> todayCountdownController.init());
 
         stage.setOnCloseRequest(event -> {
+            todayCountdownController.cancel();
             refreshTableView();
         });
 
