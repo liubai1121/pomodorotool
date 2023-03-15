@@ -20,9 +20,11 @@
             <ContextMenu>
                 <items>
                     <MenuItem onAction="#onStartClock" text="启动时钟"/>
-                    <MenuItem onAction="#onTodayCopyToTodoMenuItem" text="复制至待办列表"/>
-                    <MenuItem onAction="#onTodayCutToTodoMenuItem" text="剪切至待办列表"/>
-                    <MenuItem onAction="#onTodayDeleteMenuItem" text="删除"/>
+                    <MenuItem onAction="#onAdd" text="新增"/>
+                    <MenuItem onAction="#onEdit" text="编辑"/>
+                    <MenuItem onAction="#onCopyToTodo" text="复制至待办列表"/>
+                    <MenuItem onAction="#onCutToTodo" text="剪切至待办列表"/>
+                    <MenuItem onAction="#onDelete" text="删除"/>
                 </items>
             </ContextMenu>
         </contextMenu>

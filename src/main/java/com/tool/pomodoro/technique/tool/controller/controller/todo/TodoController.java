@@ -71,7 +71,7 @@ public class TodoController implements Initializable {
                 .ifPresent(todoVo -> {
                     moveStrategy.copyTodoToToday(todoVo.id());
                     ToolController.getController(TodayController.class)
-                            .ifPresent(TodayController::refreshTodayTableView);
+                            .ifPresent(TodayController::refreshTableView);
                 });
     }
 
@@ -83,7 +83,7 @@ public class TodoController implements Initializable {
                     moveStrategy.cutTodoToToday(todoVo.id());
                     refreshTodoTableView();
                     ToolController.getController(TodayController.class)
-                            .ifPresent(TodayController::refreshTodayTableView);
+                            .ifPresent(TodayController::refreshTableView);
                 });
     }
 

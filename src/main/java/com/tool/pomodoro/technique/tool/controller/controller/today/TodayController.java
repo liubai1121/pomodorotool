@@ -1,5 +1,7 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
+import com.tool.pomodoro.technique.tool.controller.controller.label.LabelEditController;
+import com.tool.pomodoro.technique.tool.controller.controller.label.vo.LabelVo;
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.TodoController;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
@@ -39,7 +41,7 @@ public class TodayController implements Initializable {
         todayContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
         todayClocksTableColumn.setCellValueFactory(clocksColumn -> new SimpleIntegerProperty(clocksColumn.getValue().clocks()).asObject());
 
-        refreshTodayTableView();
+        refreshTableView();
         ToolController.registerController(this);
     }
 
@@ -61,7 +63,7 @@ public class TodayController implements Initializable {
                 .ifPresent(this::addToday);
 
         addTodayField.clear();
-        refreshTodayTableView();
+        refreshTableView();
     }
 
     private void addToday(String content) {
@@ -70,7 +72,7 @@ public class TodayController implements Initializable {
     }
 
     @FXML
-    protected void onTodayCopyToTodoMenuItem() {
+    protected void onCopyToTodo() {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todayVo -> {
@@ -81,24 +83,55 @@ public class TodayController implements Initializable {
     }
 
     @FXML
-    protected void onTodayCutToTodoMenuItem() {
+    protected void onCutToTodo() {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todayVo -> {
                     moveStrategy.cutTodayToTodo(todayVo.id());
-                    refreshTodayTableView();
+                    refreshTableView();
                     ToolController.getController(TodoController.class)
                             .ifPresent(TodoController::refreshTodoTableView);
                 });
     }
 
     @FXML
-    protected void onTodayDeleteMenuItem() {
+    protected void onAdd() {
+        Stage stage = WindowUtil.create("新增标签", "label/label-add.fxml");
+        stage.setAlwaysOnTop(true);
+        stage.show();
+        stage.setOnCloseRequest(event -> {
+            refreshTableView();
+        });
+    }
+
+
+    @FXML
+    protected void edit() {
+        getSelectedLabel()
+                .ifPresent(today -> {
+                    var editController = new TodayEditController(today);
+                    Stage stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
+                    stage.setAlwaysOnTop(true);
+                    stage.show();
+                    stage.setOnCloseRequest(event -> {
+                        refreshTableView();
+                    });
+
+                });
+    }
+
+    private Optional<TodayVo> getSelectedLabel() {
+        return Optional.ofNullable(todayTableView.getSelectionModel())
+                .map(SelectionModel::getSelectedItem);
+    }
+
+    @FXML
+    protected void onDelete() {
         Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todayVo -> {
                     todayStrategy.delete(todayVo.id());
-                    refreshTodayTableView();
+                    refreshTableView();
                 });
     }
 
@@ -116,13 +149,13 @@ public class TodayController implements Initializable {
         stage.setOnShowing(event -> todayCountdownController.init());
 
         stage.setOnCloseRequest(event -> {
-            refreshTodayTableView();
+            refreshTableView();
         });
 
         stage.show();
     }
 
-    public void refreshTodayTableView() {
+    public void refreshTableView() {
         todayStrategy.all()
                 .map(this::wrapTodayVoList)
                 .map(FXCollections::observableList)
