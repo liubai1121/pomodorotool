@@ -5,6 +5,7 @@ import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
 import com.tool.pomodoro.technique.tool.storage.file.todo.FileTodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.label.LabelStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.label.po.Label;
+import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -58,20 +59,20 @@ public class FileLabelStorage implements LabelStorage, FileBaseStorage {
     @Override
     public void update(Label label) {
         Optional.ofNullable(label)
-                .ifPresent(data -> {
-
-                    doUpdate(data);
+                .flatMap(item -> selectById(item.labelId()))
+                .ifPresent(item -> {
+                    doUpdate(item, label);
                     store();
                 });
     }
 
-    private void doUpdate(Label label) {
-        int index = dataList.indexOf(label);
+    private void doUpdate(Label oldLabel, Label newLabel) {
+        int index = dataList.indexOf(oldLabel);
         if (index == -1) {
             return;
         }
         dataList.remove(index);
-        dataList.add(index, label);
+        dataList.add(index, newLabel);
     }
 
     @Override
