@@ -1,6 +1,6 @@
 package com.tool.pomodoro.technique.tool.storage.file.todo;
 
-import com.tool.pomodoro.technique.tool.storage.file.FileBaseStorage;
+import com.tool.pomodoro.technique.tool.storage.file.FileStorage;
 import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
 import com.tool.pomodoro.technique.tool.strategy.storage.todo.TodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.todo.po.Todo;
@@ -8,7 +8,7 @@ import com.tool.pomodoro.technique.tool.strategy.storage.todo.po.Todo;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class FileTodoStorage implements TodoStorage, FileBaseStorage {
+public class FileTodoStorage implements TodoStorage, FileStorage {
 
     private final String filePath;
 

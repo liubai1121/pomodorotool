@@ -1,17 +1,15 @@
 package com.tool.pomodoro.technique.tool.storage.file.label;
 
-import com.tool.pomodoro.technique.tool.storage.file.FileBaseStorage;
+import com.tool.pomodoro.technique.tool.storage.file.FileStorage;
 import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
-import com.tool.pomodoro.technique.tool.storage.file.todo.FileTodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.label.LabelStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.label.po.Label;
-import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class FileLabelStorage implements LabelStorage, FileBaseStorage {
+public class FileLabelStorage implements LabelStorage, FileStorage {
 
     private final String filePath;
 
@@ -24,7 +22,7 @@ public class FileLabelStorage implements LabelStorage, FileBaseStorage {
 
     public static FileLabelStorage getInstance(String filePath) {
         if (Objects.isNull(fileLabelStorage)) {
-            synchronized (FileTodoStorage.class) {
+            synchronized (FileLabelStorage.class) {
                 if (Objects.isNull(fileLabelStorage)) {
                     fileLabelStorage = new FileLabelStorage(filePath);
                 }

@@ -1,9 +1,7 @@
 package com.tool.pomodoro.technique.tool.storage.file.today;
 
-import com.tool.pomodoro.technique.tool.storage.file.FileBaseStorage;
-import com.tool.pomodoro.technique.tool.storage.file.FileConfig;
+import com.tool.pomodoro.technique.tool.storage.file.FileStorage;
 import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
-import com.tool.pomodoro.technique.tool.storage.file.todo.FileTodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.TodayStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
@@ -13,7 +11,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class FileTodayStorage implements TodayStorage, FileBaseStorage {
+public class FileTodayStorage implements TodayStorage, FileStorage {
     private final String filePath;
 
     private FileTodayStorage(String filePath) {
@@ -25,7 +23,7 @@ public class FileTodayStorage implements TodayStorage, FileBaseStorage {
 
     public static FileTodayStorage getInstance(String filePath) {
         if (Objects.isNull(fileTodayStorage)) {
-            synchronized (FileTodoStorage.class) {
+            synchronized (FileTodayStorage.class) {
                 if (Objects.isNull(fileTodayStorage)) {
                     fileTodayStorage = new FileTodayStorage(filePath);
                 }
