@@ -1,34 +1,25 @@
 package com.tool.pomodoro.technique.tool.storage.file.today;
 
-import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
 import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 import com.tool.pomodoro.technique.tool.strategy.util.IdUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public class FileTodayStorageTests {
 
-    FileTodayStorage database = FileTodayStorage.getInstance(new TestFilePathConfig().getStoreFilesPath());
-
-    @Test
-    void init() {
-        Optional<File> todoFile = FileUtil.getTodayFile()
-                .filter(file -> file.length() > 0);
-        Optional<List<Today>> todos = database.selectAll();
-        Assertions.assertEquals(todoFile.isPresent(), todos.isPresent());
-    }
+    FileTodayStorage todayStorage = FileTodayStorage.getInstance(new TestFilePathConfig().getStoreFilesPath());
 
     @Test
     void save() {
         var today = new Today(IdUtil.generate(), "test save");
-        database.save(today);
+        todayStorage.save(today);
 
-        Optional<List<Today>> todayList = database.selectAll();
+        Optional<List<Today>> todayList = todayStorage.selectAll();
 
         Assertions.assertTrue(todayList.isPresent());
         Assertions.assertFalse(todayList.get().isEmpty());
@@ -40,9 +31,9 @@ public class FileTodayStorageTests {
 
         var today1 = new Today(IdUtil.generate(), "test saveBatch2");
 
-        database.saveBatch(List.of(today, today1));
+        todayStorage.saveBatch(List.of(today, today1));
 
-        Optional<List<Today>> todos = database.selectAll();
+        Optional<List<Today>> todos = todayStorage.selectAll();
 
         Assertions.assertTrue(todos.isPresent());
         Assertions.assertFalse(todos.get().isEmpty());
@@ -52,26 +43,26 @@ public class FileTodayStorageTests {
     void delete() {
         String id = IdUtil.generate();
         var today = new Today(id, "test delete");
-        database.save(today);
+        todayStorage.save(today);
 
-        Assertions.assertTrue(database.selectById(id).isPresent());
+        Assertions.assertTrue(todayStorage.selectById(id).isPresent());
 
-        database.deleteById(id);
+        todayStorage.deleteById(id);
 
-        Assertions.assertFalse(database.selectById(id).isPresent());
+        Assertions.assertFalse(todayStorage.selectById(id).isPresent());
     }
 
     @Test
     void update() {
         String id = IdUtil.generate();
         var today = new Today(id, "test update");
-        database.save(today);
+        todayStorage.save(today);
 
         String updateContent = "update success!";
         var updateToday = new Today(id, updateContent);
-        database.update(updateToday);
+        todayStorage.update(updateToday);
 
-        Optional<Today> updatedToday = database.selectById(id);
+        Optional<Today> updatedToday = todayStorage.selectById(id);
         Assertions.assertTrue(updatedToday.isPresent());
         Assertions.assertEquals(updatedToday.get().content(), updateContent);
     }
@@ -80,9 +71,9 @@ public class FileTodayStorageTests {
     void selectById() {
         String uuid = IdUtil.generate();
         var today = new Today(uuid, "test selectById");
-        database.save(today);
+        todayStorage.save(today);
 
-        Optional<Today> todayOpt = database.selectById(uuid);
+        Optional<Today> todayOpt = todayStorage.selectById(uuid);
 
         Assertions.assertTrue(todayOpt.isPresent());
     }
@@ -90,11 +81,45 @@ public class FileTodayStorageTests {
     @Test
     void selectAll() {
         var today = new Today(IdUtil.generate(), "test selectAll");
-        database.save(today);
+        todayStorage.save(today);
 
-        Optional<List<Today>> todayOpt = database.selectAll();
+        Optional<List<Today>> todayOpt = todayStorage.selectAll();
 
         Assertions.assertTrue(todayOpt.isPresent());
         Assertions.assertFalse(todayOpt.get().isEmpty());
+    }
+
+    @Test
+    void getByDay() {
+        todayStorage.save(new Today(IdUtil.generate(), "test getByDay"));
+
+        var today = LocalDate.now();
+        Optional<List<Today>> todayOpt = todayStorage.getByDay(today);
+
+        Assertions.assertTrue(todayOpt.isPresent());
+        Assertions.assertFalse(todayOpt.get().isEmpty());
+    }
+
+    @Test
+    void getByDuration() {
+        todayStorage.save(new Today(IdUtil.generate(), "test getByDuration"));
+
+        var today = LocalDate.now();
+        var weekAgo = today.minusWeeks(1);
+        Optional<List<Today>> todayOpt = todayStorage.getByDuration(weekAgo, today);
+
+        Assertions.assertTrue(todayOpt.isPresent());
+        Assertions.assertFalse(todayOpt.get().isEmpty());
+    }
+
+    @Test
+    void getByDurationForStartGreaterEnd() {
+        todayStorage.save(new Today(IdUtil.generate(), "test getByDuration"));
+
+        var today = LocalDate.now();
+        var weekAgo = today.minusWeeks(1);
+        Optional<List<Today>> todayOpt = todayStorage.getByDuration(today, weekAgo);
+
+        Assertions.assertTrue(todayOpt.isEmpty());
     }
 }

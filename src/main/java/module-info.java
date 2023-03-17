@@ -21,6 +21,7 @@ module com.tool.pomodoro.technique.tool {
     opens com.tool.pomodoro.technique.tool.controller.controller.today.vo to javafx.base;
     opens com.tool.pomodoro.technique.tool.controller.controller.todo to javafx.fxml;
     opens com.tool.pomodoro.technique.tool.controller.controller.tool to javafx.fxml;
+    opens com.tool.pomodoro.technique.tool.controller.controller.report to javafx.fxml;
 
 
 }

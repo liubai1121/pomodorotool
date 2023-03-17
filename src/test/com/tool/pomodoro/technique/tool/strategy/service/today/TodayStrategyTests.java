@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,5 +88,71 @@ public class TodayStrategyTests {
 
         Assertions.assertTrue(todayDtpOpt.isPresent());
         Assertions.assertEquals(todayDtpOpt.get().clocks(), 2);
+    }
+
+    @Test
+    void getByDay() {
+
+        todayStrategy.add(new TodayAddDto("测试根据日期查询"));
+
+        var today = LocalDate.now();
+        var todayListOpt = todayStrategy.getByDay(today);
+
+        Assertions.assertTrue(todayListOpt.isPresent());
+        Assertions.assertFalse(todayListOpt.get().todayList().isEmpty());
+    }
+
+
+    @Test
+    void getByWeek() {
+        todayStrategy.add(new TodayAddDto("测试根据星期查询"));
+
+        var week = 11;
+        var todayListOpt = todayStrategy.getByWeek(week);
+
+        Assertions.assertTrue(todayListOpt.isPresent());
+        Assertions.assertFalse(todayListOpt.get().todayList().isEmpty());
+    }
+
+    @Test
+    void getByWeekForWrongRange() {
+        todayStrategy.add(new TodayAddDto("测试根据星期查询-错误的范围"));
+
+        var week = 0;
+        var todayListOpt = todayStrategy.getByWeek(week);
+
+        Assertions.assertTrue(todayListOpt.isEmpty());
+    }
+
+    @Test
+    void getByMonth() {
+        todayStrategy.add(new TodayAddDto("测试根据月份查询"));
+
+        var month = 3;
+        var todayListOpt = todayStrategy.getByMonth(month);
+
+        Assertions.assertTrue(todayListOpt.isPresent());
+    }
+
+    @Test
+    void getByMonthForWrongRange() {
+        todayStrategy.add(new TodayAddDto("测试根据月份查询-错误的范围"));
+
+        var month = 0;
+        var todayListOpt = todayStrategy.getByMonth(month);
+
+        Assertions.assertTrue(todayListOpt.isEmpty());
+    }
+
+    @Test
+    void getByDuration() {
+        todayStrategy.add(new TodayAddDto("测试根据时间段查询"));
+
+        var today = LocalDate.now();
+        var weekAgo = today.minusWeeks(1);
+        var todayListOpt = todayStrategy.getByDuration(weekAgo, today);
+
+        Assertions.assertTrue(todayListOpt.isPresent());
+        Assertions.assertFalse(todayListOpt.get().todayList().isEmpty());
     }
 }

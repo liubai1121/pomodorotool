@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.ReportTableController">
+
+    <TableView fx:id="reportTable" prefHeight="200.0" prefWidth="441.0">
+        <columns>
+            <TableColumn fx:id="reportTableContent" prefWidth="282.0" text="内容"/>
+            <TableColumn fx:id="reportTableClocks" minWidth="0.0" text="时钟数"/>
+            <TableColumn fx:id="reportTableTime" minWidth="0.0" prefWidth="62.0" text="用时"/>
+        </columns>
+    </TableView>
+    <Button layoutY="207.0" mnemonicParsing="false" onAction="#onReportTableQuery" prefHeight="23.0" prefWidth="59.0"
+            text="查询"/>
+    <Label layoutX="242.0" layoutY="206.0" prefHeight="26.0" prefWidth="31.0" text="总计" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="14.0"/>
+        </font>
+    </Label>
+    <Label fx:id="totalClocksLabel" layoutX="307.0" layoutY="206.0" prefHeight="26.0" prefWidth="31.0"
+           textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="14.0"/>
+        </font>
+    </Label>
+    <Label fx:id="totalClocksTime" layoutX="368.0" layoutY="205.0" prefHeight="26.0" prefWidth="59.0"
+           textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="14.0"/>
+        </font>
+    </Label>
+
+</AnchorPane>

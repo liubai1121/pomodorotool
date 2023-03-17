@@ -4,6 +4,6 @@ public class TestFilePathConfig implements FilePathConfig {
 
     @Override
     public String getStoreFilesPath() {
-        return "D:\\test\\pomodoro-techinque-tool";
+        return "D:\\test\\pomodoro-techinque-tool\\";
     }
 }

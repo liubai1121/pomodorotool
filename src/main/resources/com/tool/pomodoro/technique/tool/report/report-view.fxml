@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="676.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.ReportController">
+    <Label layoutX="34.0" layoutY="21.0" text="选择查询类型">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Label>
+    <ChoiceBox fx:id="choiceBox" layoutX="155.0" layoutY="22.0" onAction="#onChoiceBoxSelected" prefHeight="23.0"
+               prefWidth="59.0"/>
+
+    <TextField fx:id="queryByDay" layoutX="228.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
+    <ComboBox fx:id="queryByWeek" layoutX="228.0" layoutY="22.0" prefWidth="116.0"/>
+    <ComboBox fx:id="queryByMonth" layoutX="228.0" layoutY="22.0" prefWidth="116.0"/>
+    <TextField fx:id="queryByDurationForStart" layoutX="228.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
+    <TextField fx:id="queryByDurationForEnd" layoutX="362.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
+
+    <fx:include layoutX="34.0" layoutY="62.0" source="report-table.fxml" />
+    <LineChart layoutX="34.0" layoutY="313.0" prefHeight="200.0" prefWidth="441.0">
+        <xAxis>
+            <CategoryAxis side="BOTTOM"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis side="LEFT"/>
+        </yAxis>
+    </LineChart>
+    <PieChart layoutX="502.0" layoutY="62.0" prefHeight="200.0" prefWidth="375.0"/>
+
+
+</AnchorPane>

@@ -25,20 +25,6 @@ public class FileUtil {
 
     }
 
-    public static Optional<File> getTodoFile() {
-        var filePath = FileConfig.getTodoFile();
-
-        return getFileOrCreate(filePath);
-    }
-
-    public static Optional<File> getTodayFile() {
-        var localDate = LocalDate.now();
-        String format = DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
-        String filePath = FileConfig.getFolderDirectory() + format + FileConfig.getFileSuffix();
-
-        return getFileOrCreate(filePath);
-    }
-
     public static Optional<File> getLabelFile() {
         var filePath = FileConfig.getLabelFile();
 

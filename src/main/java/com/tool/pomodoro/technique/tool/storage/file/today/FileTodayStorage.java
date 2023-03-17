@@ -5,6 +5,7 @@ import com.tool.pomodoro.technique.tool.storage.file.FileUtil;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.TodayStorage;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -33,6 +34,19 @@ public class FileTodayStorage implements TodayStorage, FileStorage {
     }
 
     private final List<Today> dataList = new LinkedList<>();
+
+    @Override
+    public void load() {
+        FileUtil.getFileOrCreate(getFileName())
+                .filter(file -> file.length() > 0)
+                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Today.class)));
+    }
+
+    @Override
+    public void store() {
+        FileUtil.getFileOrCreate(getFileName())
+                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
+    }
 
     @Override
     public void save(Today today) {
@@ -105,21 +119,41 @@ public class FileTodayStorage implements TodayStorage, FileStorage {
     }
 
     @Override
-    public void load() {
-        FileUtil.getFileOrCreate(getFileName())
-                .filter(file -> file.length() > 0)
-                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Today.class)));
+    public Optional<List<Today>> getByDay(LocalDate date) {
+        return Optional.ofNullable(date)
+                .map(this::getDateFileName)
+                .map(File::new)
+                .filter(file -> file.exists() && file.length() > 0)
+                .map(file -> FileUtil.doDeserialized(file, Today.class));
     }
 
     @Override
-    public void store() {
-        FileUtil.getFileOrCreate(getFileName())
-                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
+    public Optional<List<Today>> getByDuration(LocalDate startDay, LocalDate endDay) {
+        if (Objects.isNull(startDay) || Objects.isNull(endDay)) {
+            return Optional.empty();
+        }
+
+        if (startDay.isAfter(endDay)) {
+            return Optional.empty();
+        }
+
+        List<Today> result = new ArrayList<>();
+        for (LocalDate day = startDay;
+             day.isBefore(endDay) || day.isEqual(endDay);
+             day = day.plusDays(1)) {
+            getByDay(day).ifPresent(result::addAll);
+        }
+
+        return Optional.of(result);
     }
 
     private String getFileName() {
-        var localDate = LocalDate.now();
+        return getDateFileName(LocalDate.now());
+    }
+
+    private String getDateFileName(LocalDate localDate) {
         String format = DateTimeFormatter.ISO_LOCAL_DATE.format(localDate);
         return filePath + format + ".json";
     }
+
 }

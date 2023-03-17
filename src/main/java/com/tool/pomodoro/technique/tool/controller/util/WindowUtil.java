@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -25,6 +26,13 @@ public class WindowUtil {
     public static Stage create(String title, String fxmlPath, Object controller) {
         FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource(fxmlPath));
         fxmlLoader.setController(controller);
+
+        return create(title, fxmlLoader);
+    }
+
+    public static Stage create(String title, String fxmlPath, Callback<Class<?>, Object> controllerFactory) {
+        FXMLLoader fxmlLoader = new FXMLLoader(ToolApplication.class.getResource(fxmlPath));
+        fxmlLoader.setControllerFactory(controllerFactory);
 
         return create(title, fxmlLoader);
     }
