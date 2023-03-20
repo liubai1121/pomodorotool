@@ -47,4 +47,9 @@ public class MemoryTodoStorage implements TodoStorage {
     public Optional<List<Todo>> selectAll() {
         return Optional.ofNullable(list);
     }
+
+    @Override
+    public Optional<List<Todo>> selectByIds(List<String> todoIds) {
+        return Optional.empty();
+    }
 }

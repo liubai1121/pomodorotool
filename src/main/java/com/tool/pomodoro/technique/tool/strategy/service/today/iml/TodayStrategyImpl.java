@@ -30,7 +30,7 @@ public class TodayStrategyImpl implements TodayStrategy {
     @Override
     public String add(TodayAddDto dto) {
         var uuid = IdUtil.generate();
-        var today = new Today(uuid, dto.content(), dto.clocks());
+        var today = new Today(uuid, dto.content(), dto.clocks(), dto.category());
         todayStorage.save(today);
         return uuid;
     }
@@ -43,7 +43,7 @@ public class TodayStrategyImpl implements TodayStrategy {
 
     @Override
     public void update(TodayUpdateDto dto) {
-        var updateToday = new Today(dto.id(), dto.content(), dto.clocks());
+        var updateToday = new Today(dto.id(), dto.content(), dto.clocks(), dto.category());
         todayStorage.update(updateToday);
     }
 
@@ -53,7 +53,7 @@ public class TodayStrategyImpl implements TodayStrategy {
                 .ifPresent(today -> {
                     var newClocks = today.clocks() + 1;
 
-                    Today updateToday = new Today(today.id(), today.content(), newClocks);
+                    Today updateToday = new Today(today.id(), today.content(), newClocks, today.category());
                     todayStorage.update(updateToday);
                 });
     }
@@ -61,7 +61,7 @@ public class TodayStrategyImpl implements TodayStrategy {
     @Override
     public Optional<TodayDto> get(String uuid) {
         return todayStorage.selectById(uuid)
-                .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.createTime()));
+                .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.category(), today.createTime()));
     }
 
     @Override

@@ -36,6 +36,7 @@ public class TodayCountdownController {
                 .map(scene -> (Stage) scene.getWindow())
                 .ifPresent(stage -> {
                     countdownLabel.setText(COUNTDOWN_TIME);
+
                     var closeWindowCommand = new CloseWindowCommand(stage);
                     var remindCommand = new CreateTodayCountdownRemindWindowCommand();
                     var incrementClockCommand = new TodayIncrementClockCommand(todayStrategy, todayVo.id());

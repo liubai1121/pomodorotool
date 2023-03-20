@@ -97,6 +97,14 @@ public class FileTodoStorage implements TodoStorage, FileStorage {
     }
 
     @Override
+    public Optional<List<Todo>> selectByIds(List<String> todoIds) {
+        return Optional.ofNullable(todoIds)
+                .map(ids -> dataList.stream()
+                        .filter(data -> ids.contains(data.id()))
+                        .toList());
+    }
+
+    @Override
     public void load() {
         FileUtil.getFileOrCreate(filePath + FILE_NAME)
                 .filter(file -> file.length() > 0)

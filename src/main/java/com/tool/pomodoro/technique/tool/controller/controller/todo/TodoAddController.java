@@ -13,9 +13,11 @@ import java.util.function.Predicate;
 public class TodoAddController {
 
     private final TodoStrategy todoStrategy;
+    private final String todoCategoryId;
 
-    public TodoAddController(TodoStrategy todoStrategy) {
+    public TodoAddController(TodoStrategy todoStrategy, String todoCategoryId) {
         this.todoStrategy = todoStrategy;
+        this.todoCategoryId = todoCategoryId;
     }
 
     @FXML
@@ -26,7 +28,7 @@ public class TodoAddController {
         Optional.ofNullable(todoContent.getText())
                 .filter(Predicate.not(String::isBlank))
                 .ifPresent(content -> {
-                    var addDto = new TodoAddDto(content);
+                    var addDto = new TodoAddDto(content, todoCategoryId);
                     todoStrategy.add(addDto);
 
                     Stage stage = (Stage) todoContent.getScene().getWindow();

@@ -17,4 +17,6 @@ public interface TodoStorage {
     Optional<Todo> selectById(String todoId);
 
     Optional<List<Todo>> selectAll();
+
+    Optional<List<Todo>> selectByIds(List<String> todoIds);
 }

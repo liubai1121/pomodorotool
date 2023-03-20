@@ -6,8 +6,6 @@ import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisti
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,7 +16,8 @@ public class TodayStrategyWrapper {
     public static List<TodayDto> wrapTodayDtos(List<Today> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.createTime()))
+                .map(today -> new TodayDto(today.id(), today.content(), today.clocks(), today.category(),
+                        today.createTime()))
                 .collect(Collectors.toList());
     }
 

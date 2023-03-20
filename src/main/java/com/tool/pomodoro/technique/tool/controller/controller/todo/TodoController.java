@@ -1,22 +1,20 @@
 package com.tool.pomodoro.technique.tool.controller.controller.todo;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.TodayController;
+import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoCategoryVo;
 import com.tool.pomodoro.technique.tool.controller.controller.todo.vo.TodoVo;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoCategoryStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -24,50 +22,58 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TodoController implements Initializable {
 
     private final TodoStrategy todoStrategy;
     private final TodoTodayMoveStrategy moveStrategy;
+    private final TodoCategoryStrategy todoCategoryStrategy;
 
     public TodoController(StrategyFactory strategyFactory) {
         this.todoStrategy = strategyFactory.createTodoStrategy();
         this.moveStrategy = strategyFactory.createTodoTodayMoveStrategy();
+        this.todoCategoryStrategy = strategyFactory.createTodoCategoryStrategy();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initTreeView();
+
         todoContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
 
-        refreshTableView();
+        refreshCategoryTree();
         ToolController.registerController(this);
     }
+
+    @FXML
+    private TreeView<TodoCategoryVo> todoCategoryTreeView;
+
+    private void initTreeView() {
+        TreeItem<TodoCategoryVo> roomNode = new TreeItem<>(new TodoCategoryVo("", "类别"));
+        roomNode.setExpanded(true);
+
+        todoCategoryTreeView.setCellFactory(treeViewItem -> new TreeCell<>() {
+            @Override
+            protected void updateItem(TodoCategoryVo item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.name());
+                }
+            }
+        });
+        todoCategoryTreeView.setRoot(roomNode);
+    }
+
 
     @FXML
     private TableView<TodoVo> todoTableView;
     @FXML
     private TableColumn<TodoVo, String> todoContentTableColumn;
 
-    @FXML
-    private TextField addTodoField;
-
-    @FXML
-    protected void onAddTodoButtonClick() {
-        Optional.ofNullable(addTodoField.getCharacters())
-                .map(CharSequence::toString)
-                .filter(Predicate.not(String::isBlank))
-                .ifPresent(this::addTodo);
-
-        addTodoField.clear();
-        refreshTableView();
-    }
-
-    private void addTodo(String todo) {
-        var dto = new TodoAddDto(todo);
-        todoStrategy.add(dto);
-    }
 
     @FXML
     protected void onCopyToToday() {
@@ -94,22 +100,10 @@ public class TodoController implements Initializable {
 
     @FXML
     protected void onAdd() {
-        var addController = new TodoAddController(todoStrategy);
-        Stage stage = WindowUtil.create("新增", "todo/todo-add.fxml", addController);
-        stage.setAlwaysOnTop(true);
-        stage.show();
-
-        stage.setOnCloseRequest(event -> {
-            refreshTableView();
-        });
-    }
-
-    @FXML
-    protected void onEdit() {
-        getSelectedLabel()
-                .ifPresent(todo -> {
-                    var editController = new TodoEditController(todoStrategy, todo);
-                    Stage stage = WindowUtil.create("修改", "todo/todo-edit.fxml", editController);
+        getCategorySelected()
+                .ifPresent(todoCategory -> {
+                    var addController = new TodoAddController(todoStrategy, todoCategory.id());
+                    Stage stage = WindowUtil.create("新增", "todo/todo-add.fxml", addController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
 
@@ -119,15 +113,30 @@ public class TodoController implements Initializable {
                 });
     }
 
-    private Optional<TodoVo> getSelectedLabel() {
+    @FXML
+    protected void onEdit() {
+        getTableSelected()
+                .ifPresent(todo -> {
+                    var editController = new TodoEditController(todoStrategy, todo);
+                    Stage stage = WindowUtil.create("修改", "todo/todo-edit.fxml", editController);
+                    stage.setAlwaysOnTop(true);
+                    stage.show();
+
+
+                    stage.setOnCloseRequest(event -> {
+                        refreshTableView();
+                    });
+                });
+    }
+
+    private Optional<TodoVo> getTableSelected() {
         return Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem);
     }
 
     @FXML
     protected void onDelete() {
-        Optional.ofNullable(todoTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
+        getTableSelected()
                 .ifPresent(todoVo -> {
                     todoStrategy.delete(todoVo.id());
                     refreshTableView();
@@ -135,11 +144,17 @@ public class TodoController implements Initializable {
     }
 
     public void refreshTableView() {
-        todoStrategy.all()
-                .map(this::wrapTodoVoList)
-                .map(FXCollections::observableList)
+        getCategorySelected()
+                .flatMap(todoCategory -> todoStrategy.listByCategory(todoCategory.id())
+                        .map(this::wrapTodoVoList)
+                        .map(FXCollections::observableList))
                 .ifPresent(todoTableView::setItems);
     }
+
+
+
+
+
 
     private List<TodoVo> wrapTodoVoList(List<TodoDto> list) {
         return list.stream()
@@ -153,6 +168,76 @@ public class TodoController implements Initializable {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> ToolController.getController(TodoDetailController.class)
-                        .ifPresent(controller -> controller.display(todoVo)));
+                        .ifPresent(detailController -> detailController.display(todoVo)));
+    }
+
+
+    @FXML
+    protected void onCategoryAdd() {
+        var categoryAddController = new TodoCategoryAddController(todoCategoryStrategy);
+        Stage stage = WindowUtil.create("新增", "todo/todo-category-add.fxml", categoryAddController);
+        stage.setAlwaysOnTop(true);
+        stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            refreshCategoryTree();
+        });
+    }
+
+    @FXML
+    protected void onCategoryEdit() {
+        getCategorySelected()
+                .ifPresent(todoCategory -> {
+                    var editController = new TodoCategoryEditController(todoCategoryStrategy, todoCategory);
+                    Stage stage = WindowUtil.create("修改", "todo/todo-category-edit.fxml", editController);
+                    stage.setAlwaysOnTop(true);
+                    stage.show();
+
+                    stage.setOnCloseRequest(event -> {
+                        refreshCategoryTree();
+                    });
+                });
+    }
+
+    @FXML
+    protected void onCategoryDelete() {
+        getCategorySelected()
+                .ifPresent(todoCategory -> {
+                    todoCategoryStrategy.delete(todoCategory.id());
+                    refreshCategoryTree();
+                });
+    }
+
+    @FXML
+    protected void onCategorySelected() {
+        getCategorySelected()
+                .ifPresent(todoCategory -> {
+                    refreshTableView();
+                });
+
+        if (getCategorySelected().isEmpty()) {
+            displayEmptyTableView();
+        }
+    }
+
+    private void displayEmptyTableView() {
+        todoTableView.getItems().clear();
+    }
+
+    private Optional<TodoCategoryVo> getCategorySelected() {
+        return Optional.ofNullable(todoCategoryTreeView.getSelectionModel())
+                .map(SelectionModel::getSelectedItem)
+                .map(TreeItem::getValue)
+                .filter(todoCategory -> Objects.nonNull(todoCategory.id()) && !todoCategory.id().isBlank());
+    }
+
+    private void refreshCategoryTree() {
+        todoCategoryStrategy.all()
+                .ifPresent(categories -> {
+                    var treeItems = categories.stream()
+                            .map(category -> new TreeItem<>(new TodoCategoryVo(category.id(), category.name())))
+                            .toList();
+                    todoCategoryTreeView.getRoot().getChildren().setAll(treeItems);
+                });
     }
 }

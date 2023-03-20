@@ -4,6 +4,7 @@ import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
+import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoCategoryDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
 
 import java.util.Optional;
@@ -22,8 +23,9 @@ public class TodoTodayMoveStrategyImpl implements TodoTodayMoveStrategy {
     @Override
     public Optional<String> copyTodoToToday(String uuid) {
         return todoStrategy.get(uuid)
-                .map(todoDto -> new TodayAddDto(todoDto.content()))
-                .map(todayStrategy::add);
+                .flatMap(todo -> todoStrategy.getCategory(todo.id())
+                        .map(category -> todayStrategy.add(new TodayAddDto(todo.content(), category.name()))));
+
     }
 
     @Override
@@ -33,21 +35,5 @@ public class TodoTodayMoveStrategyImpl implements TodoTodayMoveStrategy {
             todoStrategy.delete(uuid);
         }
         return todayIdOpt;
-    }
-
-    @Override
-    public Optional<String> copyTodayToTodo(String uuid) {
-        return todayStrategy.get(uuid)
-                .map(todayDto -> new TodoAddDto(todayDto.content()))
-                .map(todoStrategy::add);
-    }
-
-    @Override
-    public Optional<String> cutTodayToTodo(String uuid) {
-        Optional<String> todoIdOpt = copyTodayToTodo(uuid);
-        if (todoIdOpt.isPresent()) {
-            todayStrategy.delete(uuid);
-        }
-        return todoIdOpt;
     }
 }

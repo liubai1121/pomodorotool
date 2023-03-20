@@ -61,4 +61,23 @@ public class FileTodoStorageTests {
 
         Assertions.assertTrue(todos.isPresent());
     }
+
+
+    @Test
+    void selectByIds() {
+        String uuid = IdUtil.generate();
+        var todo = new Todo(uuid, "test selectByIds");
+        todoDatabase.save(todo);
+
+        String uuid1 = IdUtil.generate();
+        var todo1 = new Todo(uuid1, "test selectByIds1");
+        todoDatabase.save(todo1);
+
+        Optional<List<Todo>> todos = todoDatabase.selectByIds(List.of(uuid, uuid1));
+
+        Assertions.assertTrue(todos.isPresent());
+        Assertions.assertEquals(todos.get().size(), 2);
+    }
+
+
 }
