@@ -2,6 +2,7 @@ package com.tool.pomodoro.technique.tool.controller.controller.tool;
 
 import com.tool.pomodoro.technique.tool.controller.controller.label.LabelManagementController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.ReportController;
+import com.tool.pomodoro.technique.tool.controller.controller.report.ReportLineChartController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.ReportTableController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
@@ -27,13 +28,16 @@ public class ToolMenuController {
     @FXML
     protected void onReportView() {
         var reportController = new ReportController(strategyFactory);
-        var reportTableController = new ReportTableController(reportController, strategyFactory.createTodayStrategy());
+        var reportTableController = new ReportTableController(reportController);
+        var reportLineChartController = new ReportLineChartController(reportController);
 
         Callback<Class<?>, Object> controllerFactory = type -> {
             if (type == ReportController.class) {
                 return reportController;
             } else if (type == ReportTableController.class) {
                 return reportTableController;
+            } else if (type == ReportLineChartController.class) {
+                return reportLineChartController;
             } else {
                 try {
                     return type.getDeclaredConstructor().newInstance();

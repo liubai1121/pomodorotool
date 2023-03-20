@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -24,15 +21,7 @@
     <TextField fx:id="queryByDurationForEnd" layoutX="362.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
 
     <fx:include layoutX="34.0" layoutY="62.0" source="report-table.fxml" />
-    <LineChart layoutX="34.0" layoutY="313.0" prefHeight="200.0" prefWidth="441.0">
-        <xAxis>
-            <CategoryAxis side="BOTTOM"/>
-        </xAxis>
-        <yAxis>
-            <NumberAxis side="LEFT"/>
-        </yAxis>
-    </LineChart>
+    <fx:include  layoutX="34.0" layoutY="313.0" source="report-line-chart.fxml" />
+
     <PieChart layoutX="502.0" layoutY="62.0" prefHeight="200.0" prefWidth="375.0"/>
-
-
 </AnchorPane>

@@ -5,10 +5,10 @@ import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisti
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsDto;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TodayStrategyWrapper {
@@ -39,9 +39,16 @@ public class TodayStrategyWrapper {
         if (baseDtoList.isEmpty()) {
             return Optional.empty();
         }
+
         var totalClock = baseDtoList.stream().mapToInt(TodayStatisticsBaseDto::clocks).sum();
 
-        return Optional.of(new TodayStatisticsDto(baseDtoList, totalClock, totalClock * clocksTime));
+        Map<LocalDate, Integer> clocksPerDay = todayList.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(today -> today.createTime().toLocalDate(),
+                        TreeMap::new,
+                        Collectors.summingInt(Today::clocks)));
+
+        return Optional.of(new TodayStatisticsDto(baseDtoList, totalClock, totalClock * clocksTime, clocksPerDay));
     }
 
 }

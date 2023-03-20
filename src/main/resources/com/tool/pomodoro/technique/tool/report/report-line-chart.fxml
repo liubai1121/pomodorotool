@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.ReportLineChartController">
+
+    <LineChart fx:id="reportLineChart" prefHeight="200.0" prefWidth="441.0">
+        <xAxis>
+            <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+            <NumberAxis side="LEFT" />
+        </yAxis>
+    </LineChart>
+    <Button layoutY="189.0" mnemonicParsing="false" onAction="#onReportLineChartQuery" prefHeight="23.0" prefWidth="59.0" text="查询" />
+
+</AnchorPane>

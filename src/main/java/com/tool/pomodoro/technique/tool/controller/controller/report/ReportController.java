@@ -1,9 +1,13 @@
 package com.tool.pomodoro.technique.tool.controller.controller.report;
 
+import com.tool.pomodoro.technique.tool.controller.util.TypeConversionUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
+import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
+import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsDto;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
@@ -14,17 +18,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class ReportController implements Initializable {
 
     private final StrategyFactory strategyFactory;
+    private final TodayStrategy todayStrategy;
 
     public ReportController(StrategyFactory strategyFactory) {
         this.strategyFactory = strategyFactory;
+        this.todayStrategy = strategyFactory.createTodayStrategy();;
     }
 
     @FXML
@@ -92,6 +100,46 @@ public class ReportController implements Initializable {
         queryByDurationForStart.setVisible(false);
         queryByDurationForEnd.setVisible(false);
     }
+
+    Optional<TodayStatisticsDto> getStatistics() {
+        return Optional.ofNullable(choiceBox.getSelectionModel())
+                .map(SingleSelectionModel::getSelectedItem)
+                .flatMap(QueryType::contentOf)
+                .flatMap(queryType -> switch (queryType) {
+                        case DAY -> Optional.ofNullable(queryByDay.getText())
+                                .filter(Predicate.not(String::isBlank))
+                                .flatMap(TypeConversionUtil::toDate)
+                                .flatMap(todayStrategy::getByDay);
+
+                        case WEEK -> Optional.ofNullable(queryByWeek.getValue())
+                                .filter(Predicate.not(String::isBlank))
+                                .flatMap(TypeConversionUtil::toInteger)
+                                .flatMap(todayStrategy::getByWeek);
+
+                        case MONTH -> Optional.ofNullable(queryByMonth.getValue())
+                                .filter(Predicate.not(String::isBlank))
+                                .flatMap(TypeConversionUtil::toInteger)
+                                .flatMap(todayStrategy::getByMonth);
+
+                        case DURATION -> {
+                            Optional<LocalDate> startDateOpt =
+                                    Optional.ofNullable(queryByDurationForStart.getText())
+                                            .filter(Predicate.not(String::isBlank))
+                                            .flatMap(TypeConversionUtil::toDate);
+
+                            Optional<LocalDate> endDateOpt =
+                                    Optional.ofNullable(queryByDurationForEnd.getText())
+                                            .filter(Predicate.not(String::isBlank))
+                                            .flatMap(TypeConversionUtil::toDate);
+
+                            yield startDateOpt.flatMap(startDate ->
+                                    endDateOpt.flatMap(endDate ->
+                                            todayStrategy.getByDuration(startDate, endDate)));
+                        }
+
+                    });
+    }
+
 
     enum QueryType {
         DAY("天"),

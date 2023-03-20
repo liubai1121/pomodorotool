@@ -40,7 +40,7 @@ public class TodayEditController implements Initializable {
         todayId.setText(today.id());
         todayContent.setText(today.content());
         todayClocks.setText(String.valueOf(today.clocks()));
-        todayCreateTime.setText(DateTimeFormatter.ISO_LOCAL_TIME.format(today.createTime()));
+        todayCreateTime.setText(DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(today.createTime()));
     }
 
     @FXML
