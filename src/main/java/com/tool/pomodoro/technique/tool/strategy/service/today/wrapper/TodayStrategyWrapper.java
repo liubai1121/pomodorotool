@@ -1,13 +1,11 @@
 package com.tool.pomodoro.technique.tool.strategy.service.today.wrapper;
 
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
-import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsBaseDto;
+import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayTableReportRecordDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsDto;
 import com.tool.pomodoro.technique.tool.strategy.storage.today.po.Today;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,10 +27,10 @@ public class TodayStrategyWrapper {
                 .filter(Objects::nonNull)
                 .collect(Collectors.collectingAndThen(Collectors.groupingBy(Today::content),
                         map -> {
-                            var list = new ArrayList<TodayStatisticsBaseDto>();
+                            var list = new ArrayList<TodayTableReportRecordDto>();
                             map.forEach((content, groupByTodayList) -> {
                                 int clocks = groupByTodayList.stream().mapToInt(Today::clocks).sum();
-                                list.add(new TodayStatisticsBaseDto(content, clocks, clocks * clocksTime));
+                                list.add(new TodayTableReportRecordDto(content, clocks, clocks * clocksTime));
                             });
                             return list;
                         }));
@@ -40,7 +38,7 @@ public class TodayStrategyWrapper {
             return Optional.empty();
         }
 
-        var totalClock = baseDtoList.stream().mapToInt(TodayStatisticsBaseDto::clocks).sum();
+        var totalClock = baseDtoList.stream().mapToInt(TodayTableReportRecordDto::clocks).sum();
 
         Map<LocalDate, Integer> clocksPerDay = todayList.stream()
                 .filter(Objects::nonNull)

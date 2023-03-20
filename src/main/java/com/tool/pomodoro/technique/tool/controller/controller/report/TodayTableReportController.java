@@ -1,34 +1,31 @@
 package com.tool.pomodoro.technique.tool.controller.controller.report;
 
 import com.tool.pomodoro.technique.tool.controller.controller.report.vo.ReportTableVo;
-import com.tool.pomodoro.technique.tool.controller.util.TypeConversionUtil;
-import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsDto;
+import com.tool.pomodoro.technique.tool.strategy.service.today.TodayReportStrategy;
+import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayTableReportRecordDto;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Optional;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
-public class ReportTableController implements Initializable {
+public class TodayTableReportController implements Initializable {
 
     private final ReportController reportController;
+    private final TodayReportStrategy todayReportStrategy;
 
-    public ReportTableController(ReportController reportController) {
+    public TodayTableReportController(ReportController reportController, TodayReportStrategy todayReportStrategy) {
         this.reportController = reportController;
+        this.todayReportStrategy = todayReportStrategy;
     }
 
     @FXML
@@ -47,24 +44,26 @@ public class ReportTableController implements Initializable {
 
     @FXML
     protected void onReportTableQuery() {
-        Optional<TodayStatisticsDto> statisticsOpt = reportController.getStatistics();
+        var tableValueOpt = reportController.getSelectDuration()
+                .flatMap(pair -> todayReportStrategy.table(pair.getValue0(), pair.getValue1()));
 
-        statisticsOpt.ifPresent(statistics -> {
-            setReportTableData(statistics);
-            totalClocksLabel.setText(String.valueOf(statistics.totalClocks()));
-            totalClocksTime.setText(String.valueOf(statistics.totalTime()));
+
+        tableValueOpt.ifPresent(tableValue -> {
+            setReportTableData(tableValue.table());
+            totalClocksLabel.setText(String.valueOf(tableValue.totalClocks()));
+            totalClocksTime.setText(String.valueOf(tableValue.totalTime()));
         });
 
-        if (statisticsOpt.isEmpty()) {
+        if (tableValueOpt.isEmpty()) {
             showEmptyTable();
         }
     }
 
-    private void setReportTableData(TodayStatisticsDto statistics) {
-        var reportTableData = statistics.todayList()
+    private void setReportTableData(List<TodayTableReportRecordDto> table) {
+        var reportTableData = table
                 .stream()
-                .filter(base -> base.clocks() != 0)
-                .map(base -> new ReportTableVo(base.content(), base.clocks(), base.time()))
+                .filter(item -> item.clocks() != 0)
+                .map(item -> new ReportTableVo(item.content(), item.clocks(), item.time()))
                 .sorted(Comparator.comparing(ReportTableVo::clocks).reversed().thenComparing(ReportTableVo::content))
                 .toList();
         reportTable.setItems(FXCollections.observableArrayList(reportTableData));

@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.ReportLineChartController">
+<AnchorPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.TodayLineChartReportController">
 
     <LineChart fx:id="reportLineChart" prefHeight="200.0" prefWidth="441.0">
         <xAxis>

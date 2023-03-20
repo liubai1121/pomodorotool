@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="200.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.ReportTableController">
+            fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.TodayTableReportController">
 
     <TableView fx:id="reportTable" prefHeight="200.0" prefWidth="441.0">
         <columns>

@@ -2,12 +2,10 @@ package com.tool.pomodoro.technique.tool.controller.controller.report;
 
 import com.tool.pomodoro.technique.tool.controller.util.TypeConversionUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
-import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayStatisticsDto;
+import com.tool.pomodoro.technique.tool.strategy.service.today.TodayReportStrategy;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
@@ -17,22 +15,26 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.time.temporal.ChronoField.DAY_OF_WEEK;
+
 public class ReportController implements Initializable {
 
     private final StrategyFactory strategyFactory;
-    private final TodayStrategy todayStrategy;
+    private final TodayReportStrategy todayReportStrategy;
 
     public ReportController(StrategyFactory strategyFactory) {
         this.strategyFactory = strategyFactory;
-        this.todayStrategy = strategyFactory.createTodayStrategy();;
+        this.todayReportStrategy = strategyFactory.createTodayReportStrategy();
+        ;
     }
 
     @FXML
@@ -101,43 +103,98 @@ public class ReportController implements Initializable {
         queryByDurationForEnd.setVisible(false);
     }
 
-    Optional<TodayStatisticsDto> getStatistics() {
+    Optional<Pair<LocalDate, LocalDate>> getSelectDuration() {
         return Optional.ofNullable(choiceBox.getSelectionModel())
                 .map(SingleSelectionModel::getSelectedItem)
                 .flatMap(QueryType::contentOf)
                 .flatMap(queryType -> switch (queryType) {
-                        case DAY -> Optional.ofNullable(queryByDay.getText())
-                                .filter(Predicate.not(String::isBlank))
-                                .flatMap(TypeConversionUtil::toDate)
-                                .flatMap(todayStrategy::getByDay);
+                    case DAY -> Optional.ofNullable(queryByDay.getText())
+                            .filter(Predicate.not(String::isBlank))
+                            .flatMap(TypeConversionUtil::toDate)
+                            .flatMap(this::wrapDurationByDay);
 
-                        case WEEK -> Optional.ofNullable(queryByWeek.getValue())
-                                .filter(Predicate.not(String::isBlank))
-                                .flatMap(TypeConversionUtil::toInteger)
-                                .flatMap(todayStrategy::getByWeek);
+                    case WEEK -> Optional.ofNullable(queryByWeek.getValue())
+                            .filter(Predicate.not(String::isBlank))
+                            .flatMap(TypeConversionUtil::toInteger)
+                            .flatMap(this::wrapDurationByWeek);
 
-                        case MONTH -> Optional.ofNullable(queryByMonth.getValue())
-                                .filter(Predicate.not(String::isBlank))
-                                .flatMap(TypeConversionUtil::toInteger)
-                                .flatMap(todayStrategy::getByMonth);
+                    case MONTH -> Optional.ofNullable(queryByMonth.getValue())
+                            .filter(Predicate.not(String::isBlank))
+                            .flatMap(TypeConversionUtil::toInteger)
+                            .flatMap(this::wrapDurationByMonth);
 
-                        case DURATION -> {
-                            Optional<LocalDate> startDateOpt =
-                                    Optional.ofNullable(queryByDurationForStart.getText())
-                                            .filter(Predicate.not(String::isBlank))
-                                            .flatMap(TypeConversionUtil::toDate);
+                    case DURATION -> {
+                        Optional<LocalDate> startDateOpt =
+                                Optional.ofNullable(queryByDurationForStart.getText())
+                                        .filter(Predicate.not(String::isBlank))
+                                        .flatMap(TypeConversionUtil::toDate);
 
-                            Optional<LocalDate> endDateOpt =
-                                    Optional.ofNullable(queryByDurationForEnd.getText())
-                                            .filter(Predicate.not(String::isBlank))
-                                            .flatMap(TypeConversionUtil::toDate);
+                        Optional<LocalDate> endDateOpt =
+                                Optional.ofNullable(queryByDurationForEnd.getText())
+                                        .filter(Predicate.not(String::isBlank))
+                                        .flatMap(TypeConversionUtil::toDate);
 
-                            yield startDateOpt.flatMap(startDate ->
-                                    endDateOpt.flatMap(endDate ->
-                                            todayStrategy.getByDuration(startDate, endDate)));
-                        }
+                        yield startDateOpt.flatMap(startDate -> endDateOpt.map(endDate -> new Pair<>(startDate, endDate)));
+                    }
+                });
+    }
 
-                    });
+    private Optional<Pair<LocalDate, LocalDate>> wrapDurationByDay(LocalDate localDate) {
+        return Optional.ofNullable(localDate)
+                .map(date -> new Pair<>(date, date));
+    }
+
+    private Optional<Pair<LocalDate, LocalDate>> wrapDurationByWeek(int week) {
+        var maxWeek = 53;
+        var minWeek = 1;
+        boolean isWrongRange = week < minWeek || week > maxWeek;
+        if (isWrongRange) {
+            return Optional.empty();
+        }
+
+        LocalDate now = LocalDate.now();
+        int nowWeek = now.get(WeekFields.ISO.weekOfWeekBasedYear());
+
+        LocalDate weeKDate = now.minusWeeks(nowWeek - week);
+        var weekFirstDay = weeKDate.with((temporal) -> temporal.with(DAY_OF_WEEK, 1));
+        var weekLastDay = weeKDate.with((temporal) -> temporal.with(DAY_OF_WEEK, temporal.range(DAY_OF_WEEK).getMaximum()));
+
+        return Optional.of(new Pair<>(weekFirstDay, weekLastDay));
+    }
+
+    private Optional<Pair<LocalDate, LocalDate>> wrapDurationByMonth(int month) {
+        var maxMonth = 12;
+        var minMonth = 1;
+        boolean isWrongRange = month < minMonth || month > maxMonth;
+        if (isWrongRange) {
+            return Optional.empty();
+        }
+
+        LocalDate monthDate = LocalDate.now().withMonth(month);
+        var monthFirstDay = monthDate.with(TemporalAdjusters.firstDayOfMonth());
+        var monthLastDay = monthDate.with(TemporalAdjusters.lastDayOfMonth());
+
+        return Optional.of(new Pair<>(monthFirstDay, monthLastDay));
+    }
+
+
+    static class Pair<A, B> {
+
+        private final A value0;
+        private final B value1;
+
+        Pair(A value0, B value1) {
+            this.value0 = value0;
+            this.value1 = value1;
+        }
+
+        public A getValue0() {
+            return value0;
+        }
+
+        public B getValue1() {
+            return value1;
+        }
     }
 
 

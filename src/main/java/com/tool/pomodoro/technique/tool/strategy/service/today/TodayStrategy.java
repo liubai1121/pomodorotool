@@ -21,12 +21,4 @@ public interface TodayStrategy {
     Optional<TodayDto> get(String uuid);
 
     Optional<List<TodayDto>> all();
-
-    Optional<TodayStatisticsDto> getByDay(LocalDate today);
-
-    Optional<TodayStatisticsDto> getByWeek(int week);
-
-    Optional<TodayStatisticsDto> getByMonth(int month);
-
-    Optional<TodayStatisticsDto> getByDuration(LocalDate weekAgo, LocalDate today);
 }

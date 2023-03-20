@@ -2,8 +2,8 @@ package com.tool.pomodoro.technique.tool.controller.controller.tool;
 
 import com.tool.pomodoro.technique.tool.controller.controller.label.LabelManagementController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.ReportController;
-import com.tool.pomodoro.technique.tool.controller.controller.report.ReportLineChartController;
-import com.tool.pomodoro.technique.tool.controller.controller.report.ReportTableController;
+import com.tool.pomodoro.technique.tool.controller.controller.report.TodayLineChartReportController;
+import com.tool.pomodoro.technique.tool.controller.controller.report.TodayTableReportController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import javafx.fxml.FXML;
@@ -28,15 +28,15 @@ public class ToolMenuController {
     @FXML
     protected void onReportView() {
         var reportController = new ReportController(strategyFactory);
-        var reportTableController = new ReportTableController(reportController);
-        var reportLineChartController = new ReportLineChartController(reportController);
+        var reportTableController = new TodayTableReportController(reportController, strategyFactory.createTodayReportStrategy());
+        var reportLineChartController = new TodayLineChartReportController(reportController, strategyFactory.createTodayReportStrategy());
 
         Callback<Class<?>, Object> controllerFactory = type -> {
             if (type == ReportController.class) {
                 return reportController;
-            } else if (type == ReportTableController.class) {
+            } else if (type == TodayTableReportController.class) {
                 return reportTableController;
-            } else if (type == ReportLineChartController.class) {
+            } else if (type == TodayLineChartReportController.class) {
                 return reportLineChartController;
             } else {
                 try {

@@ -20,8 +20,8 @@
     <TextField fx:id="queryByDurationForStart" layoutX="228.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
     <TextField fx:id="queryByDurationForEnd" layoutX="362.0" layoutY="22.0" prefHeight="23.0" prefWidth="116.0"/>
 
-    <fx:include layoutX="34.0" layoutY="62.0" source="report-table.fxml" />
-    <fx:include  layoutX="34.0" layoutY="313.0" source="report-line-chart.fxml" />
+    <fx:include layoutX="34.0" layoutY="62.0" source="today-table-report.fxml" />
+    <fx:include  layoutX="34.0" layoutY="313.0" source="today-line-chart-report.fxml" />
 
     <PieChart layoutX="502.0" layoutY="62.0" prefHeight="200.0" prefWidth="375.0"/>
 </AnchorPane>

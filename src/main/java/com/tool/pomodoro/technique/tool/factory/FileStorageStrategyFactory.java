@@ -6,7 +6,9 @@ import com.tool.pomodoro.technique.tool.storage.file.today.FileTodayStorage;
 import com.tool.pomodoro.technique.tool.storage.file.todo.FileTodoStorage;
 import com.tool.pomodoro.technique.tool.strategy.service.label.LabelStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.label.impl.LabelStrategyImpl;
+import com.tool.pomodoro.technique.tool.strategy.service.today.TodayReportStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
+import com.tool.pomodoro.technique.tool.strategy.service.today.iml.TodayReportStrategyImpl;
 import com.tool.pomodoro.technique.tool.strategy.service.today.iml.TodayStrategyImpl;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.impl.TodoStrategyImpl;
@@ -29,6 +31,11 @@ public class FileStorageStrategyFactory implements StrategyFactory {
     @Override
     public TodayStrategy createTodayStrategy() {
         return new TodayStrategyImpl(FileTodayStorage.getInstance(filePathConfig.getStoreFilesPath()));
+    }
+
+    @Override
+    public TodayReportStrategy createTodayReportStrategy() {
+        return new TodayReportStrategyImpl(FileTodayStorage.getInstance(filePathConfig.getStoreFilesPath()));
     }
 
     @Override
