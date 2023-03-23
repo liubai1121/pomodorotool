@@ -1,22 +1,20 @@
 package com.tool.pomodoro.technique.tool.storage.file;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     static {
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -79,4 +77,35 @@ public class FileUtil {
     }
 
 
+    public static void doSerialized(File file, Object object) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+            String todoJson = objectMapper.writeValueAsString(object);
+            bw.write(todoJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static Map<String, List<String>> doDeserializedLink(File file) {
+        try {
+            String dataMap = Files.readString(file.toPath());
+            return objectMapper.readValue(dataMap, new TypeReference<HashMap<String, List<String>>>() {
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyMap();
+        }
+    }
+
+    public static Map<String, String> doDeserializedLinkForTodo(File file) {
+        try {
+            String dataMap = Files.readString(file.toPath());
+            return objectMapper.readValue(dataMap, new TypeReference<HashMap<String, String>>() {
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+    }
 }

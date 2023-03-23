@@ -31,17 +31,18 @@ import java.util.stream.Collectors;
 public class TodayController implements Initializable {
 
     private final TodayStrategy todayStrategy;
-    private final TodoTodayMoveStrategy moveStrategy;
+    private final StrategyFactory strategyFactory;
 
     public TodayController(StrategyFactory strategyFactory) {
+        this.strategyFactory = strategyFactory;
         this.todayStrategy = strategyFactory.createTodayStrategy();
-        this.moveStrategy = strategyFactory.createTodoTodayMoveStrategy();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         todayContentTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().content()));
         todayClocksTableColumn.setCellValueFactory(clocksColumn -> new SimpleIntegerProperty(clocksColumn.getValue().clocks()).asObject());
+        todayCategoryTableColumn.setCellValueFactory(contentColumn -> new SimpleStringProperty(contentColumn.getValue().category()));
 
         refreshTableView();
         ToolController.registerController(this);
@@ -53,52 +54,35 @@ public class TodayController implements Initializable {
     private TableColumn<TodayVo, String> todayContentTableColumn;
     @FXML
     private TableColumn<TodayVo, Integer> todayClocksTableColumn;
-
     @FXML
-    private TextField addTodayField;
+    private TableColumn<TodayVo, String> todayCategoryTableColumn;
 
-    @FXML
-    protected void onAddTodayButtonClick() {
-        Optional.ofNullable(addTodayField.getCharacters())
-                .map(CharSequence::toString)
-                .filter(Predicate.not(String::isBlank))
-                .ifPresent(this::addToday);
-
-        addTodayField.clear();
-        refreshTableView();
-    }
-
-    private void addToday(String content) {
-        var dto = new TodayAddDto(content);
-        todayStrategy.add(dto);
-    }
-
-    @FXML
-    protected void onCopyToTodo() {
-        Optional.ofNullable(todayTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
-                .ifPresent(todayVo -> {
-                    moveStrategy.copyTodayToTodo(todayVo.id());
-                    ToolController.getController(TodoController.class)
-                            .ifPresent(TodoController::refreshTableView);
-                });
-    }
-
-    @FXML
-    protected void onCutToTodo() {
-        Optional.ofNullable(todayTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
-                .ifPresent(todayVo -> {
-                    moveStrategy.cutTodayToTodo(todayVo.id());
-                    refreshTableView();
-                    ToolController.getController(TodoController.class)
-                            .ifPresent(TodoController::refreshTableView);
-                });
-    }
+//    @FXML
+//    protected void onCopyToTodo() {
+//        Optional.ofNullable(todayTableView.getSelectionModel())
+//                .map(SelectionModel::getSelectedItem)
+//                .ifPresent(todayVo -> {
+//                    moveStrategy.copyTodayToTodo(todayVo.id());
+//                    ToolController.getController(TodoController.class)
+//                            .ifPresent(TodoController::refreshTableView);
+//                });
+//    }
+//
+//    @FXML
+//    protected void onCutToTodo() {
+//        Optional.ofNullable(todayTableView.getSelectionModel())
+//                .map(SelectionModel::getSelectedItem)
+//                .ifPresent(todayVo -> {
+//                    moveStrategy.cutTodayToTodo(todayVo.id());
+//                    refreshTableView();
+//                    ToolController.getController(TodoController.class)
+//                            .ifPresent(TodoController::refreshTableView);
+//                });
+//    }
 
     @FXML
     protected void onAdd() {
-        var addController = new TodayAddController(todayStrategy);
+        var addController = new TodayAddController(todayStrategy, strategyFactory.createTodoCategoryStrategy());
         var stage = WindowUtil.create("新增", "today/today-add.fxml", addController);
         stage.setAlwaysOnTop(true);
         stage.show();
@@ -112,7 +96,7 @@ public class TodayController implements Initializable {
     protected void onEdit() {
         getSelectedLabel()
                 .ifPresent(today -> {
-                    var editController = new TodayEditController(todayStrategy, today);
+                    var editController = new TodayEditController(todayStrategy, today, strategyFactory.createTodoCategoryStrategy());
                     var stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
@@ -169,7 +153,7 @@ public class TodayController implements Initializable {
     private List<TodayVo> wrapTodayVoList(List<TodayDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
-                .map(item -> new TodayVo(item.id(), item.content(), item.clocks(), item.createTime()))
+                .map(item -> new TodayVo(item.id(), item.content(), item.clocks(), item.category(), item.createTime()))
                 .collect(Collectors.toList());
     }
 

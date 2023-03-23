@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class FileTodayStorageTests {
 
@@ -16,8 +17,7 @@ public class FileTodayStorageTests {
 
     @Test
     void save() {
-        var today = new Today(IdUtil.generate(), "test save");
-        todayStorage.save(today);
+        doSave();
 
         Optional<List<Today>> todayList = todayStorage.selectAll();
 
@@ -27,9 +27,9 @@ public class FileTodayStorageTests {
 
     @Test
     void saveBatch() {
-        var today = new Today(IdUtil.generate(), "test saveBatch1");
+        var today = new Today(IdUtil.generate(), "test saveBatch1", "test category");
 
-        var today1 = new Today(IdUtil.generate(), "test saveBatch2");
+        var today1 = new Today(IdUtil.generate(), "test saveBatch2", "test category");
 
         todayStorage.saveBatch(List.of(today, today1));
 
@@ -41,9 +41,7 @@ public class FileTodayStorageTests {
 
     @Test
     void delete() {
-        String id = IdUtil.generate();
-        var today = new Today(id, "test delete");
-        todayStorage.save(today);
+        String id = doSave();
 
         Assertions.assertTrue(todayStorage.selectById(id).isPresent());
 
@@ -54,34 +52,32 @@ public class FileTodayStorageTests {
 
     @Test
     void update() {
-        String id = IdUtil.generate();
-        var today = new Today(id, "test update");
-        todayStorage.save(today);
+        String id = doSave();
 
         String updateContent = "update success!";
-        var updateToday = new Today(id, updateContent);
+        String updateCategory = "update category!";
+
+        var updateToday = new Today(id, updateContent, updateCategory);
         todayStorage.update(updateToday);
 
         Optional<Today> updatedToday = todayStorage.selectById(id);
         Assertions.assertTrue(updatedToday.isPresent());
         Assertions.assertEquals(updatedToday.get().content(), updateContent);
+        Assertions.assertEquals(updatedToday.get().category(), updateCategory);
     }
 
     @Test
     void selectById() {
-        String uuid = IdUtil.generate();
-        var today = new Today(uuid, "test selectById");
-        todayStorage.save(today);
+        String id = doSave();
 
-        Optional<Today> todayOpt = todayStorage.selectById(uuid);
+        Optional<Today> todayOpt = todayStorage.selectById(id);
 
         Assertions.assertTrue(todayOpt.isPresent());
     }
 
     @Test
     void selectAll() {
-        var today = new Today(IdUtil.generate(), "test selectAll");
-        todayStorage.save(today);
+        doSave();
 
         Optional<List<Today>> todayOpt = todayStorage.selectAll();
 
@@ -91,7 +87,7 @@ public class FileTodayStorageTests {
 
     @Test
     void getByDay() {
-        todayStorage.save(new Today(IdUtil.generate(), "test getByDay"));
+        doSave();
 
         var today = LocalDate.now();
         Optional<List<Today>> todayOpt = todayStorage.getByDay(today);
@@ -102,7 +98,7 @@ public class FileTodayStorageTests {
 
     @Test
     void getByDuration() {
-        todayStorage.save(new Today(IdUtil.generate(), "test getByDuration"));
+        doSave();
 
         var today = LocalDate.now();
         var weekAgo = today.minusWeeks(1);
@@ -114,12 +110,20 @@ public class FileTodayStorageTests {
 
     @Test
     void getByDurationForStartGreaterEnd() {
-        todayStorage.save(new Today(IdUtil.generate(), "test getByDuration"));
+        doSave();
 
         var today = LocalDate.now();
         var weekAgo = today.minusWeeks(1);
         Optional<List<Today>> todayOpt = todayStorage.getByDuration(today, weekAgo);
 
         Assertions.assertTrue(todayOpt.isEmpty());
+    }
+
+    private String doSave() {
+        var random = new Random();
+        var idx = random.nextInt(10000);
+        var id = IdUtil.generate();
+        todayStorage.save(new Today(id , "doSave" + idx, "category"));
+        return id;
     }
 }

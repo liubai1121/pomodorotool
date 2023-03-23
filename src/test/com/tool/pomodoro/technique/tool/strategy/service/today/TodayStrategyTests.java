@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class TodayStrategyTests {
     private static TodayStrategy todayStrategy;
@@ -26,7 +27,7 @@ public class TodayStrategyTests {
     @Test
     void add() {
         var clocks = 2;
-        var dto = new TodayAddDto("开发任务", clocks);
+        var dto = new TodayAddDto("开发任务", clocks, "测试添加");
         var uuid = todayStrategy.add(dto);
 
         Optional<TodayDto> today = todayStrategy.get(uuid);
@@ -36,8 +37,7 @@ public class TodayStrategyTests {
 
     @Test
     void delete() {
-        var dto = new TodayAddDto("测试删除");
-        var id = todayStrategy.add(dto);
+        var id = doAdd();
         Assertions.assertTrue(todayStrategy.get(id).isPresent());
 
         todayStrategy.delete(id);
@@ -46,12 +46,12 @@ public class TodayStrategyTests {
 
     @Test
     void update() {
-        var dto = new TodayAddDto("测试更新方法");
-        String id = todayStrategy.add(dto);
+        String id = doAdd();
 
         var updateContent = "测试更新成功";
+        var updateCategory = "测试更新成功";
         var updateClocks = 15;
-        var updateDto = new TodayUpdateDto(id, updateContent, updateClocks);
+        var updateDto = new TodayUpdateDto(id, updateContent, updateClocks, updateCategory);
         todayStrategy.update(updateDto);
 
         Optional<TodayDto> today = todayStrategy.get(id);
@@ -63,8 +63,7 @@ public class TodayStrategyTests {
 
     @Test
     void selectAll() {
-        var dto = new TodayAddDto("自测");
-        todayStrategy.add(dto);
+        doAdd();
 
         Optional<List<TodayDto>> today = todayStrategy.all();
         Assertions.assertTrue(today.isPresent());
@@ -73,8 +72,7 @@ public class TodayStrategyTests {
 
     @Test
     void incrementClock() {
-        var dto = new TodayAddDto("测试自增时钟");
-        String id = todayStrategy.add(dto);
+        String id = doAdd();
 
         todayStrategy.incrementClock(id);
         Optional<TodayDto> todayDtpOpt = todayStrategy.get(id);
@@ -90,5 +88,9 @@ public class TodayStrategyTests {
         Assertions.assertEquals(todayDtpOpt.get().clocks(), 2);
     }
 
-
+    private String doAdd() {
+        var random = new Random();
+        var idx = random.nextInt(10000);
+        return todayStrategy.add(new TodayAddDto("添加" + idx, "测试分类"));
+    }
 }
