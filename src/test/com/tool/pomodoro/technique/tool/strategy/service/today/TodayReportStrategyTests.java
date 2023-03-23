@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Random;
 
 public class TodayReportStrategyTests {
 
@@ -28,7 +29,7 @@ public class TodayReportStrategyTests {
 
     @Test
     void table() {
-        todayStrategy.add(new TodayAddDto("测试表格报表", 10));
+        doAddToday();
 
 
         Optional<TodayTableReportValueDto> tableValueOpt = todayReportStrategy.table(LocalDate.now(), LocalDate.now());
@@ -39,7 +40,7 @@ public class TodayReportStrategyTests {
 
     @Test
     void tableForWrongRange() {
-        todayStrategy.add(new TodayAddDto("测试表格报表-查询范围错误"));
+        doAddToday();
 
         var today = LocalDate.now();
         var yesterday = today.minusDays(1);
@@ -50,7 +51,7 @@ public class TodayReportStrategyTests {
 
     @Test
     void lineChart() {
-        todayStrategy.add(new TodayAddDto("测试折线图报表", 10));
+        doAddToday();
 
         Optional<TodayLineChartReportValueDto> lineChartOpt = todayReportStrategy.lineChart(LocalDate.now(), LocalDate.now());
         Assertions.assertTrue(lineChartOpt.isPresent());
@@ -60,12 +61,18 @@ public class TodayReportStrategyTests {
 
     @Test
     void lineChartForWrongRange() {
-        todayStrategy.add(new TodayAddDto("测试折线图报表-查询范围错误", 10));
+        doAddToday();
 
         var today = LocalDate.now();
         var yesterday = today.minusDays(1);
         var todayListOpt = todayReportStrategy.lineChart(today, yesterday);
 
         Assertions.assertTrue(todayListOpt.isEmpty());
+    }
+
+    private String doAddToday() {
+        var random = new Random();
+        var idx = random.nextInt(10000);
+        return todayStrategy.add(new TodayAddDto("添加" + idx, "测试分类"));
     }
 }
