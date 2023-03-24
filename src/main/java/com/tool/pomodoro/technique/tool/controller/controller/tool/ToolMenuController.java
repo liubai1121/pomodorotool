@@ -2,6 +2,7 @@ package com.tool.pomodoro.technique.tool.controller.controller.tool;
 
 import com.tool.pomodoro.technique.tool.controller.controller.label.LabelManagementController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.ReportController;
+import com.tool.pomodoro.technique.tool.controller.controller.report.TodayCategoryPieChartReportController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.TodayLineChartReportController;
 import com.tool.pomodoro.technique.tool.controller.controller.report.TodayTableReportController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
@@ -30,6 +31,7 @@ public class ToolMenuController {
         var reportController = new ReportController(strategyFactory);
         var reportTableController = new TodayTableReportController(reportController, strategyFactory.createTodayReportStrategy());
         var reportLineChartController = new TodayLineChartReportController(reportController, strategyFactory.createTodayReportStrategy());
+        var todayCategoryPieChartReportController = new TodayCategoryPieChartReportController(reportController, strategyFactory.createTodayReportStrategy());
 
         Callback<Class<?>, Object> controllerFactory = type -> {
             if (type == ReportController.class) {
@@ -38,6 +40,8 @@ public class ToolMenuController {
                 return reportTableController;
             } else if (type == TodayLineChartReportController.class) {
                 return reportLineChartController;
+            } else if (type == TodayCategoryPieChartReportController.class) {
+                return todayCategoryPieChartReportController;
             } else {
                 try {
                     return type.getDeclaredConstructor().newInstance();

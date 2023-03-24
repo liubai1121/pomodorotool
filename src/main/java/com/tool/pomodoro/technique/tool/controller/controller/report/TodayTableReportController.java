@@ -35,23 +35,19 @@ public class TodayTableReportController implements Initializable {
     @FXML
     private TableColumn<ReportTableVo, Integer> reportTableClocks;
     @FXML
-    private TableColumn<ReportTableVo, Integer> reportTableTime;
+    private TableColumn<ReportTableVo, String> reportCategory;
 
     @FXML
     private Label totalClocksLabel;
-    @FXML
-    private Label totalClocksTime;
 
     @FXML
     protected void onReportTableQuery() {
         var tableValueOpt = reportController.getSelectDuration()
                 .flatMap(pair -> todayReportStrategy.table(pair.getValue0(), pair.getValue1()));
 
-
         tableValueOpt.ifPresent(tableValue -> {
             setReportTableData(tableValue.table());
             totalClocksLabel.setText(String.valueOf(tableValue.totalClocks()));
-            totalClocksTime.setText(String.valueOf(tableValue.totalTime()));
         });
 
         if (tableValueOpt.isEmpty()) {
@@ -63,7 +59,7 @@ public class TodayTableReportController implements Initializable {
         var reportTableData = table
                 .stream()
                 .filter(item -> item.clocks() != 0)
-                .map(item -> new ReportTableVo(item.content(), item.clocks(), item.time()))
+                .map(item -> new ReportTableVo(item.content(), item.clocks(), item.category()))
                 .sorted(Comparator.comparing(ReportTableVo::clocks).reversed().thenComparing(ReportTableVo::content))
                 .toList();
         reportTable.setItems(FXCollections.observableArrayList(reportTableData));
@@ -72,7 +68,6 @@ public class TodayTableReportController implements Initializable {
     private void showEmptyTable() {
         reportTable.setItems(FXCollections.observableArrayList(Collections.emptyList()));
         totalClocksLabel.setText("");
-        totalClocksTime.setText("");
     }
 
 
@@ -80,6 +75,6 @@ public class TodayTableReportController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         reportTableContent.setCellValueFactory(column -> new SimpleStringProperty(column.getValue().content()));
         reportTableClocks.setCellValueFactory(column -> new SimpleIntegerProperty(column.getValue().clocks()).asObject());
-        reportTableTime.setCellValueFactory(column -> new SimpleIntegerProperty(column.getValue().time()).asObject());
+        reportCategory.setCellValueFactory(column -> new SimpleStringProperty(column.getValue().category()));
     }
 }

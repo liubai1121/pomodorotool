@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="433.0" prefWidth="475.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tool.pomodoro.technique.tool.controller.controller.report.TodayCategoryPieChartReportController">
+
+    <PieChart fx:id="reportCategoryPieChart" prefHeight="336.0" prefWidth="475.0" />
+   <Button layoutY="345.0" mnemonicParsing="false" onAction="#onQuery" prefHeight="23.0" prefWidth="54.0" text="查询" />
+</AnchorPane>

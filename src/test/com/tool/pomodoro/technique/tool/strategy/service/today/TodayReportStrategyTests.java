@@ -5,6 +5,7 @@ import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import com.tool.pomodoro.technique.tool.storage.file.TestFilePathConfig;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayLineChartReportValueDto;
+import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayPieChartForCategoryReportValueDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayTableReportValueDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +31,6 @@ public class TodayReportStrategyTests {
     @Test
     void table() {
         doAddToday();
-
 
         Optional<TodayTableReportValueDto> tableValueOpt = todayReportStrategy.table(LocalDate.now(), LocalDate.now());
 
@@ -68,6 +68,29 @@ public class TodayReportStrategyTests {
         var todayListOpt = todayReportStrategy.lineChart(today, yesterday);
 
         Assertions.assertTrue(todayListOpt.isEmpty());
+    }
+
+
+    @Test
+    void pieChartForCategory() {
+        var random = new Random();
+        var idx = random.nextInt(10000);
+        todayStrategy.add(new TodayAddDto("添加" + idx, "测试分类1"));
+
+        Optional<TodayPieChartForCategoryReportValueDto> pieChartOpt = todayReportStrategy.pieChartForCategory(LocalDate.now(), LocalDate.now());
+        Assertions.assertTrue(pieChartOpt.isPresent());
+        Assertions.assertTrue(pieChartOpt.get().dataMap().size() > 0);
+    }
+
+    @Test
+    void pieChartForCategoryForWrongRange() {
+        doAddToday();
+
+        var today = LocalDate.now();
+        var yesterday = today.minusDays(1);
+        Optional<TodayPieChartForCategoryReportValueDto> pieChartOpt = todayReportStrategy.pieChartForCategory(today, yesterday);
+
+        Assertions.assertTrue(pieChartOpt.isEmpty());
     }
 
     private String doAddToday() {
