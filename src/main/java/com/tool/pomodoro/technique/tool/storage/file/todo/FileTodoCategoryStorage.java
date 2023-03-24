@@ -47,7 +47,10 @@ public class FileTodoCategoryStorage implements TodoCategoryStorage, FileStorage
     @Override
     public void delete(String id) {
         Optional.ofNullable(id)
-                .ifPresent(dataId -> dataList.removeIf(todoCategory -> todoCategory.id().equals(dataId)));
+                .ifPresent(dataId -> {
+                    dataList.removeIf(todoCategory -> todoCategory.id().equals(dataId));
+                    store();
+                });
     }
 
     @Override
