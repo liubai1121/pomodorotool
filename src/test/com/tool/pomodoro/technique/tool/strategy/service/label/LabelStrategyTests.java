@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-public class LabelStrategyTest {
+public class LabelStrategyTests {
     private static LabelStrategy labelStrategy;
 
     @BeforeAll

@@ -8,49 +8,59 @@ import javafx.scene.control.Label;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 public class TodayCountdownCommand implements Command {
 
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    private final Label label;
+    private final Label countdownLabel;
     private final Command command;
+    private LocalTime countdownTime;
 
-    public TodayCountdownCommand(Label label, Command command) {
-        this.label = label;
+    public TodayCountdownCommand(Label countdownLabel, LocalTime countdownTime, Command command) {
+        this.countdownLabel = countdownLabel;
         this.command = command;
+        this.countdownTime = countdownTime;
+
+        initLabelText();
+    }
+
+    private void initLabelText() {
+        Optional.ofNullable(countdownLabel)
+                .ifPresent(label ->
+                        Optional.ofNullable(countdownTime).ifPresent(time -> {
+                            label.setText(dateTimeFormatter.format(time));
+                        }));
     }
 
     private boolean isCancel = false;
+
+    public void cancel() {
+        isCancel = true;
+    }
 
     @Override
     public void execute() {
         if (isCancel) {
             return;
         }
-        Optional.of(label.getText())
-                .filter(Predicate.not(String::isBlank))
-                .map(this::countdown)
-                .ifPresent(newTime -> PerSecondCommandScheduleQueue.getInstance().put(this));
-    }
 
-    public void cancel() {
-        isCancel = true;
-    }
-
-    private LocalTime countdown(String text) {
-        LocalTime localTime = LocalTime.parse(text, dateTimeFormatter);
-        LocalTime newTime = localTime.plusSeconds(-1);
-
-        Platform.runLater(() -> label.setText(dateTimeFormatter.format(newTime)));
-
-        boolean isCountdownEnds = newTime.toSecondOfDay() == 0;
-        if (isCountdownEnds) {
+        if (this.countdown()) {
+            PerSecondCommandScheduleQueue.getInstance().put(this);
+            Optional.ofNullable(countdownLabel)
+                    .ifPresent(countdownLabel -> Platform.runLater(() -> countdownLabel.setText(dateTimeFormatter.format(countdownTime))));
+        } else {
             Optional.ofNullable(command)
                     .ifPresent(Command::execute);
-            return null;
         }
-        return newTime;
+    }
+
+    private boolean countdown() {
+        return Optional.ofNullable(countdownTime)
+                .map(time -> {
+                    countdownTime = time.plusSeconds(-1);
+                    boolean countdownIsNotOver = countdownTime.toSecondOfDay() != 0;
+                    return countdownIsNotOver;
+                }).orElse(false);
     }
 }
