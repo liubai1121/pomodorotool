@@ -99,17 +99,17 @@ public class TodayReportStrategyImpl implements TodayReportStrategy {
                 .filter(today -> Objects.nonNull(today.category()) && !today.category().isBlank())
                 .collect(Collectors.groupingBy(Today::category));
 
-        var totalSize = new BigDecimal(todayList.size());
+        var totalSize = new BigDecimal(getTotalClocks(todayList));
 
         Map<String, Integer> dataMap = new HashMap<>();
         mapForCategory.forEach((category, dataList) -> {
-            var categorySize = new BigDecimal(dataList.size());
+            var categorySize = new BigDecimal(getTotalClocks(dataList));
             var proportion = categorySize.divide(totalSize, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).intValue();
             dataMap.put(category, proportion);
         });
 
         var categoryList = mapForCategory.values().stream().flatMap(Collection::stream).toList();
-        var totalCategorySize = new BigDecimal(categoryList.size());
+        var totalCategorySize = new BigDecimal(getTotalClocks(categoryList));
         var categorySizeEqualsTotalSize = totalCategorySize.compareTo(totalSize) == 0;
         if (categorySizeEqualsTotalSize) {
             return new TodayPieChartForCategoryReportValueDto(dataMap);
@@ -120,5 +120,9 @@ public class TodayReportStrategyImpl implements TodayReportStrategy {
         dataMap.put("未分类", notCategoryProportion);
 
         return new TodayPieChartForCategoryReportValueDto(dataMap);
+    }
+
+    private int getTotalClocks(List<Today> dataList) {
+        return dataList.stream().mapToInt(Today::clocks).sum();
     }
 }
