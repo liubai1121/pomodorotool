@@ -57,28 +57,6 @@ public class TodayController implements Initializable {
     @FXML
     private TableColumn<TodayVo, String> todayCategoryTableColumn;
 
-//    @FXML
-//    protected void onCopyToTodo() {
-//        Optional.ofNullable(todayTableView.getSelectionModel())
-//                .map(SelectionModel::getSelectedItem)
-//                .ifPresent(todayVo -> {
-//                    moveStrategy.copyTodayToTodo(todayVo.id());
-//                    ToolController.getController(TodoController.class)
-//                            .ifPresent(TodoController::refreshTableView);
-//                });
-//    }
-//
-//    @FXML
-//    protected void onCutToTodo() {
-//        Optional.ofNullable(todayTableView.getSelectionModel())
-//                .map(SelectionModel::getSelectedItem)
-//                .ifPresent(todayVo -> {
-//                    moveStrategy.cutTodayToTodo(todayVo.id());
-//                    refreshTableView();
-//                    ToolController.getController(TodoController.class)
-//                            .ifPresent(TodoController::refreshTableView);
-//                });
-//    }
 
     @FXML
     protected void onAdd() {
@@ -133,8 +111,6 @@ public class TodayController implements Initializable {
         TodayCountdownController todayCountdownController = new TodayCountdownController(todayStrategy, todayVo);
         Stage stage = WindowUtil.create(todayVo.content(), "today/today-countdown.fxml", todayCountdownController);
 
-        stage.setOnShowing(event -> todayCountdownController.init());
-
         stage.setOnCloseRequest(event -> {
             todayCountdownController.cancel();
             refreshTableView();
@@ -156,7 +132,6 @@ public class TodayController implements Initializable {
                 .map(item -> new TodayVo(item.id(), item.content(), item.clocks(), item.category(), item.createTime()))
                 .collect(Collectors.toList());
     }
-
 
     @FXML
     protected void onRowSelected() {
