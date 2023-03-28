@@ -70,14 +70,16 @@ public class ReportController implements Initializable {
                             queryByWeek.setVisible(true);
                             var week = LocalDate.now().get(ChronoField.ALIGNED_WEEK_OF_YEAR);
                             var defaultWeek = week - 1 < 1 ? week : week - 1;
-                            queryByWeek.setValue(String.valueOf(defaultWeek));
+                            Optional.ofNullable(queryByWeek.getSelectionModel())
+                                    .ifPresent(selectionModel -> selectionModel.select(defaultWeek - 1));
                         }
 
                         case MONTH -> {
                             queryByMonth.setVisible(true);
                             var month = LocalDate.now().get(ChronoField.MONTH_OF_YEAR);
                             var defaultMonth = month - 1 < 1 ? month : month - 1;
-                            queryByMonth.setValue(String.valueOf(defaultMonth));
+                            Optional.ofNullable(queryByMonth.getSelectionModel())
+                                    .ifPresent(selectionModel -> selectionModel.select(defaultMonth - 1));
                         }
 
                         case DURATION -> {
@@ -239,5 +241,6 @@ public class ReportController implements Initializable {
 
         queryByMonth.setItems(FXCollections.observableArrayList(IntStream.rangeClosed(1, 12).mapToObj(String::valueOf).toList()));
         queryByMonth.setEditable(true);
+
     }
 }

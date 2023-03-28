@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane prefHeight="181.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1">
-    <Label fx:id="countdownLabel" layoutX="120.0" layoutY="60.0" prefHeight="61.0" prefWidth="200.0" text="00:25:00">
+    <Label fx:id="countdownLabel" layoutX="120.0" layoutY="60.0" prefHeight="61.0" prefWidth="200.0">
         <font>
             <Font size="48.0"/>
         </font>
     </Label>
+    <ComboBox fx:id="countdownHours" layoutX="105.0" layoutY="49.0" prefHeight="23.0" prefWidth="65.0"/>
+    <ComboBox fx:id="countdownMinutes" layoutX="188.0" layoutY="49.0" prefHeight="23.0" prefWidth="65.0"/>
+    <ComboBox fx:id="countdownSeconds" layoutX="272.0" layoutY="49.0" prefHeight="23.0" prefWidth="65.0"/>
+    <Button fx:id="countdownStartButton" onAction="#start" layoutX="173.0" layoutY="121.0" mnemonicParsing="false"
+            prefHeight="35.0" prefWidth="95.0" text="开始">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Button>
+    <Label fx:id="hoursMinutesDelimiter" layoutX="176.0" layoutY="53.0" prefHeight="15.0" prefWidth="12.0" text="："/>
+    <Label fx:id="minutesSecondsDelimiter" layoutX="259.0" layoutY="54.0" prefHeight="15.0" prefWidth="12.0" text="："/>
 </AnchorPane>
