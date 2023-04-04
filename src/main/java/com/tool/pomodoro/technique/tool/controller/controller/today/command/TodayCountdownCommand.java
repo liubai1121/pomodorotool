@@ -33,15 +33,26 @@ public class TodayCountdownCommand implements Command {
                         }));
     }
 
-    private boolean isCancel = false;
+    private boolean isStart = true;
 
-    public void cancel() {
-        isCancel = true;
+    public synchronized void stop() {
+        isStart = false;
+        PerSecondCommandScheduleQueue.getInstance().delete(this);
+    }
+
+    public synchronized void start() {
+        isStart = true;
+    }
+
+    public synchronized void complete() {
+        isStart = false;
+        Optional.ofNullable(command)
+                .ifPresent(Command::execute);
     }
 
     @Override
     public void execute() {
-        if (isCancel) {
+        if (!isStart) {
             return;
         }
 

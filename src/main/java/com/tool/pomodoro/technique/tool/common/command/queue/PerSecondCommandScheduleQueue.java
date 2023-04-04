@@ -33,6 +33,12 @@ public class PerSecondCommandScheduleQueue implements CommandScheduleQueue, Tool
                 .ifPresent(queue::add);
     }
 
+    @Override
+    public void delete(Command command) {
+        Optional.ofNullable(command)
+                .ifPresent(queue::remove);
+    }
+
     public static PerSecondCommandScheduleQueue getInstance() {
         return PER_SECOND_COMMAND_QUEUE;
     }
