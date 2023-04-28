@@ -1,23 +1,18 @@
 package com.tool.pomodoro.technique.tool.controller.controller.today;
 
 import com.tool.pomodoro.technique.tool.controller.controller.today.vo.TodayVo;
-import com.tool.pomodoro.technique.tool.controller.controller.todo.TodoController;
 import com.tool.pomodoro.technique.tool.controller.controller.tool.ToolController;
 import com.tool.pomodoro.technique.tool.controller.util.WindowUtil;
 import com.tool.pomodoro.technique.tool.factory.StrategyFactory;
 import com.tool.pomodoro.technique.tool.strategy.service.today.TodayStrategy;
-import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayAddDto;
 import com.tool.pomodoro.technique.tool.strategy.service.today.dto.TodayDto;
-import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.SelectionModel;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -25,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TodayController implements Initializable {
@@ -72,7 +66,7 @@ public class TodayController implements Initializable {
 
     @FXML
     protected void onEdit() {
-        getSelectedLabel()
+        getSelectedItem()
                 .ifPresent(today -> {
                     var editController = new TodayEditController(todayStrategy, today, strategyFactory.createTodoCategoryStrategy());
                     var stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
@@ -85,15 +79,14 @@ public class TodayController implements Initializable {
                 });
     }
 
-    private Optional<TodayVo> getSelectedLabel() {
+    private Optional<TodayVo> getSelectedItem() {
         return Optional.ofNullable(todayTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem);
     }
 
     @FXML
     protected void onDelete() {
-        Optional.ofNullable(todayTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
+        getSelectedItem()
                 .ifPresent(todayVo -> {
                     todayStrategy.delete(todayVo.id());
                     refreshTableView();
@@ -102,8 +95,7 @@ public class TodayController implements Initializable {
 
     @FXML
     protected void onStartClock() {
-        Optional.ofNullable(todayTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
+        getSelectedItem()
                 .ifPresent(this::createCountdownWindow);
     }
 
@@ -135,9 +127,29 @@ public class TodayController implements Initializable {
 
     @FXML
     protected void onRowSelected() {
-        Optional.ofNullable(todayTableView.getSelectionModel())
-                .map(SelectionModel::getSelectedItem)
+        getSelectedItem()
                 .ifPresent(todayVo -> ToolController.getController(TodayDetailController.class)
                         .ifPresent(controller -> controller.display(todayVo)));
     }
+
+    // menu
+    @FXML
+    private ContextMenu todayMenu;
+
+    @FXML
+    protected void onContextMenuRequested() {
+        ObservableList<MenuItem> items = todayMenu.getItems();
+
+        Optional<TodayVo> selectedItem = getSelectedItem();
+        if (selectedItem.isPresent()) {
+            items.forEach(item -> item.setDisable(false));
+        } else {
+            items.forEach(item -> {
+                if (!item.getText().equals("新增")) {
+                    item.setDisable(true);
+                }
+            });
+        }
+    }
+
 }

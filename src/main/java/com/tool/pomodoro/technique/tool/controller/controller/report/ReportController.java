@@ -34,7 +34,6 @@ public class ReportController implements Initializable {
     public ReportController(StrategyFactory strategyFactory) {
         this.strategyFactory = strategyFactory;
         this.todayReportStrategy = strategyFactory.createTodayReportStrategy();
-        ;
     }
 
     @FXML

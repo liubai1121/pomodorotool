@@ -12,6 +12,7 @@ import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoDto;
 import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoTodayMoveStrategy;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -151,11 +152,6 @@ public class TodoController implements Initializable {
                 .ifPresent(todoTableView::setItems);
     }
 
-
-
-
-
-
     private List<TodoVo> wrapTodoVoList(List<TodoDto> list) {
         return list.stream()
                 .filter(Objects::nonNull)
@@ -171,6 +167,27 @@ public class TodoController implements Initializable {
                         .ifPresent(detailController -> detailController.display(todoVo)));
     }
 
+    @FXML
+    private ContextMenu todoMenu;
+
+    @FXML
+    protected void onTodoMenuRequested() {
+        ObservableList<MenuItem> items = todoMenu.getItems();
+
+        Optional<TodoVo> selectedItem = getTableSelected();
+        Optional<TodoCategoryVo> categorySelected = getCategorySelected();
+        if (selectedItem.isPresent()) {
+            items.forEach(item -> item.setDisable(false));
+        } else {
+            if (categorySelected.isPresent()) {
+                items.forEach(item -> {
+                    item.setDisable(!item.getText().equals("新增"));
+                });
+            } else {
+                items.forEach(item -> item.setDisable(true));
+            }
+        }
+    }
 
     @FXML
     protected void onCategoryAdd() {
@@ -240,4 +257,24 @@ public class TodoController implements Initializable {
                     todoCategoryTreeView.getRoot().getChildren().setAll(treeItems);
                 });
     }
+
+    @FXML
+    private ContextMenu categoryMenu;
+
+    @FXML
+    protected void onCategoryMenuRequested() {
+        ObservableList<MenuItem> items = categoryMenu.getItems();
+
+        Optional<TodoCategoryVo> selectedItem = getCategorySelected();
+        if (selectedItem.isPresent()) {
+            items.forEach(item -> item.setDisable(false));
+        } else {
+            items.forEach(item -> {
+                if (!item.getText().equals("新增")) {
+                    item.setDisable(true);
+                }
+            });
+        }
+    }
+
 }

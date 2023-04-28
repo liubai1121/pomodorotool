@@ -12,9 +12,9 @@
 
     <SplitPane dividerPositions="0.29259896729776247" layoutX="9.0" layoutY="17.0" prefHeight="319.0" prefWidth="583.0">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-            <TreeView fx:id="todoCategoryTreeView" onMouseClicked="#onCategorySelected" layoutX="-5.0" layoutY="-1.0" prefHeight="319.0" prefWidth="173.0">
+            <TreeView fx:id="todoCategoryTreeView" onMouseClicked="#onCategorySelected" onContextMenuRequested="#onCategoryMenuRequested" layoutX="-5.0" layoutY="-1.0" prefHeight="319.0" prefWidth="173.0">
                 <contextMenu>
-                    <ContextMenu>
+                    <ContextMenu fx:id="categoryMenu">
                         <items>
                             <MenuItem mnemonicParsing="false" onAction="#onCategoryAdd" text="新增" />
                             <MenuItem mnemonicParsing="false" onAction="#onCategoryEdit" text="修改" />
@@ -25,12 +25,12 @@
             </TreeView>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="389.0">
-            <TableView fx:id="todoTableView" layoutX="-3.0" onMouseClicked="#onRowSelected" prefHeight="319.0" prefWidth="414.0">
+            <TableView fx:id="todoTableView" layoutX="-3.0" onMouseClicked="#onRowSelected" onContextMenuRequested="#onTodoMenuRequested" prefHeight="319.0" prefWidth="414.0">
                 <columns>
                     <TableColumn fx:id="todoContentTableColumn" prefWidth="399.0" text="内容" />
                 </columns>
                 <contextMenu>
-                    <ContextMenu>
+                    <ContextMenu fx:id="todoMenu">
                         <items>
                             <MenuItem mnemonicParsing="false" onAction="#onAdd" text="新增" />
                             <MenuItem mnemonicParsing="false" onAction="#onEdit" text="修改" />

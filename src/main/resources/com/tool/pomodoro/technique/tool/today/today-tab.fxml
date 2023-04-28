@@ -10,7 +10,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.tool.pomodoro.technique.tool.controller.controller.today.TodayController">
 
-    <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onRowSelected" prefHeight="300.0"
+    <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onRowSelected" onContextMenuRequested="#onContextMenuRequested" prefHeight="300.0"
                prefWidth="580.0">
         <columns>
             <TableColumn fx:id="todayContentTableColumn" prefWidth="350.0" text="内容"/>
@@ -18,7 +18,7 @@
             <TableColumn fx:id="todayCategoryTableColumn" prefWidth="125.0" text="分类"/>
         </columns>
         <contextMenu>
-            <ContextMenu>
+            <ContextMenu fx:id="todayMenu">
                 <items>
                     <MenuItem onAction="#onStartClock" text="启动时钟"/>
                     <MenuItem onAction="#onAdd" text="新增"/>
