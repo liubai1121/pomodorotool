@@ -111,14 +111,14 @@ public class FileLabelStorage implements LabelStorage, FileStorage {
 
     @Override
     public void load() {
-        FileUtil.getFileOrCreate(filePath + FILE_NAME)
-                .filter(file -> file.length() > 0)
-                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Label.class)));
+//        FileUtil.getFileOrCreate(filePath + FILE_NAME)
+//                .filter(file -> file.length() > 0)
+//                .ifPresent(file -> dataList.addAll(FileUtil.doDeserialized(file, Label.class)));
     }
 
     @Override
     public void store() {
-        FileUtil.getLabelFile()
-                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
+//        FileUtil.getLabelFile()
+//                .ifPresent(file -> selectAll().ifPresent(list -> FileUtil.doSerialized(file, list)));
     }
 }

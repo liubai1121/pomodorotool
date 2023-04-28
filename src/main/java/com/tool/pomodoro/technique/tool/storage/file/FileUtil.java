@@ -23,12 +23,6 @@ public class FileUtil {
 
     }
 
-    public static Optional<File> getLabelFile() {
-        var filePath = FileConfig.getLabelFile();
-
-        return getFileOrCreate(filePath);
-    }
-
     public static Optional<File> getFileOrCreate(String filePath) {
         try {
             var file = new File(filePath);

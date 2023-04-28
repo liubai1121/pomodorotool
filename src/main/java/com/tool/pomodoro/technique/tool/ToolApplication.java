@@ -14,12 +14,19 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ToolApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        StrategyFactory strategyFactory = new FileStorageStrategyFactory(() -> "D:\\Program Files\\Pomodoro Technique Tool\\");
+        String path = System.getProperty("user.dir");
+        File dir = new File(path + "\\Pomodoro Technique Tool");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(() -> dir.getPath() + "\\");
         var toolController = new ToolController(strategyFactory);
         var menuController = new ToolMenuController(strategyFactory);
         var todoController = new TodoController(strategyFactory);

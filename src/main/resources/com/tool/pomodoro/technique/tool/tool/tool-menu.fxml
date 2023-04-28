@@ -12,9 +12,9 @@
             <MenuItem mnemonicParsing="false" text="导入"/>
             <MenuItem mnemonicParsing="false" text="导出"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="编辑">
-            <MenuItem onAction="#onLabelManagement" mnemonicParsing="false" text="标签管理"/>
-        </Menu>
+<!--        <Menu mnemonicParsing="false" text="编辑">-->
+<!--            <MenuItem onAction="#onLabelManagement" mnemonicParsing="false" text="标签管理"/>-->
+<!--        </Menu>-->
         <Menu mnemonicParsing="false" text="报表">
             <MenuItem onAction="#onReportView" mnemonicParsing="false" text="报表"/>
         </Menu>
