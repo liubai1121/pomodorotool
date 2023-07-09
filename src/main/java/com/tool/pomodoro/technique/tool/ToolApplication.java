@@ -20,13 +20,8 @@ import java.io.IOException;
 public class ToolApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        String path = System.getProperty("user.dir");
-        File dir = new File(path + "\\Pomodoro Technique Tool");
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
 
-        StrategyFactory strategyFactory = new FileStorageStrategyFactory(() -> dir.getPath() + "\\");
+        StrategyFactory strategyFactory = new FileStorageStrategyFactory(this::myPath);
         var toolController = new ToolController(strategyFactory);
         var menuController = new ToolMenuController(strategyFactory);
         var todoController = new TodoController(strategyFactory);
@@ -75,5 +70,18 @@ public class ToolApplication extends Application {
     public static void main(String[] args) {
         initTool();
         launch();
+    }
+
+    private String packagePath() {
+        String path = System.getProperty("user.dir");
+        File dir = new File(path + "\\Pomodoro Technique Tool");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return dir.getPath() + "\\";
+    }
+
+    private String myPath() {
+        return "D:\\Program Files\\Pomodoro Technique Tool\\";
     }
 }

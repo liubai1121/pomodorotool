@@ -15,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -115,6 +117,15 @@ public class TodayCountdownController implements Initializable {
         labelCountdownCommand.stop();
         labelCountdownCommand = null;
         setStatus(Status.STOP);
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            if (status.equals(Status.STOP)) {
+                start();
+            }
+        }
     }
 
 

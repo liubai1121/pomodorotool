@@ -19,7 +19,7 @@
             <ContextMenu>
                 <items>
                     <MenuItem onAction="#onLabelAdd" mnemonicParsing="false" text="添加"/>
-                    <MenuItem onAction="#onLabelEdit" mnemonicParsing="false" text="修改"/>
+                    <MenuItem onAction="#onLabelEdit" mnemonicParsing="false" text="编辑"/>
                     <MenuItem onAction="#onLabelDelete" mnemonicParsing="false" text="删除"/>
                 </items>
             </ContextMenu>

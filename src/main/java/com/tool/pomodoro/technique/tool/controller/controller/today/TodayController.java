@@ -13,6 +13,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -69,7 +72,7 @@ public class TodayController implements Initializable {
         getSelectedItem()
                 .ifPresent(today -> {
                     var editController = new TodayEditController(todayStrategy, today, strategyFactory.createTodoCategoryStrategy());
-                    var stage = WindowUtil.create("修改", "today/today-edit.fxml", editController);
+                    var stage = WindowUtil.create("编辑", "today/today-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
 
@@ -101,7 +104,7 @@ public class TodayController implements Initializable {
 
     private void createCountdownWindow(TodayVo todayVo) {
         TodayCountdownController todayCountdownController = new TodayCountdownController(todayStrategy, todayVo);
-        Stage stage = WindowUtil.create(todayVo.content(), "today/today-countdown.fxml", todayCountdownController);
+        Stage stage = WindowUtil.create("倒计时 - " + todayVo.content(), "today/today-countdown.fxml", todayCountdownController);
 
         stage.setOnCloseRequest(event -> {
             todayCountdownController.cancel();
@@ -126,10 +129,22 @@ public class TodayController implements Initializable {
     }
 
     @FXML
-    protected void onRowSelected() {
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onStartClock();
+        }
+    }
+
+    @FXML
+    protected void onMouseClicked(MouseEvent mouseEvent) {
         getSelectedItem()
                 .ifPresent(todayVo -> ToolController.getController(TodayDetailController.class)
                         .ifPresent(controller -> controller.display(todayVo)));
+
+        boolean isDoubleClick = mouseEvent.getClickCount() == 2;
+        if (isDoubleClick) {
+            onEdit();
+        }
     }
 
     // menu

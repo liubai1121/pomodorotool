@@ -13,9 +13,13 @@ import com.tool.pomodoro.technique.tool.strategy.service.todotodaymove.TodoToday
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -119,7 +123,7 @@ public class TodoController implements Initializable {
         getTableSelected()
                 .ifPresent(todo -> {
                     var editController = new TodoEditController(todoStrategy, todo);
-                    Stage stage = WindowUtil.create("修改", "todo/todo-edit.fxml", editController);
+                    Stage stage = WindowUtil.create("编辑", "todo/todo-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
 
@@ -160,11 +164,23 @@ public class TodoController implements Initializable {
     }
 
     @FXML
-    protected void onRowSelected() {
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onCopyToToday();
+        }
+    }
+
+    @FXML
+    protected void onMouseClicked(MouseEvent mouseEvent) {
         Optional.ofNullable(todoTableView.getSelectionModel())
                 .map(SelectionModel::getSelectedItem)
                 .ifPresent(todoVo -> ToolController.getController(TodoDetailController.class)
                         .ifPresent(detailController -> detailController.display(todoVo)));
+
+        boolean isDoubleClick = mouseEvent.getClickCount() == 2;
+        if (isDoubleClick) {
+            onEdit();
+        }
     }
 
     @FXML
@@ -206,7 +222,7 @@ public class TodoController implements Initializable {
         getCategorySelected()
                 .ifPresent(todoCategory -> {
                     var editController = new TodoCategoryEditController(todoCategoryStrategy, todoCategory);
-                    Stage stage = WindowUtil.create("修改", "todo/todo-category-edit.fxml", editController);
+                    Stage stage = WindowUtil.create("编辑", "todo/todo-category-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
 

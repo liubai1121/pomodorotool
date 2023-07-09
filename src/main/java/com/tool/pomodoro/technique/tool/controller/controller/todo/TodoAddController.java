@@ -5,6 +5,8 @@ import com.tool.pomodoro.technique.tool.strategy.service.todo.TodoStrategy;
 import com.tool.pomodoro.technique.tool.strategy.service.todo.dto.TodoAddDto;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -34,5 +36,12 @@ public class TodoAddController {
                     Stage stage = (Stage) todoContent.getScene().getWindow();
                     WindowUtil.close(stage);
                 });
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onTodoAdd();
+        }
     }
 }

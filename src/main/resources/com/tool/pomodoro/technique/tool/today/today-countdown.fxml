@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="181.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="181.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+    onKeyPressed="#onKeyPressed">
     <Label fx:id="countdownLabel" layoutX="120.0" layoutY="28.0" prefHeight="61.0" prefWidth="200.0">
         <font>
             <Font size="48.0" />

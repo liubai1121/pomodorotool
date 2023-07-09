@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="178.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1" onKeyPressed="#onKeyPressed" >
     <Label layoutX="30.0" layoutY="34.0" prefHeight="15.0" prefWidth="73.0" text="类别ID："/>
     <Label fx:id="todoCategoryId" layoutX="112.0" layoutY="30.0" prefHeight="23.0" prefWidth="245.0"/>
     <Label layoutX="40.0" layoutY="64.0" prefHeight="15.0" prefWidth="65.0" text="类别名字："/>
     <TextField fx:id="todoCategoryContent" layoutX="112.0" layoutY="60.0" prefHeight="23.0" prefWidth="245.0"/>
     <Button layoutX="172.0" layoutY="132.0" mnemonicParsing="false" onAction="#onTodoCategoryEdit" prefHeight="23.0"
-            prefWidth="63.0" text="修改"/>
+            prefWidth="63.0" text="保存"/>
 </AnchorPane>

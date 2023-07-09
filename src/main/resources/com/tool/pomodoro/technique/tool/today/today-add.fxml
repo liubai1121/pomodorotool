@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="172.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1">
+            xmlns:fx="http://javafx.com/fxml/1" onKeyPressed="#onKeyPressed">
     <Label layoutX="40.0" layoutY="23.0" prefHeight="15.0" prefWidth="65.0" text="今日待办："/>
     <TextField fx:id="todayContent" layoutX="112.0" layoutY="20.0" prefHeight="23.0" prefWidth="245.0"/>
     <Label layoutX="51.0" layoutY="57.0" prefHeight="15.0" prefWidth="48.0" text="时钟数："/>
@@ -15,5 +15,5 @@
     <Label layoutX="61.0" layoutY="90.0" prefHeight="15.0" prefWidth="37.0" text="类别："/>
     <ChoiceBox fx:id="categories" layoutX="114.0" layoutY="86.0" prefHeight="23.0" prefWidth="107.0"/>
     <Button layoutX="172.0" layoutY="125.0" mnemonicParsing="false" onAction="#onTodayAdd" prefHeight="23.0"
-            prefWidth="63.0" text="新增"/>
+            prefWidth="63.0" text="保存"/>
 </AnchorPane>

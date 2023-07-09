@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="451.0" prefWidth="490.0" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.tool.pomodoro.technique.tool.controller.controller.today.TodayController">
 
-    <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onRowSelected" onContextMenuRequested="#onContextMenuRequested" prefHeight="300.0"
-               prefWidth="580.0">
+    <TableView fx:id="todayTableView" layoutX="14.0" layoutY="14.0" prefHeight="300.0" prefWidth="580.0"
+               onMouseClicked="#onMouseClicked" onKeyPressed="#onKeyPressed" onContextMenuRequested="#onContextMenuRequested">
         <columns>
             <TableColumn fx:id="todayContentTableColumn" prefWidth="350.0" text="内容"/>
             <TableColumn fx:id="todayClocksTableColumn" prefWidth="93.0" text="时钟数"/>

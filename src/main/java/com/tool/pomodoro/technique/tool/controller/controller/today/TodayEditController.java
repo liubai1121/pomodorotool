@@ -13,6 +13,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -71,6 +73,13 @@ public class TodayEditController implements Initializable {
                             Stage stage = (Stage) todayId.getScene().getWindow();
                             WindowUtil.close(stage);
                         }))));
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onTodayEdit();
+        }
     }
 
     private Optional<String> getId() {

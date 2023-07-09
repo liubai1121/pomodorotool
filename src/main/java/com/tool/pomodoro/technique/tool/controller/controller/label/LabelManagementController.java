@@ -72,7 +72,7 @@ public class LabelManagementController implements Initializable {
         getSelectedLabel()
                 .ifPresent(label -> {
                     var editController = new LabelEditController(labelStrategy, label);
-                    var stage = WindowUtil.create("修改标签", "label/label-edit.fxml", editController);
+                    var stage = WindowUtil.create("编辑", "label/label-edit.fxml", editController);
                     stage.setAlwaysOnTop(true);
                     stage.show();
                     stage.setOnCloseRequest(event -> {

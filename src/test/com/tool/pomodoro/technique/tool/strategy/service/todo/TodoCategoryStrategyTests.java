@@ -86,7 +86,7 @@ public class TodoCategoryStrategyTests {
 
     @Test
     void update() {
-        var name = "测试修改";
+        var name = "测试编辑";
         var addDto = new TodoCategoryAddDto(name);
         Optional<String> idOpt = todoCategoryStrategy.add(addDto);
         Assertions.assertTrue(idOpt.isPresent());
@@ -96,7 +96,7 @@ public class TodoCategoryStrategyTests {
         Assertions.assertTrue(todoCategoryOpt.isPresent());
         Assertions.assertEquals(todoCategoryOpt.get().name(), name);
 
-        var updateName = "测试修改成功";
+        var updateName = "测试成功";
         var updateDto = new TodoCategoryUpdateDto(idOpt.get(), updateName);
         todoCategoryStrategy.update(updateDto);
 

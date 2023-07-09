@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -54,5 +56,12 @@ public class TodoCategoryEditController implements Initializable {
                             Stage stage = (Stage) todoCategoryId.getScene().getWindow();
                             WindowUtil.close(stage);
                         }));
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onTodoCategoryEdit();
+        }
     }
 }

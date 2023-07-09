@@ -11,6 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -46,6 +48,13 @@ public class TodayAddController implements Initializable {
                             Stage stage = (Stage) todayContent.getScene().getWindow();
                             WindowUtil.close(stage);
                         })));
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onTodayAdd();
+        }
     }
 
     private Optional<String> getSelectCategory() {

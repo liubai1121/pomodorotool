@@ -5,9 +5,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="110.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-    <Label layoutX="40.0" layoutY="23.0" prefHeight="15.0" prefWidth="65.0" text="待办事项："/>
-    <TextField fx:id="todoContent" layoutX="112.0" layoutY="20.0" prefHeight="23.0" prefWidth="245.0"/>
-    <Button layoutX="171.0" layoutY="68.0" mnemonicParsing="false" onAction="#onTodoAdd" prefHeight="23.0"
-            prefWidth="63.0" text="新增"/>
+<AnchorPane onKeyPressed="#onKeyPressed" prefHeight="110.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <Label layoutX="40.0" layoutY="23.0" prefHeight="15.0" prefWidth="65.0" text="待办事项：" />
+    <TextField fx:id="todoContent" layoutX="112.0" layoutY="20.0" prefHeight="23.0" prefWidth="245.0" />
+    <Button layoutX="171.0" layoutY="68.0" mnemonicParsing="false" onAction="#onTodoAdd" prefHeight="23.0" prefWidth="63.0" text="保存" />
 </AnchorPane>
